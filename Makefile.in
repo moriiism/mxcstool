@@ -1,0 +1,26 @@
+#
+# Makefile.in
+#
+
+# MXCSTOOL_DIR := /home/ohman/work/morii/gti/mxcstool
+MXCSTOOL_DIR := /home/morii/work/github/moriiism/mxcstool
+
+### library
+LIB := -lm -lrt
+
+# compiler
+FC := f77
+# FC = gfortran
+CC := gcc
+CXX := g++
+LD := gcc
+
+FFLAGS   := -Wall -g -O2 -fPIC
+CFLAGS   := -Wall -g -O2 -fPIC
+CXXFLAGS := -Wall -g -O3 -fPIC
+LDFLAGS  := -g -O2
+
+FCN     = $(FC) $(FFLAGS) $(INCLUDE)
+CCN     = $(CC) $(CFLAGS) $(INCLUDE)
+CXXN    = $(CXX) $(CXXFLAGS) $(INCLUDE)
+CXXN_OPENBLAS = $(CXX) $(CXXFLAGS) $(INCLUDE_OPENBLAS)

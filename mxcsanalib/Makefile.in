@@ -1,0 +1,8 @@
+#
+# Makefile.in
+#
+
+### mxcsanalib
+MXCSANALIB_DIR := ${MXCSTOOL_DIR}/mxcsanalib
+MXCSANALIB_INC := -I$(MXCSANALIB_DIR)/include
+MXCSANALIB_LIB := -L$(MXCSANALIB_DIR)/lib -lmxcsanalib
