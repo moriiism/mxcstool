@@ -147,7 +147,8 @@ void GraphDataNerr3d::PrintData(FILE* fp, string format,
         }
     } else if ("x,xe+,xe-,y,ye+,ye-,z,ze+,ze-" == format){
         for(long idata = 0; idata < ndata; idata ++){
-            fprintf(fp, "%.15e  %.15e  %.15e  %.15e  %.15e  %.15e  %.15e  %.15e  %.15e\n",
+            fprintf(fp, "%.15e  %.15e  %.15e  %.15e  %.15e  %.15e  "
+                    "%.15e  %.15e  %.15e\n",
                     GetXvalElm(idata) - offset_xval,
                     0.0, 0.0,
                     GetYvalElm(idata) - offset_yval,

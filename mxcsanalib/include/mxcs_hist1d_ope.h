@@ -293,9 +293,9 @@ namespace HistData1dOpe
                     HistDataNerr1d* const out);
 
     
-//    // Init & Set by graph2d_serr,
-//    // only if xval_arr of graph2d_serr is equally-spaced and
-//    // appropriate errors.
+//    //    // Init & Set by graph2d_serr,
+//    //    // only if xval_arr of graph2d_serr is equally-spaced and
+//    //    // appropriate errors.
 //    void InitSetByGraphData2dSerr(const GraphDataSerr2d* const g2d);
     
     

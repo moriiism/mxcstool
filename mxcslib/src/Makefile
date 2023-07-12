@@ -1,11 +1,13 @@
 include ../../Makefile.in
 include ../../mxcslib/Makefile.in
 
-INCLUDE := $(MXCSLIB_INC)
+RAND_INC = -I/soft/heasoft/6.30.1/x86_64-pc-linux-gnu-libc2.17/include
+
+INCLUDE := $(MXCSLIB_INC) $(RAND_INC)
 
 TARGET := libmxcslib.a
 
-OBJ := base.o  str.o  iolib.o  time.o
+OBJ := base.o  str.o  iolib.o  time.o  rand.o
  
 all: $(TARGET)
 

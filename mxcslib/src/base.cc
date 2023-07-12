@@ -26,33 +26,39 @@ void MxcsObject::NullMxcsObject()
 // MxcsBase
 //
 
-void MxcsBase::IsValidArray(long narr, const int* const val_arr)
+void MxcsBase::IsValidArray(long narr, const int* const val_arr,
+                            string err_msg)
 {
     if(narr < 1){
         char msg[kLineSize];
-        sprintf(msg, "narr (=%ld) < 1", narr);
+        sprintf(msg, "narr (=%ld) < 1. %s.",
+                narr, err_msg.c_str());
         MxcsPrintErr(msg);
         abort();
     }
     if(NULL == val_arr){
         char msg[kLineSize];
-        sprintf(msg, "val_arr == NULL");
+        sprintf(msg, "val_arr == NULL. %s.",
+                err_msg.c_str());
         MxcsPrintErr(msg);
         abort();
     }
 }
 
-void MxcsBase::IsValidArray(long narr, const double* const val_arr)
+void MxcsBase::IsValidArray(long narr, const double* const val_arr,
+                            string err_msg)
 {
     if(narr < 1){
         char msg[kLineSize];
-        sprintf(msg, "narr (=%ld) < 1", narr);
+        sprintf(msg, "narr (=%ld) < 1. %s.",
+                narr, err_msg.c_str());
         MxcsPrintErr(msg);
         abort();
     }
     if(NULL == val_arr){
         char msg[kLineSize];
-        sprintf(msg, "val_arr == NULL");
+        sprintf(msg, "val_arr == NULL. %s.",
+                err_msg.c_str());
         MxcsPrintErr(msg);
         abort();
     }

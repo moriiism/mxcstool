@@ -365,31 +365,31 @@ void HistData1d::PrintData(FILE* fp, string format,
     }
 }
 
-//// generate events from histogram with poisson statistic
-//DataArrayNerr1d* const HistData1d::GenRandomEvt(int rand_seed) const
-//{
-//    TRandom3* trand = new TRandom3(rand_seed);
-//    vector<double> time_vec;
-//
-//    double tbinfwidth = GetXvalBinWidth();
-//    for(long ibin = 0; ibin < GetNbinX(); ibin ++){
-//        double bin_center = GetBinCenter(ibin);
-//        double bin_lo     = bin_center - 0.5 * tbinfwidth;
-//        double count_wpe = trand->Poisson(GetOvalElm(ibin));
-//      
-//        for(long ievt = 0; ievt < count_wpe; ievt ++){
-//            double time_evt = bin_lo + trand->Uniform() * tbinfwidth;
-//            time_vec.push_back(time_evt);
-//        }
-//    }
-//
-//    DataArrayNerr1d* data_arr = new DataArrayNerr1d;
-//    data_arr->Init(time_vec.size());
-//    data_arr->SetVal(time_vec);
-//
-//    delete trand;
-//    return data_arr;
-//}
+// generate events from histogram with poisson statistic
+DataArrayNerr1d* const HistData1d::GenRandomEvt(int rand_seed) const
+{
+    TRandom3* trand = new TRandom3(rand_seed);
+    vector<double> time_vec;
+
+    double tbinfwidth = GetXvalBinWidth();
+    for(long ibin = 0; ibin < GetNbinX(); ibin ++){
+        double bin_center = GetBinCenter(ibin);
+        double bin_lo     = bin_center - 0.5 * tbinfwidth;
+        double count_wpe = trand->Poisson(GetOvalElm(ibin));
+      
+        for(long ievt = 0; ievt < count_wpe; ievt ++){
+            double time_evt = bin_lo + trand->Uniform() * tbinfwidth;
+            time_vec.push_back(time_evt);
+        }
+    }
+
+    DataArrayNerr1d* data_arr = new DataArrayNerr1d;
+    data_arr->Init(time_vec.size());
+    data_arr->SetVal(time_vec);
+
+    delete trand;
+    return data_arr;
+}
 
 //// generate events from a probability distribution
 //DataArrayNerr1d* const HistData1d::GenRandomEvtFromProbDist(int nevt, int rand_seed) const

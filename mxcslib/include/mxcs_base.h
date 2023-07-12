@@ -96,8 +96,10 @@ private:
 
 namespace MxcsBase
 {
-    void IsValidArray(long narr, const int* const val_arr);    
-    void IsValidArray(long narr, const double* const val_arr);
+    void IsValidArray(long narr, const int* const val_arr,
+                      string err_msg = "");
+    void IsValidArray(long narr, const double* const val_arr,
+                      string err_msg = "");
 
     // vector --> arrray
     void GenArray(vector<double> vec,

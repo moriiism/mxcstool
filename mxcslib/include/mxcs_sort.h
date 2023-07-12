@@ -18,7 +18,7 @@ namespace MxcsSort
         }
         T fData;
     };
- 
+
     template<typename T>
     struct CompareAsc {
         CompareAsc(T d) : fData(d) {}
