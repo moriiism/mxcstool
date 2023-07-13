@@ -1,4 +1,4 @@
-ALL = gti
+ALL = gti lc
 
 all:
 	for dir in $(ALL); do \
