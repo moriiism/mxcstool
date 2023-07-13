@@ -1,6 +1,7 @@
 #ifndef MXCSTOOL_MXCSANALIB_HIST1D_H_
 #define MXCSTOOL_MXCSANALIB_HIST1D_H_
 
+#include "mxcs_rand.h"
 #include "mxcs_interval.h"
 #include "mxcs_data1d_nerr.h"
 #include "mxcs_data1d_serr.h"

@@ -2,6 +2,11 @@
 # Makefile.in
 #
 
+### GSL lib
+GSL_DIR := /soft/heasoft/6.30.1/x86_64-pc-linux-gnu-libc2.17
+GSL_INC := -I${GSL_DIR}/include
+GSL_LIB := -L${GSL_DIR}/lib -lgsl -lgslcblas
+
 ### mxcsanalib
 MXCSANALIB_DIR := ${MXCSTOOL_DIR}/mxcsanalib
 MXCSANALIB_INC := -I$(MXCSANALIB_DIR)/include

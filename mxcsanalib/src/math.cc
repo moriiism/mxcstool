@@ -437,6 +437,37 @@ double MxcsMath::GetRMS(long narr, const double* const val_arr)
     return rms;
 }
 
+double MxcsMath::GetMedian(long narr, const double* const val_arr)
+{
+    MxcsBase::IsValidArray(narr, val_arr);
+
+    long* index_arr = new long[narr];
+    bool down = false;
+    MxcsSort::Sort(narr, val_arr, index_arr, down);
+
+    // 0, 1, 2, 3, 4 : narr = 5
+    // narr / 2 = 2
+
+    // 0, 1, 2, 3, 4, 5 : narr = 6
+    // narr / 2 = 3
+    
+    double median = 0.0;
+    if (1 == narr % 2){
+        // odd
+        median = val_arr[index_arr[narr/2]];
+    } else {
+        // even
+        median = (val_arr[index_arr[narr/2 - 1]] + val_arr[index_arr[narr/2]])
+            / 2.0;
+    }
+    delete [] index_arr;
+    return median;
+}
+
+
+
+
+
 // For N values without errors
 //  for vector
 
@@ -750,6 +781,125 @@ int MxcsMath::GenWMeanWithMask(long narr, const double* const val_arr,
     return status;
 }
 
+int MxcsMath::GenChi2byConst(long narr,
+                             const double* const val_arr,
+                             const double* const val_err_arr,
+                             double* const wmean_ptr,
+                             double* const wmean_err_ptr,
+                             long* const nsel_ptr,
+                             int** const mask_sel_arr_ptr,
+                             double* const chi2_ptr,
+                             long* const dof_ptr,
+                             double* const chi2_red_ptr,
+                             double* const prob_ptr)
+{
+    int status = kRetNormal;
+    double wmean = 0.0;
+    double wmean_err = 0.0;
+    long nsel = 0;
+    int* mask_sel_arr = NULL;
+    int status_getwmean = GenWMean(narr, val_arr, val_err_arr,
+                                   &wmean, &wmean_err,
+                                   &nsel, &mask_sel_arr);
+    double chi2 = 0.0;
+    for(long index = 0; index < narr; index ++){
+        if(1 == mask_sel_arr[index]){
+            if( pow(val_err_arr[index], 2) > DBL_EPSILON ){
+                chi2 += pow(val_arr[index] - wmean, 2) / pow(val_err_arr[index], 2);
+            }
+        }
+    }
+    long dof = nsel - 1;
+    if(dof < 1){
+        printf("Error: dof(=%ld) < 1.", dof);
+        abort();
+    }
+    double chi2_red = chi2 / dof;
+
+    // the probability that an observed Chi-squared exceeds
+    // the value chi2 by chance, even for a correct model.
+    double prob = PvalChi2(chi2, dof);
+
+    // See Numerical Recipes, Section 6.2
+    // prob = Q(chi2, dof) = gammq(dof/2, chi2/2) = 1 - gammp(dof/2, chi2/2)
+    //                     = 1 - TMath::Gamma(dof/2, chi2/2)
+    // double prob = 1. - TMath::Gamma(dof/2., chi2/2.));
+    //
+
+    *wmean_ptr = wmean;
+    *wmean_err_ptr = wmean_err;
+    *nsel_ptr = nsel;
+    *mask_sel_arr_ptr = mask_sel_arr;
+    *chi2_ptr = chi2;
+    *dof_ptr = dof;
+    *chi2_red_ptr = chi2_red;
+    *prob_ptr = prob;
+
+    status = status_getwmean;
+    return status;
+}
+
+int MxcsMath::GenChi2byConst(long narr,
+                            const double* const val_arr,
+                            const double* const val_err_arr,
+                            const int* const mask_arr,
+                            double* const wmean_ptr,
+                            double* const wmean_err_ptr,
+                            long* const nsel_ptr,
+                            int** const mask_sel_arr_ptr,
+                            double* const chi2_ptr,
+                            long* const dof_ptr,
+                            double* const chi2_red_ptr,
+                            double* const prob_ptr)
+{
+    int status = kRetNormal;
+    double wmean = 0.0;
+    double wmean_err = 0.0;
+    long nsel = 0;
+    int* mask_sel_arr = NULL;
+    int status_getwmean = GenWMeanWithMask(narr, val_arr, val_err_arr,
+                                           mask_arr,
+                                           &wmean, &wmean_err,
+                                           &nsel, &mask_sel_arr);
+    double chi2 = 0.0;
+    for(long index = 0; index < narr; index ++){
+        if(1 == mask_sel_arr[index]){
+            if( pow(val_err_arr[index], 2) > DBL_EPSILON ){
+                chi2 += pow(val_arr[index] - wmean, 2) / pow(val_err_arr[index], 2);
+            }
+        }
+    }
+    long dof = nsel - 1;
+    if(dof < 1){
+        printf("Error: dof(=%ld) < 1.", dof);
+        abort();
+    }
+    double chi2_red = chi2 / dof;
+
+    // the probability that an observed Chi-squared exceeds
+    // the value chi2 by chance, even for a correct model.
+    double prob = PvalChi2(chi2, dof);
+
+    // See Numerical Recipes, Section 6.2
+    // prob = Q(chi2, dof) = gammq(dof/2, chi2/2) = 1 - gammp(dof/2, chi2/2)
+    //                     = 1 - TMath::Gamma(dof/2, chi2/2)
+    // double prob = 1. - TMath::Gamma(dof/2., chi2/2.));
+    //
+
+    *wmean_ptr = wmean;
+    *wmean_err_ptr = wmean_err;
+    *nsel_ptr = nsel;
+    *mask_sel_arr_ptr = mask_sel_arr;
+    *chi2_ptr = chi2;
+    *dof_ptr = dof;
+    *chi2_red_ptr = chi2_red;
+    *prob_ptr = prob;
+
+    status = status_getwmean;
+    return status;
+}
+
+
 // ichiji-hokan
 double MxcsMath::IntPolLin(double xval,
                            double xval_lo, double xval_up,
@@ -797,27 +947,122 @@ double MxcsMath::IntPolLin(double xval, double yval,
     return oval;
 }
 
+//
 // statistics
+//
 
-double MxcsMath::ProbGaus(double xval, double mu, double sigma)
+// PDF: probability density function
+double MxcsMath::GaussianPDF(double xval, double mu, double sigma)
 {
-    double ans = 1./( sigma * sqrt(2.0*M_PI) )
+    double ans = 1.0 / (sigma * sqrt(2.0*M_PI))
         * exp( (-1.0)*(xval - mu)*(xval - mu)/2.0/sigma/sigma );
     return ans;
 }
 
-double MxcsMath::ProbGausAsym(double xval, double mu,
-                              double sigma_plus, double sigma_minus)
+// CDF: cumulative distribution function
+double MxcsMath::GaussianCDF(double xval, double mu, double sigma)
+{
+    double cdf = (1.0 + std::erf(
+                      (xval - mu)
+                      / sqrt(2.0 * sigma * sigma) ) ) / 2.0;
+    return cdf;
+}
+
+// P-value
+double MxcsMath::PvalGaussian(double xval, double mu, double sigma,
+                              string side)
+{
+    double pval = 0.0;
+    if("both" == side){
+        double diff = fabs(xval - mu);
+        pval = 1.0
+            - (GaussianCDF(xval + diff, mu, sigma)
+               - GaussianCDF(xval - diff, mu, sigma));
+    } else if("upper" == side){
+        pval = 1.0 - GaussianCDF(xval, mu, sigma);
+    } else if("lower" == side){
+        pval = GaussianCDF(xval, mu, sigma);
+    } else{
+        printf("bad side (=%s)\n", side.c_str());
+        abort();
+    }
+    return pval;
+}
+
+
+double MxcsMath::GaussianAsymPDF(double xval, double mu,
+                                 double sigma_plus,
+                                 double sigma_minus)
 {
     double sigma_mean = (sigma_plus + sigma_minus) / 2.0;
     double ans = 0.0;
     if (xval < mu){
-        ans = sigma_minus / sigma_mean * ProbGaus(xval, mu, sigma_minus);
+        ans = sigma_minus / sigma_mean
+            * GaussianPDF(xval, mu, sigma_minus);
     } else {
-        ans = sigma_plus  / sigma_mean * ProbGaus(xval, mu, sigma_plus);
+        ans = sigma_plus  / sigma_mean
+            * GaussianPDF(xval, mu, sigma_plus);
     }
     return ans;
 }
+
+// gamma distribution
+double MxcsMath::GammaPDF(double xval, double alpha, double beta)
+{
+    double pdf = ( pow(beta, alpha) * pow(xval, (alpha - 1.0))
+                   * exp(-1.0 * beta * xval) ) / std::tgamma(alpha);
+    return pdf;
+}
+
+double MxcsMath::GammaCDF(double xval, double alpha, double beta)
+{
+    // cdf = P(alpha, beta * xval),
+    // where P() is the imcomplete gamma function.
+    // See Numerical Recipes, (6.14.43)
+    
+    double cdf = gsl_sf_gamma_inc_P(alpha, beta * xval);
+    return cdf;
+}
+
+double MxcsMath::PvalGamma(double xval, double alpha, double beta)
+{
+    double pval = 1.0 - GammaCDF(xval, alpha, beta);
+    return pval;
+}
+
+
+// chi2 distribution
+double MxcsMath::Chi2PDF(double xval, int dof)
+{
+    double pdf = pow(xval, dof / 2.0 - 1.0) * exp(-xval/2.0)
+        / (pow(2.0, dof/2.0) * std::tgamma(dof/2.0));
+    return pdf;
+}
+
+double MxcsMath::Chi2CDF(double xval, int dof)
+{
+    // See Numerical Recipes, (6.14.38)
+    double cdf = gsl_sf_gamma_inc_P(dof/2.0, xval/2.0);
+    return cdf;
+}
+
+double MxcsMath::PvalChi2(double xval, int dof)
+{
+    double pval = 1.0 - Chi2CDF(xval, dof);
+    return pval;
+}
+
+double MxcsMath::Sigma2CL(double s_sigma_level)
+{
+    // s_sigma level --> confidence level
+    
+    double mu = 0.0;
+    double sigma = 1.0;
+    double cl = GaussianCDF(s_sigma_level, mu, sigma)
+        - GaussianCDF(-s_sigma_level, mu, sigma);
+    return cl;
+}
+
 
 // for binning
 long MxcsMath::GetNbin(double val_lo, double val_up,

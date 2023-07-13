@@ -2,6 +2,8 @@
 #define MXCSTOOL_MXCSANALIB_MATH_H_
 
 #include "mxcs_base.h"
+#include "mxcs_sort.h"
+#include "gsl/gsl_sf_gamma.h"
 
 // "Average" and "mean" are ambiguous,
 // then we do not use these names.
@@ -189,16 +191,41 @@ namespace MxcsMath
                      double oval_x0y0, double oval_x1y0,
                      double oval_x1y1, double oval_x0y1);
 
+    //
     // statistics
-    double ProbGaus(double xval, double mu, double sigma);
-    double ProbGausAsym(double xval, double mu,
-                        double sigma_plus, double sigma_minus);
-    double Sigma2CL(double sigma);
+    //
+    // PDF: probability density function
+    // CDF: cumulative distribution function
+    // Pval: p-value = 1 - CDF(x)
+    //
+
+    // gaussian dist
+    double GaussianPDF(double xval, double mu, double sigma);
+    double GaussianCDF(double xval, double mu, double sigma);
+    double PvalGaussian(double xval, double mu, double sigma,
+                        string side = "both");
+
+    double GaussianAsymPDF(double xval, double mu,
+                           double sigma_plus,
+                           double sigma_minus);
+    // gamma dist
+    double GammaPDF(double xval, double alpha, double beta);
+    double GammaCDF(double xval, double alpha, double beta);
+    double PvalGamma(double xval, double alpha, double beta);
+
+    // chi2 dist
+    double Chi2PDF(double xval, int dof);
+    double Chi2CDF(double xval, int dof);
+    double PvalChi2(double xval, int dof);
+
+    // sigma level <--> confidence level
+    double Sigma2CL(double s_sigma_level);
     double CL2Sigma(double cl);
 
+
+    
     int GetPermutation(int n, int r);
     // Permutation(n, r) = _nP_r = n! / (n - r)!
-    
     int GetCombination(int n, int r);
     // Combination(n, r) = _nC_r = _nP_r / r! =  n! / [r! (n - r)!]
 

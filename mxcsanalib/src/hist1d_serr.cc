@@ -248,60 +248,63 @@ HistDataSerr1d* const HistDataSerr1d::GenHd1MaxInBin(long nbin_new) const
     return h1d_new;
 }
 
-//void HistDataSerr1d::FillRandom(const MxcsFunc* const func,
-//                                const double* const func_par,
-//                                int rand_seed)
-//{
-//    TRandom3* trand = new TRandom3(rand_seed);
-//    for(long ibin = 0; ibin < GetNbinX(); ibin ++){
-//        double xval = GetBinCenter(ibin);
-//        double oval = func->Eval1d(xval, func_par);
-//
-//        // poisson error
-//        double oval_rand = trand->PoissonD(oval);
-//        double oval_err = sqrt(oval_rand);
-//        SetOvalElm(ibin, oval_rand);
-//        SetOvalSerrElm(ibin, oval_err);
-//    }
-//    delete trand;
-//}
-//
-//void HistDataSerr1d::FillRandom(const MxcsFunc* const func,
-//                                const double* const func_par,
-//                                const MxcsFunc* const func_sigma,
-//                                const double* const func_par_sigma,
-//                                int rand_seed)
-//{
-//    TRandom3* trand = new TRandom3(rand_seed);
-//    for(long ibin = 0; ibin < GetNbinX(); ibin ++){
-//        double xval = GetBinCenter(ibin);
-//        double oval = func->Eval1d(xval, func_par);
-//        
-//        // gaussian error
-//        double sigma = func_sigma->Eval1d(xval, func_par_sigma);
-//        double oval_rand = trand->Gaus(oval, sigma);
-//        double oval_err = sigma;
-//        SetOvalElm(ibin, oval_rand);
-//        SetOvalSerrElm(ibin, oval_err);
-//    }
-//    delete trand;
-//}
-//
-//
-//void HistDataSerr1d::FillRandom(const HistData1d* const hist_data, int rand_seed)
-//{
-//    Init(hist_data->GetNbinX(), hist_data->GetXvalLo(), hist_data->GetXvalUp());
-//    
-//    TRandom3* trand = new TRandom3(rand_seed);
-//    for(long ibin = 0; ibin < GetNbinX(); ibin ++){
-//        // poisson error
-//        double oval_rand = trand->PoissonD(hist_data->GetOvalElm(ibin));
-//        double oval_err = sqrt(oval_rand);
-//        SetOvalElm(ibin, oval_rand);
-//        SetOvalSerrElm(ibin, oval_err);
-//    }
-//    delete trand;
-//}
+void HistDataSerr1d::FillRandom(const MxcsFunc* const func,
+                                const double* const func_par,
+                                int rand_seed)
+{
+    MxcsRand* mrand = new MxcsRand;
+    mrand->Init(rand_seed);
+    for(long ibin = 0; ibin < GetNbinX(); ibin ++){
+        double xval = GetBinCenter(ibin);
+        double oval = func->Eval1d(xval, func_par);
+
+        // poisson error
+        double oval_rand = mrand->Poisson(oval);
+        double oval_err = sqrt(oval_rand);
+        SetOvalElm(ibin, oval_rand);
+        SetOvalSerrElm(ibin, oval_err);
+    }
+    delete mrand;
+}
+
+void HistDataSerr1d::FillRandom(const MxcsFunc* const func,
+                                const double* const func_par,
+                                const MxcsFunc* const func_sigma,
+                                const double* const func_par_sigma,
+                                int rand_seed)
+{
+    MxcsRand* mrand = new MxcsRand;
+    mrand->Init(rand_seed);
+    for(long ibin = 0; ibin < GetNbinX(); ibin ++){
+        double xval = GetBinCenter(ibin);
+        double oval = func->Eval1d(xval, func_par);
+        
+        // gaussian error
+        double sigma = func_sigma->Eval1d(xval, func_par_sigma);
+        double oval_rand = mrand->Normal(oval, sigma);
+        double oval_err = sigma;
+        SetOvalElm(ibin, oval_rand);
+        SetOvalSerrElm(ibin, oval_err);
+    }
+    delete mrand;
+}
+
+
+void HistDataSerr1d::FillRandom(const HistData1d* const hist_data, int rand_seed)
+{
+    Init(hist_data->GetNbinX(), hist_data->GetXvalLo(), hist_data->GetXvalUp());
+    
+    MxcsRand* mrand = new MxcsRand;
+    mrand->Init(rand_seed);
+    for(long ibin = 0; ibin < GetNbinX(); ibin ++){
+        // poisson error
+        double oval_rand = mrand->Poisson(hist_data->GetOvalElm(ibin));
+        double oval_err = sqrt(oval_rand);
+        SetOvalElm(ibin, oval_rand);
+        SetOvalSerrElm(ibin, oval_err);
+    }
+    delete mrand;
+}
 
 HistDataSerr1d* HistDataSerr1d::GenSubHist(long ibinx_st, long ibinx_ed) const
 {

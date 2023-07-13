@@ -349,40 +349,41 @@ void HistData2d::PrintInfo(FILE* fp) const
 }
 
 
-//GraphDataNerr2d* const HistData2d::GenRandomEvt(int rand_seed) const
-//{
-//    TRandom3* trand = new TRandom3(rand_seed);
-//    vector<double> xval_vec;
-//    vector<double> yval_vec;
-//
-//    double tbinfwidth_x = GetBinWidthX();
-//    double tbinfwidth_y = GetBinWidthY();
-//    for(long ibin = 0; ibin < GetNbin(); ibin ++){
-//        long ibin_x = GetHi2d()->GetIbinX(ibin);
-//        long ibin_y = GetHi2d()->GetIbinY(ibin);
-//        double bin_center_x = GetHi2d()->GetBinCenterXFromIbinX(ibin_x);
-//        double bin_center_y = GetHi2d()->GetBinCenterYFromIbinY(ibin_y);
-//        
-//        double bin_lo_x = bin_center_x - 0.5 * tbinfwidth_x;
-//        double bin_lo_y = bin_center_y - 0.5 * tbinfwidth_y;
-//        double count_wpe = trand->Poisson(GetOvalElm(ibin_x, ibin_y));
-//        
-//        for(long ievt = 0; ievt < count_wpe; ievt ++){
-//            double xval_evt = bin_lo_x + trand->Uniform() * tbinfwidth_x;
-//            double yval_evt = bin_lo_y + trand->Uniform() * tbinfwidth_y;
-//            xval_vec.push_back(xval_evt);
-//            yval_vec.push_back(yval_evt);
-//        }
-//    }
-//
-//    GraphDataNerr2d* gdata2d = new GraphDataNerr2d;
-//    gdata2d->Init(xval_vec.size());
-//    gdata2d->SetXvalArr(xval_vec);
-//    gdata2d->SetOvalArr(yval_vec);
-//    delete trand;
-//    return gdata2d;
-//}
-//
+GraphDataNerr2d* const HistData2d::GenRandomEvt(int rand_seed) const
+{
+    MxcsRand* mrand = new MxcsRand;
+    mrand->Init(rand_seed);
+    vector<double> xval_vec;
+    vector<double> yval_vec;
+
+    double tbinfwidth_x = GetBinWidthX();
+    double tbinfwidth_y = GetBinWidthY();
+    for(long ibin = 0; ibin < GetNbin(); ibin ++){
+        long ibin_x = GetHi2d()->GetIbinX(ibin);
+        long ibin_y = GetHi2d()->GetIbinY(ibin);
+        double bin_center_x = GetHi2d()->GetBinCenterXFromIbinX(ibin_x);
+        double bin_center_y = GetHi2d()->GetBinCenterYFromIbinY(ibin_y);
+        
+        double bin_lo_x = bin_center_x - 0.5 * tbinfwidth_x;
+        double bin_lo_y = bin_center_y - 0.5 * tbinfwidth_y;
+        double count_wpe = mrand->Poisson(GetOvalElm(ibin_x, ibin_y));
+        
+        for(long ievt = 0; ievt < count_wpe; ievt ++){
+            double xval_evt = bin_lo_x + mrand->Uniform() * tbinfwidth_x;
+            double yval_evt = bin_lo_y + mrand->Uniform() * tbinfwidth_y;
+            xval_vec.push_back(xval_evt);
+            yval_vec.push_back(yval_evt);
+        }
+    }
+
+    GraphDataNerr2d* gdata2d = new GraphDataNerr2d;
+    gdata2d->Init(xval_vec.size());
+    gdata2d->SetXvalArr(xval_vec);
+    gdata2d->SetOvalArr(yval_vec);
+    delete mrand;
+    return gdata2d;
+}
+
 
 double HistData2d::GetOffsetXFromTag(string offset_tag) const
 {

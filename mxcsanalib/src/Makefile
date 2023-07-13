@@ -2,7 +2,11 @@ include ../../Makefile.in
 include ../../mxcslib/Makefile.in
 include ../../mxcsanalib/Makefile.in
 
-INCLUDE := $(MXCSANALIB_INC) $(MXCSLIB_INC) 
+#GSL_DIR := /soft/heasoft/6.30.1/x86_64-pc-linux-gnu-libc2.17
+#GSL_INC := -I${GSL_DIR}/include
+#GSL_LIB := -L${GSL_DIR}/lib -lgsl
+
+INCLUDE := $(MXCSANALIB_INC) $(MXCSLIB_INC) $(GSL_INC)
 
 TARGET := libmxcsanalib.a
 

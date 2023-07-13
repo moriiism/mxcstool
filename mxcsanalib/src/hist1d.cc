@@ -368,17 +368,18 @@ void HistData1d::PrintData(FILE* fp, string format,
 // generate events from histogram with poisson statistic
 DataArrayNerr1d* const HistData1d::GenRandomEvt(int rand_seed) const
 {
-    TRandom3* trand = new TRandom3(rand_seed);
+    MxcsRand* mrand = new MxcsRand;
+    mrand->Init(rand_seed);
     vector<double> time_vec;
 
     double tbinfwidth = GetXvalBinWidth();
     for(long ibin = 0; ibin < GetNbinX(); ibin ++){
         double bin_center = GetBinCenter(ibin);
         double bin_lo     = bin_center - 0.5 * tbinfwidth;
-        double count_wpe = trand->Poisson(GetOvalElm(ibin));
+        double count_wpe = mrand->Poisson(GetOvalElm(ibin));
       
         for(long ievt = 0; ievt < count_wpe; ievt ++){
-            double time_evt = bin_lo + trand->Uniform() * tbinfwidth;
+            double time_evt = bin_lo + mrand->Uniform() * tbinfwidth;
             time_vec.push_back(time_evt);
         }
     }
@@ -387,41 +388,46 @@ DataArrayNerr1d* const HistData1d::GenRandomEvt(int rand_seed) const
     data_arr->Init(time_vec.size());
     data_arr->SetVal(time_vec);
 
-    delete trand;
+    delete mrand;
     return data_arr;
 }
 
-//// generate events from a probability distribution
-//DataArrayNerr1d* const HistData1d::GenRandomEvtFromProbDist(int nevt, int rand_seed) const
-//{
-//    long nbin = GetOvalArr()->GetNdata();
-//    double sum = MxcsMath::GetSum(nbin, GetOvalArr()->GetVal());
-//
-//    // normalize
-//    double* data_norm = new double [nbin];
-//    for(long ibin = 0; ibin < nbin; ibin ++){
-//        data_norm[ibin] = GetOvalArr()->GetValElm(ibin) / sum;
-//    }
-//    // cumulative dist
-//    double* cum_arr = new double [nbin];
-//    double cum = 0.0;
-//    for(long ibin = 0; ibin < nbin; ibin ++){
-//        cum += data_norm[ibin];
-//        cum_arr[ibin] = cum;
-//    }
-//
-//    long* index_arr = new long [nbin];
-//    TRandom3* trand = new TRandom3(rand_seed);
-//    for(int ievt = 0; ievt < nevt; ievt++){
-//        double rand = trand->Rndm();
-//        long ibin_find = MxcsSort::BinarySearch(nbin, cum_arr, rand);
-//        index_arr[ibin_find] ++;
-//    }
-//    
-//    
-//    delete trand;
-//    return data_arr;
-//}
+// generate events from a probability distribution
+DataArrayNerr1d* const HistData1d::GenRandomEvtFromProbDist(int nevt,
+                                                            int rand_seed) const
+{
+    long nbin = GetOvalArr()->GetNdata();
+    double sum = MxcsMath::GetSum(nbin, GetOvalArr()->GetVal());
+
+    // normalize
+    double* data_norm = new double [nbin];
+    for(long ibin = 0; ibin < nbin; ibin ++){
+        data_norm[ibin] = GetOvalArr()->GetValElm(ibin) / sum;
+    }
+    // cumulative dist
+    double* cum_arr = new double [nbin];
+    double cum = 0.0;
+    for(long ibin = 0; ibin < nbin; ibin ++){
+        cum += data_norm[ibin];
+        cum_arr[ibin] = cum;
+    }
+
+    DataArrayNerr1d* da1d = new DataArrayNerr1d;
+    da1d->Init(nevt);
+    
+    MxcsRand* mrand = new MxcsRand;
+    mrand->Init(rand_seed);
+    for(int ievt = 0; ievt < nevt; ievt++){
+        double rand = mrand->Uniform();
+        long ibin_find = MxcsSort::BinarySearch(nbin, cum_arr, rand);
+        da1d->SetValElm(ievt, GetBinCenter(ibin_find));
+    }
+    delete mrand;
+    delete [] data_norm;
+    delete [] cum_arr;
+    
+    return da1d;
+}
 
 
 

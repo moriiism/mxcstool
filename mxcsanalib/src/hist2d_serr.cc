@@ -274,81 +274,84 @@ void HistDataSerr2d::PrintData(FILE* fp, string format,
 }
 
 
-//// poisson error
-//void HistDataSerr2d::FillRandom(const MxcsFunc* const func,
-//                                const double* const func_par,
-//                                int rand_seed)
-//{
-//    TRandom3* trand = new TRandom3(rand_seed);
-//    for(long ibin = 0; ibin < GetNbin(); ibin ++){
-//        long ibin_x = GetHi2d()->GetIbinX(ibin);
-//        long ibin_y = GetHi2d()->GetIbinY(ibin);
-//        double xval = GetHi2d()->GetBinCenterXFromIbinX(ibin_x);
-//        double yval = GetHi2d()->GetBinCenterYFromIbinY(ibin_y);
-//
-//        double xval_arr[2];
-//        xval_arr[0] = xval;
-//        xval_arr[1] = yval;
-//        double oval = func->Eval(xval_arr, func_par);
-//
-//        // poisson error
-//        double oval_rand = trand->PoissonD(oval);
-//        double oval_err = sqrt(oval_rand);
-//        SetOvalElm(ibin_x, ibin_y, oval_rand);
-//        SetOvalSerrElm(ibin_x, ibin_y, oval_err);
-//    }
-//    delete trand;
-//}
-//
-//// gaussian error
-//void HistDataSerr2d::FillRandom(const MxcsFunc* const func,
-//                                const double* const func_par,
-//                                const MxcsFunc* const func_sigma,
-//                                const double* const func_par_sigma,
-//                                int rand_seed)
-//{
-//    TRandom3* trand = new TRandom3(rand_seed);
-//    for(long ibin = 0; ibin < GetNbin(); ibin ++){
-//        long ibin_x = GetHi2d()->GetIbinX(ibin);
-//        long ibin_y = GetHi2d()->GetIbinY(ibin);
-//        double xval = GetHi2d()->GetBinCenterXFromIbinX(ibin_x);
-//        double yval = GetHi2d()->GetBinCenterYFromIbinY(ibin_y);
-//        
-//        double xval_arr[2];
-//        xval_arr[0] = xval;
-//        xval_arr[1] = yval;
-//        double oval = func->Eval(xval_arr, func_par);
-//        
-//        // gaussian error
-//        double sigma = func_sigma->Eval(xval_arr, func_par_sigma);
-//        double oval_rand = trand->Gaus(oval, sigma);
-//        double oval_err = sigma;
-//        SetOvalElm(ibin_x, ibin_y, oval_rand);
-//        SetOvalSerrElm(ibin_x, ibin_y, oval_err);
-//    }
-//    delete trand;
-//}
-//
-//// poisson error
-//void HistDataSerr2d::FillRandom(const HistData2d* const hist_data,
-//                                int rand_seed)
-//{
-//    Init(hist_data->GetNbinX(), hist_data->GetXvalLo(), hist_data->GetXvalUp(),
-//         hist_data->GetNbinY(), hist_data->GetYvalLo(), hist_data->GetYvalUp());
-//    
-//    TRandom3* trand = new TRandom3(rand_seed);
-//    for(long ibin = 0; ibin < GetNbin(); ibin ++){
-//        long ibin_x = GetHi2d()->GetIbinX(ibin);
-//        long ibin_y = GetHi2d()->GetIbinY(ibin);
-//        
-//        // poisson error
-//        double oval_rand = trand->PoissonD(hist_data->GetOvalElm(ibin_x, ibin_y));
-//        double oval_err = sqrt(oval_rand);
-//        SetOvalElm(ibin_x, ibin_y, oval_rand);
-//        SetOvalSerrElm(ibin_x, ibin_y, oval_err);
-//    }
-//    delete trand;
-//}
+// poisson error
+void HistDataSerr2d::FillRandom(const MxcsFunc* const func,
+                                const double* const func_par,
+                                int rand_seed)
+{
+    MxcsRand* mrand = new MxcsRand;
+    mrand->Init(rand_seed);
+    for(long ibin = 0; ibin < GetNbin(); ibin ++){
+        long ibin_x = GetHi2d()->GetIbinX(ibin);
+        long ibin_y = GetHi2d()->GetIbinY(ibin);
+        double xval = GetHi2d()->GetBinCenterXFromIbinX(ibin_x);
+        double yval = GetHi2d()->GetBinCenterYFromIbinY(ibin_y);
+
+        double xval_arr[2];
+        xval_arr[0] = xval;
+        xval_arr[1] = yval;
+        double oval = func->Eval(xval_arr, func_par);
+
+        // poisson error
+        double oval_rand = mrand->Poisson(oval);
+        double oval_err = sqrt(oval_rand);
+        SetOvalElm(ibin_x, ibin_y, oval_rand);
+        SetOvalSerrElm(ibin_x, ibin_y, oval_err);
+    }
+    delete mrand;
+}
+
+// gaussian error
+void HistDataSerr2d::FillRandom(const MxcsFunc* const func,
+                                const double* const func_par,
+                                const MxcsFunc* const func_sigma,
+                                const double* const func_par_sigma,
+                                int rand_seed)
+{
+    MxcsRand* mrand = new MxcsRand;
+    mrand->Init(rand_seed);
+    for(long ibin = 0; ibin < GetNbin(); ibin ++){
+        long ibin_x = GetHi2d()->GetIbinX(ibin);
+        long ibin_y = GetHi2d()->GetIbinY(ibin);
+        double xval = GetHi2d()->GetBinCenterXFromIbinX(ibin_x);
+        double yval = GetHi2d()->GetBinCenterYFromIbinY(ibin_y);
+        
+        double xval_arr[2];
+        xval_arr[0] = xval;
+        xval_arr[1] = yval;
+        double oval = func->Eval(xval_arr, func_par);
+        
+        // gaussian error
+        double sigma = func_sigma->Eval(xval_arr, func_par_sigma);
+        double oval_rand = mrand->Normal(oval, sigma);
+        double oval_err = sigma;
+        SetOvalElm(ibin_x, ibin_y, oval_rand);
+        SetOvalSerrElm(ibin_x, ibin_y, oval_err);
+    }
+    delete mrand;
+}
+
+// poisson error
+void HistDataSerr2d::FillRandom(const HistData2d* const hist_data,
+                                int rand_seed)
+{
+    Init(hist_data->GetNbinX(), hist_data->GetXvalLo(), hist_data->GetXvalUp(),
+         hist_data->GetNbinY(), hist_data->GetYvalLo(), hist_data->GetYvalUp());
+    
+    MxcsRand* mrand = new MxcsRand;
+    mrand->Init(rand_seed);
+    for(long ibin = 0; ibin < GetNbin(); ibin ++){
+        long ibin_x = GetHi2d()->GetIbinX(ibin);
+        long ibin_y = GetHi2d()->GetIbinY(ibin);
+        
+        // poisson error
+        double oval_rand = mrand->Poisson(hist_data->GetOvalElm(ibin_x, ibin_y));
+        double oval_err = sqrt(oval_rand);
+        SetOvalElm(ibin_x, ibin_y, oval_rand);
+        SetOvalSerrElm(ibin_x, ibin_y, oval_err);
+    }
+    delete mrand;
+}
 
 HistDataSerr2d* HistDataSerr2d::GenSubHist(long ibinx_st, long ibinx_ed,
                                            long ibiny_st, long ibiny_ed) const
