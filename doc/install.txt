@@ -1,0 +1,57 @@
+#
+# install.txt
+#
+
+Installation steps are shown below.
+In this explanation, the user name is assumed to be "morii".
+The downloaded files will be stored in the sub-directory
+under "/home/morii/admin", and these files will be
+installed in the sub-directory of "/soft".
+CentOS 7 is assumed.
+
+#
+# heasoft
+#
+
+https://heasarc.gsfc.nasa.gov/docs/software/heasoft/download.html
+# select mission: MAXI and Suzaku
+# qdp is included in XANADU package.
+(download) --> /home/morii/admin/heasoft/heasoft-6.30.1src.tar.gz
+
+% cd /home/morii/admin/heasoft/
+% tar xvfz heasoft-6.30.1src.tar.gz
+
+(By root)
+# mkdir -p /soft/heasoft/6.30.1
+# chown -R morii /soft/heasoft/6.30.1
+
+(By morii)
+export PATH=/soft/gcc/9.4.0/bin:$PATH
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/soft/gcc/9.4.0/lib64
+
+% cd /home/morii/admin/heasoft/heasoft-6.30.1/BUILD_DIR
+% ./configure --prefix=/soft/heasoft/6.30.1 > config.txt 2>&1 &
+% make > build.log 2>&1 &
+% make install > install.log 2>&1
+
+#
+# mxcstool
+#
+
+(By root)
+# mkdir /soft/mxcstool
+# chown morii /soft/mxcstool
+
+cd /soft/mxcstool
+mkdir YYMMDD
+cd YYMMDD
+git clone https://<your account name>@github.com/moriiism/mxcstool.git
+
+emacs Makefile.in &
+emacs setup/setup.sh &
+
+cd /soft/mxcstool/YYMMDD
+
+source setup/setup.sh
+make > make.log 2>&1 &
+tail -f make.log

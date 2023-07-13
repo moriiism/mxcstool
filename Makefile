@@ -1,8 +1,9 @@
-LIBS = mxcslib  mxcsfitslib  mxcstiminglib
+LIBS = mxcslib  mxcsfitslib  mxcsanalib
 
-BINS = mxcsutil
+BINS = mxcstiming
 
-SUBDIR = $(LIBS) $(BINS) script  setup  doc  try
+SUBDIR = $(LIBS) $(BINS) setup
+#script doc try
 
 ALL = $(LIBS) $(BINS)
 

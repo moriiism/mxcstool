@@ -1,23 +1,24 @@
 include ../../Makefile.in
 include ../../mxcslib/Makefile.in
+include ../../mxcsfitslib/Makefile.in
 
-INCLUDE := $(MXCSLIB_INC)
+INCLUDE := $(MXCSFITSLIB_INC) $(MXCSLIB_INC) $(CFITSIO_INC)
 
-TARGET := libmxcslib.a
+TARGET := libmxcsfitslib.a
 
-OBJ := base.o  str.o  iolib.o  time.o  rand.o
- 
+OBJ := img_info.o  fits.o
+
 all: $(TARGET)
 
 LIB_DEST := ../lib
-libmxcslib.a: ${OBJ}
+libmxcsfitslib.a: ${OBJ}
 	$(AR) -r $@ $(OBJ)
 	ranlib $@
 	if [ ! -d $(LIB_DEST) ]; then mkdir $(LIB_DEST); fi
 	cp $@ ${LIB_DEST}
 	ranlib ${LIB_DEST}/$@
 
-libmxcslib.so: ${OBJ}
+libmxcsfitslib.so: ${OBJ}
 	$(CC) -shared -g -O2 -o $@ ${OBJ}
 	if [ ! -d $(LIB_DEST) ]; then mkdir $(LIB_DEST); fi
 	cp $@ ${LIB_DEST}

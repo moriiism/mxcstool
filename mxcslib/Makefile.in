@@ -2,16 +2,6 @@
 # Makefile.in
 #
 
-### MersenneTwister
-#RND_DIR := /soft/MersenneTwister/mt19937-64
-#RND_INC := -I$(MT_DIR)/include
-#RND_LIB := -L$(MT_DIR)/lib -lmt19937-64
-
-### random
-RND_DIR := /soft/heasoft/6.30.1/attitude/x86_64-pc-linux-gnu-libc2.17
-RND_INC := -I$(RND_DIR)/include
-RND_LIB := -L$(RND_DIR)/lib -lrandom
-
 ### mxcslib
 MXCSLIB_DIR := ${MXCSTOOL_DIR}/mxcslib
 MXCSLIB_INC := -I$(MXCSLIB_DIR)/include

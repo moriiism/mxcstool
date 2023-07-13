@@ -1,6 +1,8 @@
-ALL = src  test
+ALL = src
 TEST = test
-SUBDIR = include  src  test
+
+SUBDIR = include  src
+#SUBDIR = include  src  test
 
 .PHONY: all test clean cleaner
 
@@ -24,4 +26,3 @@ cleaner:
 	for dir in $(SUBDIR); do \
 	(cd $$dir; ${MAKE} cleaner); \
 	done
-

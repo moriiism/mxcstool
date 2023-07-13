@@ -1,0 +1,13 @@
+#
+# Makefile.in
+#
+
+### cfitsio in heasoft
+CFITSIO_DIR := ${HEADAS}
+CFITSIO_INC := -I${CFITSIO_DIR}/include
+CFITSIO_LIB := -L${CFITSIO_DIR}/lib -lcfitsio
+
+### mxcsfitslib
+MXCSFITSLIB_DIR := ${MXCSTOOL_DIR}/mxcsfitslib
+MXCSFITSLIB_INC := -I$(MXCSFITSLIB_DIR)/include
+MXCSFITSLIB_LIB := -L$(MXCSFITSLIB_DIR)/lib -lmxcsfitslib
