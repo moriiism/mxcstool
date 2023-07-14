@@ -6,7 +6,8 @@ INCLUDE := $(MXCSANALIB_INC) $(MXCSLIB_INC) $(GSL_INC)
 LDLIBS  := $(MXCSANALIB_LIB) $(MXCSLIB_LIB) $(GSL_LIB) $(LIB)
 
 TARGET = gti_split  plot_gti  gti_rmgap  gti_andor2  \
-        gti_andorn  gti_lcthr  gti_lcthr_hist  gti_index  \
+        gti_andorn  gti_lcthr  gti_lcthr_hist  gti_lcthr_evt  \
+	gti_index  \
         gti_index_list  gti_is_ordered  gti_length
 
 # gti_margin 
@@ -35,6 +36,9 @@ gti_lcthr: gti_lcthr.o  arg_gti_lcthr.o
 	$(CXXN) $@.o arg_$@.o  ${LDLIBS} -o $@
 
 gti_lcthr_hist: gti_lcthr_hist.o  arg_gti_lcthr_hist.o 
+	$(CXXN) $@.o arg_$@.o  ${LDLIBS} -o $@
+
+gti_lcthr_evt: gti_lcthr_evt.o  arg_gti_lcthr_evt.o 
 	$(CXXN) $@.o arg_$@.o  ${LDLIBS} -o $@
 
 gti_margin: gti_margin.o  arg_gti_margin.o 

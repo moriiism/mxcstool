@@ -1,0 +1,42 @@
+#
+# gti_lcthr_evt.cc
+#
+
+cd /home/morii/work/maxitest
+
+file=data/test_g1_evt_time.dat
+bin_width=1.0
+threshold=1
+gtiout=test_g1_evtgti.dat
+outdir=temp
+outfile_head=temp
+offset_tag="st"
+
+/home/morii/work/github/moriiism/mxcstool/mxcstiming/gti/gti_lcthr_evt \
+$file \
+$bin_width \
+$threshold \
+$gtiout \
+$outdir \
+$outfile_head \
+$offset_tag
+
+##### rm gap
+
+gti_file=test_g1_evtgti.dat
+time_gap=5.0
+gtiout=test_g1_evtgti_rmgap.dat
+outdir="temp"
+outfile_head="temp"
+offset_tag="st"
+
+/home/morii/work/github/moriiism/mxcstool/mxcstiming/gti/gti_rmgap \
+$gti_file \
+$time_gap \
+$gtiout \
+$outdir \
+$outfile_head \
+$offset_tag
+
+
+
