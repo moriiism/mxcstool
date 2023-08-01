@@ -1,0 +1,8 @@
+#ifndef MXCSTOOL_MXCSANALIB_MATHPAR_H_
+#define MXCSTOOL_MXCSANALIB_MATHPAR_H_
+
+// parameters of math
+
+const double kPi = 3.14159265358979;
+
+#endif // MXCSTOOL_MXCSANALIB_MATHPAR_H_
