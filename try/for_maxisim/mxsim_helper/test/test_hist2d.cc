@@ -1,7 +1,7 @@
 #include "mxcs_str.h"
 #include "mxcs_iolib.h"
 #include "mxcs_hist2d_nerr.h"
-//#include "mxcs_qdp_tool.h"
+#include "mxcs_qdp_tool.h"
 //#include "mxcs_func.h"
 
 // global variable 
@@ -67,6 +67,56 @@ int main(int argc, char* argv[])
         printf("=== \n");
     }
 
+    {
+        HistDataNerr2d* hd2d = new HistDataNerr2d("hd2d");
+        hd2d->Init(1, 0.0, 1.0, 2, 0.0, 2.0);        
+        hd2d->SetOvalElm(0, 0, 3);
+        hd2d->SetOvalElm(0, 1, 7);
+
+        double* xval_arr = NULL;
+        double* yval_arr = NULL;
+        int nevt = 10000;
+        int rand_seed = 0;
+        hd2d->GenRandomEvtFromProbDist(nevt, rand_seed,
+                                       &xval_arr, &yval_arr);
+        for(int ievt = 0; ievt < nevt; ievt++){
+            printf("%e, %e\n", xval_arr[ievt], yval_arr[ievt]);
+        }
+
+
+        HistDataNerr1d* hd1d = new HistDataNerr1d;
+        hd1d->Init(2, 0.0, 2.0);
+        for(int ievt = 0; ievt < nevt; ievt++){
+            hd1d->Fill(yval_arr[ievt]);
+        }
+        MxcsQdpTool::MkQdp(hd1d, "temp.qdp", "x,y");
+        delete hd1d;
+        delete hd2d;
+        printf("=== \n");
+    }
+
+    // projection
+    {
+        HistDataNerr2d* hd2d = new HistDataNerr2d("hd2d");
+        hd2d->Init(1, 0.0, 1.0, 2, 0.0, 2.0);        
+        hd2d->SetOvalElm(0, 0, 3);
+        hd2d->SetOvalElm(0, 1, 7);
+
+        HistDataNerr1d* hd1d = new HistDataNerr1d;
+        HistData2dOpe::GetProjectX(hd2d, 0, 1,
+                                   "add", hd1d);
+
+        printf("jjjjj");
+        
+        MxcsQdpTool::MkQdp(hd1d, "temp_proj.qdp", "x,y");
+        delete hd1d;
+        delete hd2d;
+        printf("=== \n");
+    }
+
+    
+    
+    
     
     return status_prog;
 }

@@ -188,8 +188,9 @@ public:
     DataArrayNerr1d* const GenRandomEvt(int rand_seed) const;
 
     // generate events from a probability distribution
-    DataArrayNerr1d* const GenRandomEvtFromProbDist(int nevt,
-                                                    int rand_seed) const;
+    void GenRandomEvtFromProbDist(int nevt,
+                                  int rand_seed,
+                                  double** xval_arr_ptr) const;
     
     Interval* const GenIntervalAboveThreshold(double threshold) const;
     Interval* const GenIntervalBelowThreshold(double threshold) const;

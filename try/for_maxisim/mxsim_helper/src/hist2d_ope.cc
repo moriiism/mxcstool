@@ -1,34 +1,6 @@
 #include "mxcs_vect.h"
 #include "mxcs_hist2d_ope.h"
 
-HistData2d* const HistData2dOpe::GenHd2dByLoad(string file)
-{
-    HistData2d* hd2d = NULL;
-    long nbin_xval = 0;
-    double xval_lo = 0.0;
-    double xval_up = 0.0;
-    long nbin_yval = 0;
-    double yval_lo = 0.0;
-    double yval_up = 0.0;
-    string format = "";
-    HistData2d::ReadInfo(file,
-                         &nbin_xval, &xval_lo, &xval_up,
-                         &nbin_yval, &yval_lo, &yval_up,
-                         &format);
-    if("x,y,z" == format){
-        hd2d = new HistDataNerr2d;
-    } else if("x,y,z,ze" == format){
-        hd2d = new HistDataSerr2d;
-    } else if("x,y,z,ze+,ze-" == format){
-        hd2d = new HistDataTerr2d;        
-    } else {
-        MxcsPrintErr("bad format");
-        abort();
-    }
-    hd2d->Load(file);
-    return hd2d;
-}
-
 DataArray1d** const HistData2dOpe::GenDa1dArrNerr(
     const HistData2d* const* const hd2d_arr,
     int narr)
@@ -48,18 +20,6 @@ DataArray1d** const HistData2dOpe::GenDa1dArrSerr(
     DataArray1d** da1d_arr = new DataArray1d* [narr];
     for(int iarr = 0; iarr < narr; iarr ++){
         da1d_arr[iarr] = new DataArraySerr1d;
-        da1d_arr[iarr]->Copy(hd2d_arr[iarr]->GetOvalArr());
-    }
-    return da1d_arr;
-}
-
-DataArray1d** const HistData2dOpe::GenDa1dArrTerr(
-    const HistData2d* const* const hd2d_arr,
-    int narr)
-{
-    DataArray1d** da1d_arr = new DataArray1d* [narr];
-    for(int iarr = 0; iarr < narr; iarr ++){
-        da1d_arr[iarr] = new DataArrayTerr1d;
         da1d_arr[iarr]->Copy(hd2d_arr[iarr]->GetOvalArr());
     }
     return da1d_arr;
@@ -190,17 +150,6 @@ void HistData2dOpe::GetNot(const HistData2d* const in,
     delete da1d;
 }
 
-void HistData2dOpe::GetNot(const HistData2d* const in,
-                           HistDataTerr2d* const out)
-{
-    DataArrayTerr1d* da1d = new DataArrayTerr1d;
-    DataArray1dOpe::GetNot(in->GetOvalArr(),
-                           da1d);
-    out->Init(in->GetHi2d());
-    out->SetOvalArr(da1d);
-    delete da1d;
-}
-
 void HistData2dOpe::GetScale(const HistData2d* const in,
                              double scale, double offset,
                              HistDataNerr2d* const out)
@@ -227,19 +176,7 @@ void HistData2dOpe::GetScale(const HistData2d* const in,
     delete da1d;
 }
 
-void HistData2dOpe::GetScale(const HistData2d* const in,
-                             double scale, double offset,
-                             HistDataTerr2d* const out)
-{
-    DataArrayTerr1d* da1d = new DataArrayTerr1d;
-    DataArray1dOpe::GetScale(in->GetOvalArr(),
-                             scale, offset,
-                             da1d);
-    out->Init(in->GetHi2d());
-    out->SetOvalArr(da1d);
-    delete da1d;
-}
-    
+   
 // For two HistData2d
 void HistData2dOpe::GetMin(const HistData2d* const in1,
                            const HistData2d* const in2,
@@ -267,20 +204,6 @@ void HistData2dOpe::GetMin(const HistData2d* const in1,
     delete da1d;
 }
     
-void HistData2dOpe::GetMin(const HistData2d* const in1,
-                           const HistData2d* const in2,
-                           HistDataTerr2d* const out)
-{
-    DataArrayTerr1d* da1d = new DataArrayTerr1d;
-    DataArray1dOpe::GetMin(in1->GetOvalArr(),
-                           in2->GetOvalArr(),
-                           da1d);
-    out->Init(in1->GetHi2d());
-    out->SetOvalArr(da1d);
-    delete da1d;
-}
-    
-    
 void HistData2dOpe::GetMax(const HistData2d* const in1,
                            const HistData2d* const in2,
                            HistDataNerr2d* const out)
@@ -299,19 +222,6 @@ void HistData2dOpe::GetMax(const HistData2d* const in1,
                            HistDataSerr2d* const out)
 {
     DataArraySerr1d* da1d = new DataArraySerr1d;
-    DataArray1dOpe::GetMax(in1->GetOvalArr(),
-                           in2->GetOvalArr(),
-                           da1d);
-    out->Init(in1->GetHi2d());
-    out->SetOvalArr(da1d);
-    delete da1d;
-}
-    
-void HistData2dOpe::GetMax(const HistData2d* const in1,
-                           const HistData2d* const in2,
-                           HistDataTerr2d* const out)
-{
-    DataArrayTerr1d* da1d = new DataArrayTerr1d;
     DataArray1dOpe::GetMax(in1->GetOvalArr(),
                            in2->GetOvalArr(),
                            da1d);
@@ -561,21 +471,6 @@ void HistData2dOpe::GetMin(const HistData2d* const* const in_arr,
     DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
     delete da1d;
 }
-
-void HistData2dOpe::GetMin(const HistData2d* const* const in_arr,
-                           int narr,
-                           HistDataTerr2d* const out)
-{
-    DataArray1d** da1d_arr = GenDa1dArrTerr(in_arr, narr);
-    DataArrayTerr1d* da1d = new DataArrayTerr1d;
-    DataArray1dOpe::GetMin(da1d_arr, narr, da1d);
-    out->Init(in_arr[0]->GetHi2d());
-    out->SetOvalArr(da1d);
-
-    DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
-    delete da1d;
-}
-
     
 void HistData2dOpe::GetMax(const HistData2d* const* const in_arr,
                            int narr,
@@ -604,21 +499,6 @@ void HistData2dOpe::GetMax(const HistData2d* const* const in_arr,
     DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
     delete da1d;
 }
-
-void HistData2dOpe::GetMax(const HistData2d* const* const in_arr,
-                           int narr,
-                           HistDataTerr2d* const out)
-{
-    DataArray1d** da1d_arr = GenDa1dArrTerr(in_arr, narr);
-    DataArrayTerr1d* da1d = new DataArrayTerr1d;
-    DataArray1dOpe::GetMax(da1d_arr, narr, da1d);
-    out->Init(in_arr[0]->GetHi2d());
-    out->SetOvalArr(da1d);
-
-    DataArray1dOpe::DelDa1dArr(da1d_arr, narr);
-    delete da1d;
-}
-    
     
 void HistData2dOpe::GetSum(const HistData2d* const* const in_arr,
                            int narr,
@@ -923,40 +803,6 @@ void HistData2dOpe::GetResValHd2d(const HistData2d* const data,
     delete [] oval_res_serr;
 }
 
-void HistData2dOpe::GetResValHd2d(const HistData2d* const data,
-                                  const MxcsFunc* const func,
-                                  const double* const par,
-                                  HistDataTerr2d* const out)
-{
-    long nbinx = data->GetNbinX();
-    long nbiny = data->GetNbinY();
-    long nbin = nbinx * nbiny;
-    double* oval_res = new double[nbin];
-    double* oval_res_terr_plus  = new double[nbin];
-    double* oval_res_terr_minus = new double[nbin];
-    for(long ibin = 0; ibin < nbin; ibin++){
-        long ibin_x = data->GetHi2d()->GetIbinX(ibin);
-        long ibin_y = data->GetHi2d()->GetIbinY(ibin);
-        double xval_arg[2];
-        double xval_tmp, yval_tmp;
-        data->GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_tmp, &yval_tmp);
-        xval_arg[0] = xval_tmp;
-        xval_arg[1] = yval_tmp;
-        double func_val = func->Eval(xval_arg, par);
-        oval_res[ibin] = data->GetOvalElm(ibin_x, ibin_y) - func_val;
-        oval_res_terr_plus[ibin]  = data->GetOvalTerrPlusElm(ibin_x, ibin_y);
-        oval_res_terr_minus[ibin] = data->GetOvalTerrMinusElm(ibin_x, ibin_y);
-    }
-    out->Init(nbinx, data->GetXvalLo(), data->GetXvalUp(),
-              nbiny, data->GetYvalLo(), data->GetYvalUp());
-    out->SetOvalArr(nbinx * nbiny, oval_res);
-    out->SetOvalTerrArr(nbinx * nbiny,
-                        oval_res_terr_plus, oval_res_terr_minus);
-    delete [] oval_res;
-    delete [] oval_res_terr_plus;
-    delete [] oval_res_terr_minus;    
-}
-
 void HistData2dOpe::GetResRatioHd2d(const HistData2d* const data,
                                     const MxcsFunc* const func,
                                     const double* const par,
@@ -1016,45 +862,6 @@ void HistData2dOpe::GetResRatioHd2d(const HistData2d* const data,
     delete [] oval_res_serr;
 }
 
-
-void HistData2dOpe::GetResRatioHd2d(const HistData2d* const data,
-                                    const MxcsFunc* const func,
-                                    const double* const par,
-                                    HistDataTerr2d* const out)
-{
-    long nbinx = data->GetNbinX();
-    long nbiny = data->GetNbinY();
-    long nbin = nbinx * nbiny;
-    double* oval_res = new double[nbin];
-    double* oval_res_terr_plus  = new double[nbin];
-    double* oval_res_terr_minus = new double[nbin];    
-    for(long ibin = 0; ibin < nbin; ibin++){
-        long ibin_x = data->GetHi2d()->GetIbinX(ibin);
-        long ibin_y = data->GetHi2d()->GetIbinY(ibin);        
-        double xval_arg[2];
-        double xval_tmp, yval_tmp;
-        data->GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_tmp, &yval_tmp);
-        xval_arg[0] = xval_tmp;
-        xval_arg[1] = yval_tmp;
-        double func_val = func->Eval(xval_arg, par);
-        oval_res[ibin] = (data->GetOvalElm(ibin_x, ibin_y) - func_val )
-            / func_val;
-        oval_res_terr_plus[ibin]  = fabs(data->GetOvalTerrPlusElm(ibin_x, ibin_y)
-                                         / func_val);
-        oval_res_terr_minus[ibin] = -1 * fabs(data->GetOvalTerrMinusElm(
-                                                  ibin_x, ibin_y) / func_val);
-    }
-    out->Init(nbinx, data->GetXvalLo(), data->GetXvalUp(),
-              nbiny, data->GetYvalLo(), data->GetYvalUp());
-    out->SetOvalArr(nbinx * nbiny, oval_res);
-    out->SetOvalTerrArr(nbinx * nbiny,
-                        oval_res_terr_plus, oval_res_terr_minus);
-    delete [] oval_res;
-    delete [] oval_res_terr_plus;
-    delete [] oval_res_terr_minus;
-}
-
-
 void HistData2dOpe::GetResChiHd2d(const HistData2d* const data,
                                   const MxcsFunc* const func,
                                   const double* const par,
@@ -1084,48 +891,6 @@ void HistData2dOpe::GetResChiHd2d(const HistData2d* const data,
     out->SetOvalSerrArr(nbinx * nbiny, oval_res_serr);
     delete [] oval_res;
     delete [] oval_res_serr;
-}
-
-
-void HistData2dOpe::GetResChiHd2d(const HistData2d* const data,
-                                  const MxcsFunc* const func,
-                                  const double* const par,
-                                  HistDataTerr2d* const out)
-{
-    long nbinx = data->GetNbinX();
-    long nbiny = data->GetNbinY();
-    long nbin = nbinx * nbiny;
-    double* oval_res = new double[nbin];
-    double* oval_res_terr_plus  = new double[nbin];
-    double* oval_res_terr_minus = new double[nbin];
-    for(long ibin = 0; ibin < nbin; ibin++){
-        long ibin_x = data->GetHi2d()->GetIbinX(ibin);
-        long ibin_y = data->GetHi2d()->GetIbinY(ibin);        
-        double xval_arg[2];
-        double xval_tmp, yval_tmp;
-        data->GetHi2d()->GetBinCenterXYFromIbin(ibin, &xval_tmp, &yval_tmp);
-        xval_arg[0] = xval_tmp;
-        xval_arg[1] = yval_tmp;
-        double func_val = func->Eval(xval_arg, par);
-        if(data->GetOvalElm(ibin_x, ibin_y) > func_val){
-            oval_res[ibin] = -1 * (data->GetOvalElm(ibin_x, ibin_y)
-                                   - func_val)
-                / data->GetOvalTerrMinusElm(ibin_x, ibin_y);
-        } else {
-            oval_res[ibin] = (data->GetOvalElm(ibin_x, ibin_y) - func_val)
-                / data->GetOvalTerrPlusElm(ibin_x, ibin_y);
-        }
-        oval_res_terr_plus[ibin] = 1.0;
-        oval_res_terr_minus[ibin] = 1.0;
-    }
-    out->Init(nbinx, data->GetXvalLo(), data->GetXvalUp(),
-              nbiny, data->GetYvalLo(), data->GetYvalUp());
-    out->SetOvalArr(nbinx * nbiny, oval_res);
-    out->SetOvalTerrArr(nbinx * nbiny,
-                        oval_res_terr_plus, oval_res_terr_minus);
-    delete [] oval_res;
-    delete [] oval_res_terr_plus;
-    delete [] oval_res_terr_minus;
 }
 
 double HistData2dOpe::FindMdXbyEdge(const HistDataNerr2d* const hd2d)

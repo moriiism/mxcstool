@@ -91,9 +91,33 @@ int main(int argc, char* argv[])
         delete hd1d;
         printf("=== \n");
     }
+
+    {
+        HistDataNerr1d* hd1d = new HistDataNerr1d("hd1d");
+        hd1d->Init(4, 0.0, 4.0);
+        hd1d->SetOvalElm(0, 10);
+        hd1d->SetOvalElm(1, 20);
+        hd1d->SetOvalElm(2, 30);
+        hd1d->SetOvalElm(3, 5);
+
+        printf("jjjj");
+        int nevt = 1000;
+        int rand_seed = 0;
+        DataArrayNerr1d* da1d = NULL;
+        da1d = hd1d->GenRandomEvtFromProbDist(nevt, rand_seed);
+
+        HistDataNerr1d* hd1d_rand = new HistDataNerr1d("hd1d_rand");
+        hd1d_rand->Init(4, 0.0, 4.0);
+        da1d->PrintData(stdout, 0, 0.0);
+        delete hd1d;
+        printf("=== \n");
+    }
+    
     
 
 
+
+    
 
     
 ////    virtual void Init(const HistInfo1d* const hist_info) = 0;

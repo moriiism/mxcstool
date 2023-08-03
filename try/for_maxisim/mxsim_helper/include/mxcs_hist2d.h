@@ -199,6 +199,12 @@ public:
     virtual void FillRandom(const HistData2d* const hist_data,
                             int rand_seed)
         {MxcsPrintErrVFunc; abort();};
+
+    // generate events from a probability distribution
+    void GenRandomEvtFromProbDist(int nevt,
+                                  int rand_seed,
+                                  double** xval_arr_ptr,
+                                  double** yval_arr_ptr) const;
     
     virtual HistData2d* GenSubHist(long ibinx_st, long ibinx_ed,
                                    long ibiny_st, long ibiny_ed) const = 0;

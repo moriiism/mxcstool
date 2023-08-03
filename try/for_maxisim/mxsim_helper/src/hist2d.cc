@@ -349,6 +349,47 @@ void HistData2d::PrintInfo(FILE* fp) const
 }
 
 
+// generate events from a probability distribution
+void HistData2d::GenRandomEvtFromProbDist(
+    int nevt,
+    int rand_seed,
+    double** xval_arr_ptr,
+    double** yval_arr_ptr) const
+{
+    long nbin = GetOvalArr()->GetNdata();
+    double sum = MxcsMath::GetSum(nbin, GetOvalArr()->GetVal());
+    // normalize
+    double* data_norm = new double [nbin];
+    for(long ibin = 0; ibin < nbin; ibin ++){
+        data_norm[ibin] = GetOvalArr()->GetValElm(ibin) / sum;
+    }
+    // cumulative dist
+    double* cum_arr = new double [nbin];
+    double cum = 0.0;
+    for(long ibin = 0; ibin < nbin; ibin ++){
+        cum += data_norm[ibin];
+        cum_arr[ibin] = cum;
+        printf("cum_arr = %e\n", cum_arr[ibin]);
+    }
+
+    double* xval_arr = new double[nevt];
+    double* yval_arr = new double[nevt];
+    MxcsRand* mrand = new MxcsRand;
+    mrand->Init(rand_seed);
+    for(int ievt = 0; ievt < nevt; ievt++){
+        double rand = mrand->Uniform();
+        long ibin_find = MxcsSort::BinarySearch(nbin, cum_arr, rand);
+        xval_arr[ievt] = GetHi2d()->GetBinCenterXFromIbin(ibin_find + 1);
+        yval_arr[ievt] = GetHi2d()->GetBinCenterYFromIbin(ibin_find + 1);
+    }
+    delete mrand;
+    delete [] data_norm;
+    delete [] cum_arr;
+    *xval_arr_ptr = xval_arr;
+    *yval_arr_ptr = yval_arr;
+}
+
+
 double HistData2d::GetOffsetXFromTag(string offset_tag) const
 {
     double offset = 0.0;

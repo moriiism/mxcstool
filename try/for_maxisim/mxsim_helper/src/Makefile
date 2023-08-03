@@ -7,10 +7,10 @@ TARGET := libmxsim_helper.a
 OBJ := base.o  iolib.o  rand.o  str.o  time.o \
 	math.o  interval.o  func.o  func_par.o \
 	plot_conf.o  \
-	data1d.o  data1d_nerr.o  data1d_serr.o  \
+	data1d.o  data1d_nerr.o  data1d_serr.o  data1d_ope.o \
 	hist_info.o  \
-	hist1d.o  hist1d_nerr.o  hist1d_serr.o  \
-	hist2d.o  hist2d_nerr.o  hist2d_serr.o  \
+	hist1d.o  hist1d_nerr.o  hist1d_serr.o  hist1d_ope.o \
+	hist2d.o  hist2d_nerr.o  hist2d_serr.o  hist2d_ope.o \
 	qdp_tool.o
 
 all: $(TARGET)

@@ -3,7 +3,7 @@ include ../Makefile.in
 INCLUDE := $(MXSIM_HELPER_INC) $(GSL_INC)
 LDLIBS  := $(MXSIM_HELPER_LIB) $(GSL_LIB) $(LIB)
 
-TARGET := test_hist1d  test_hist2d
+TARGET := test_hist1d  test_hist2d  test_binary_search
 
 all: $(TARGET)
 
@@ -11,6 +11,9 @@ test_hist1d: test_hist1d.o
 	$(CXXN) $@.o ${LDLIBS} -o $@
 
 test_hist2d: test_hist2d.o
+	$(CXXN) $@.o ${LDLIBS} -o $@
+
+test_binary_search: test_binary_search.o
 	$(CXXN) $@.o ${LDLIBS} -o $@
 
 .SUFFIXES:

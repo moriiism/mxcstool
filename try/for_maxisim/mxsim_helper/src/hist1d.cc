@@ -383,7 +383,7 @@ DataArrayNerr1d* const HistData1d::GenRandomEvt(int rand_seed) const
             time_vec.push_back(time_evt);
         }
     }
-
+    
     DataArrayNerr1d* data_arr = new DataArrayNerr1d;
     data_arr->Init(time_vec.size());
     data_arr->SetVal(time_vec);
@@ -393,12 +393,13 @@ DataArrayNerr1d* const HistData1d::GenRandomEvt(int rand_seed) const
 }
 
 // generate events from a probability distribution
-DataArrayNerr1d* const HistData1d::GenRandomEvtFromProbDist(int nevt,
-                                                            int rand_seed) const
+void HistData1d::GenRandomEvtFromProbDist(
+    int nevt,
+    int rand_seed,
+    double** xval_arr_ptr) const
 {
     long nbin = GetOvalArr()->GetNdata();
     double sum = MxcsMath::GetSum(nbin, GetOvalArr()->GetVal());
-
     // normalize
     double* data_norm = new double [nbin];
     for(long ibin = 0; ibin < nbin; ibin ++){
@@ -410,23 +411,20 @@ DataArrayNerr1d* const HistData1d::GenRandomEvtFromProbDist(int nevt,
     for(long ibin = 0; ibin < nbin; ibin ++){
         cum += data_norm[ibin];
         cum_arr[ibin] = cum;
+        printf("cum_arr = %e\n", cum_arr[ibin]);
     }
-
-    DataArrayNerr1d* da1d = new DataArrayNerr1d;
-    da1d->Init(nevt);
-    
+    double* xval_arr = new double[nevt];
     MxcsRand* mrand = new MxcsRand;
     mrand->Init(rand_seed);
     for(int ievt = 0; ievt < nevt; ievt++){
         double rand = mrand->Uniform();
         long ibin_find = MxcsSort::BinarySearch(nbin, cum_arr, rand);
-        da1d->SetValElm(ievt, GetBinCenter(ibin_find));
+        xval_arr[ievt] = GetBinCenter(ibin_find + 1);
     }
     delete mrand;
     delete [] data_norm;
     delete [] cum_arr;
-    
-    return da1d;
+    *xval_arr_ptr = xval_arr;
 }
 
 

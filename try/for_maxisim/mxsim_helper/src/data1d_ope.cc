@@ -7,8 +7,6 @@ DataArray1d* const DataArray1dOpe::GenDa1dByLoad(string file, string format)
         da1d = new DataArrayNerr1d;
     } else if("x,xe" == format){
         da1d = new DataArraySerr1d;
-    } else if("x,xe+,xe-" == format){
-        da1d = new DataArrayTerr1d;
     } else {
         MxcsPrintErr("bad format");
         abort();
@@ -67,25 +65,6 @@ void DataArray1dOpe::GetScale(const DataArray1d* const data_array,
     }
 }
 
-void DataArray1dOpe::GetScale(const DataArray1d* const data_array,
-                              double scale, double offset,
-                              DataArrayTerr1d* const data_array_out)
-{
-    long ndata = data_array->GetNdata();
-    data_array_out->Init(ndata);
-    for(long idata = 0; idata < ndata; idata++){
-        double val = 0.0;
-        double val_terr_plus = 0.0;
-        double val_terr_minus = 0.0;
-        val = scale * data_array->GetValElm(idata) + offset;
-        val_terr_plus  = scale * data_array->GetValTerrPlusElm(idata);
-        val_terr_minus = scale * data_array->GetValTerrMinusElm(idata);
-        data_array_out->SetValElm(idata, val);
-        data_array_out->SetValTerrPlusElm(idata, val_terr_plus);
-        data_array_out->SetValTerrMinusElm(idata, val_terr_minus);
-    }
-}
-
 // For two DataArray1d
 
 void DataArray1dOpe::GetMin(const DataArray1d* const data_array1,
@@ -128,36 +107,6 @@ void DataArray1dOpe::GetMin(const DataArray1d* const data_array1,
     }
 }
 
-void DataArray1dOpe::GetMin(const DataArray1d* const data_array1,
-                            const DataArray1d* const data_array2,
-                            DataArrayTerr1d* const data_array_out)
-{
-    IsFormatSame(data_array1, data_array2);
-    long ndata = data_array1->GetNdata();
-    data_array_out->Init(ndata);
-    for(long idata = 0; idata < ndata; idata++){
-        int index  = MxcsMath::GetLocMin(data_array1->GetValElm(idata),
-                                         data_array2->GetValElm(idata));
-        double val = 0.0;
-        double val_terr_plus  = 0.0;
-        double val_terr_minus = 0.0;
-        if(0 == index){
-            val            = data_array1->GetValElm(idata);
-            val_terr_plus  = data_array1->GetValTerrPlusElm(idata);
-            val_terr_minus = data_array1->GetValTerrMinusElm(idata);
-        } else if (1 == index){
-            val            = data_array2->GetValElm(idata);
-            val_terr_plus  = data_array2->GetValTerrPlusElm(idata);
-            val_terr_minus = data_array2->GetValTerrMinusElm(idata);
-        } else {
-            abort();
-        }
-        data_array_out->SetValElm(idata, val);
-        data_array_out->SetValTerrPlusElm(idata, val_terr_plus);
-        data_array_out->SetValTerrMinusElm(idata, val_terr_minus);
-    }
-}
-
 void DataArray1dOpe::GetMax(const DataArray1d* const data_array1,
                             const DataArray1d* const data_array2,
                             DataArrayNerr1d* const data_array_out)
@@ -195,36 +144,6 @@ void DataArray1dOpe::GetMax(const DataArray1d* const data_array1,
         }
         data_array_out->SetValElm(idata, val);        
         data_array_out->SetValSerrElm(idata, val_serr);
-    }
-}
-
-void DataArray1dOpe::GetMax(const DataArray1d* const data_array1,
-                            const DataArray1d* const data_array2,
-                            DataArrayTerr1d* const data_array_out)
-{
-    IsFormatSame(data_array1, data_array2);
-    long ndata = data_array1->GetNdata();
-    data_array_out->Init(ndata);
-    for(long idata = 0; idata < ndata; idata++){
-        int index  = MxcsMath::GetLocMax(data_array1->GetValElm(idata),
-                                         data_array2->GetValElm(idata));
-        double val = 0.0;
-        double val_terr_plus  = 0.0;
-        double val_terr_minus = 0.0;
-        if(0 == index){
-            val            = data_array1->GetValElm(idata);
-            val_terr_plus  = data_array1->GetValTerrPlusElm(idata);
-            val_terr_minus = data_array1->GetValTerrMinusElm(idata);
-        } else if (1 == index){
-            val            = data_array2->GetValElm(idata);
-            val_terr_plus  = data_array2->GetValTerrPlusElm(idata);
-            val_terr_minus = data_array2->GetValTerrMinusElm(idata);
-        } else {
-            abort();
-        }
-        data_array_out->SetValElm(idata, val);        
-        data_array_out->SetValTerrPlusElm(idata, val_terr_plus);
-        data_array_out->SetValTerrMinusElm(idata, val_terr_minus);
     }
 }
 
@@ -589,30 +508,6 @@ void DataArray1dOpe::GetMin(const DataArray1d* const* const data_array_arr,
     }
 }
 
-void DataArray1dOpe::GetMin(const DataArray1d* const* const data_array_arr,
-                            int ndata_array,
-                            DataArrayTerr1d* const data_array_out)
-{
-    IsFormatSame(data_array_arr, ndata_array);
-    long ndata = data_array_arr[0]->GetNdata();
-    data_array_out->Init(ndata);
-    for(long idata = 0; idata < ndata; idata++){
-        double* val_arr_tmp = new double [ndata_array];
-        for(int idata_array = 0; idata_array < ndata_array; idata_array++){
-            val_arr_tmp[idata_array]
-                = data_array_arr[idata_array]->GetValElm(idata);
-        }
-        int index = MxcsMath::GetLocMin(ndata_array, val_arr_tmp);
-        double val            = data_array_arr[index]->GetValElm(idata);
-        double val_terr_plus  = data_array_arr[index]->GetValTerrPlusElm(idata);
-        double val_terr_minus = data_array_arr[index]->GetValTerrMinusElm(idata);
-        data_array_out->SetValElm(idata, val);
-        data_array_out->SetValTerrPlusElm(idata, val_terr_plus);
-        data_array_out->SetValTerrMinusElm(idata, val_terr_minus);
-        delete [] val_arr_tmp;        
-    }
-}
-
 void DataArray1dOpe::GetMax(const DataArray1d* const* const data_array_arr,
                             int ndata_array,
                             DataArrayNerr1d* const data_array_out)
@@ -654,31 +549,6 @@ void DataArray1dOpe::GetMax(const DataArray1d* const* const data_array_arr,
         delete [] val_arr_tmp;
     }
 }
-
-void DataArray1dOpe::GetMax(const DataArray1d* const* const data_array_arr,
-                            int ndata_array,
-                            DataArrayTerr1d* const data_array_out)
-{
-    IsFormatSame(data_array_arr, ndata_array);
-    long ndata = data_array_arr[0]->GetNdata();
-    data_array_out->Init(ndata);
-    for(long idata = 0; idata < ndata; idata++){
-        double* val_arr_tmp = new double [ndata_array];
-        for(int idata_array = 0; idata_array < ndata_array; idata_array++){
-            val_arr_tmp[idata_array]
-                = data_array_arr[idata_array]->GetValElm(idata);
-        }
-        int index = MxcsMath::GetLocMax(ndata_array, val_arr_tmp);
-        double val            = data_array_arr[index]->GetValElm(idata);
-        double val_terr_plus  = data_array_arr[index]->GetValTerrPlusElm(idata);
-        double val_terr_minus = data_array_arr[index]->GetValTerrMinusElm(idata);
-        data_array_out->SetValElm(idata, val);
-        data_array_out->SetValTerrPlusElm(idata, val_terr_plus);
-        data_array_out->SetValTerrMinusElm(idata, val_terr_minus);
-        delete [] val_arr_tmp;
-    }
-}
-
 
 void DataArray1dOpe::GetSum(const DataArray1d* const* const data_array_arr,
                             int ndata_array,
@@ -1221,35 +1091,6 @@ void DataArray1dOpe::GetSelectDa1dByInterval(
     data_array_out->SetValSerr(val_serr_vec);
 }
 
-void DataArray1dOpe::GetSelectDa1dByInterval(
-    const DataArray1d* const data_array,
-    const Interval* const interval,
-    DataArrayTerr1d* const data_array_out)
-{
-    vector<double> val_vec;
-    vector<double> val_terr_plus_vec;
-    vector<double> val_terr_minus_vec;
-    int nterm = interval->GetNterm();
-    for(long iterm = 0; iterm < nterm; iterm ++){
-        long ndata = data_array->GetNdata();
-        for(long idata = 0; idata < ndata; idata ++){
-            double val = data_array->GetValElm(idata);
-            double val_terr_plus  = data_array->GetValTerrPlusElm(idata);
-            double val_terr_minus = data_array->GetValTerrMinusElm(idata);
-            if(interval->GetTstartElm(iterm) <= val &&
-               val <= interval->GetTstopElm(iterm)){
-                val_vec.push_back(val);
-                val_terr_plus_vec.push_back(val_terr_plus);
-                val_terr_minus_vec.push_back(val_terr_minus);
-            }
-        }
-    }
-    data_array_out->Init(val_vec.size());
-    data_array_out->SetVal(val_vec);
-    data_array_out->SetValTerr(val_terr_plus_vec, val_terr_minus_vec);
-}
-
-
 void DataArray1dOpe::GenSelectDa1dArrByIntervalNerr(
     const DataArray1d* const data_array,
     const Interval* const interval,
@@ -1299,39 +1140,6 @@ void DataArray1dOpe::GenSelectDa1dArrByIntervalSerr(
         data_array_arr[iterm]->Init(val_vec.size());
         data_array_arr[iterm]->SetVal(val_vec);
         data_array_arr[iterm]->SetValSerr(val_serr_vec);
-    }
-    *data_array_arr_ptr = data_array_arr;
-}
-
-
-void DataArray1dOpe::GenSelectDa1dArrByIntervalTerr(
-    const DataArray1d* const data_array,
-    const Interval* const interval,
-    DataArray1d*** const data_array_arr_ptr)
-{
-    int nterm = interval->GetNterm();
-    DataArray1d** data_array_arr = new DataArray1d* [nterm];
-    for(long iterm = 0; iterm < nterm; iterm ++){
-        data_array_arr[iterm] = new DataArrayTerr1d;
-        vector<double> val_vec;
-        vector<double> val_terr_plus_vec;
-        vector<double> val_terr_minus_vec;
-        long ndata = data_array->GetNdata();
-        for(long idata = 0; idata < ndata; idata ++){
-            double val = data_array->GetValElm(idata);
-            double val_terr_plus  = data_array->GetValTerrPlusElm(idata);
-            double val_terr_minus = data_array->GetValTerrMinusElm(idata);
-            if(interval->GetTstartElm(iterm) <= val &&
-               val <= interval->GetTstopElm(iterm)){
-                val_vec.push_back(val);
-                val_terr_plus_vec.push_back(val_terr_plus);
-                val_terr_minus_vec.push_back(val_terr_minus);
-            }
-        }
-        data_array_arr[iterm]->Init(val_vec.size());
-        data_array_arr[iterm]->SetVal(val_vec);
-        data_array_arr[iterm]->SetValTerr(val_terr_plus_vec,
-                                          val_terr_minus_vec);
     }
     *data_array_arr_ptr = data_array_arr;
 }
