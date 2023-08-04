@@ -1,7 +1,6 @@
 #include "mxcs_data1d_ope.h"
 #include "mxcs_hist1d_ope.h"
 
-
 DataArray1d** const HistData1dOpe::GenDa1dArrNerr(
     const HistData1d* const* const hd1d_arr,
     int narr)

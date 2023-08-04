@@ -103,12 +103,9 @@ int main(int argc, char* argv[])
         printf("jjjj");
         int nevt = 1000;
         int rand_seed = 0;
-        DataArrayNerr1d* da1d = NULL;
-        da1d = hd1d->GenRandomEvtFromProbDist(nevt, rand_seed);
-
-        HistDataNerr1d* hd1d_rand = new HistDataNerr1d("hd1d_rand");
-        hd1d_rand->Init(4, 0.0, 4.0);
-        da1d->PrintData(stdout, 0, 0.0);
+        double* xval_arr = NULL;
+        hd1d->GenRandomEvtFromProbDist(nevt, rand_seed,
+                                       &xval_arr);
         delete hd1d;
         printf("=== \n");
     }

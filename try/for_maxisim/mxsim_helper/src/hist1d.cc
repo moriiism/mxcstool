@@ -64,69 +64,6 @@ void HistData1d::SetConst(double constant)
     GetOvalArrNonConst()->SetConst(constant);
 }
 
-
-void HistData1d::SetOneAtInterval(const Interval* const interval)
-{
-    IsOvalArrNotNull();            
-    if(1 != interval->IsOrdered()){
-        MxcsPrintErrClass("bad interval.");
-        abort();
-    }
-
-    Interval* interval_hist = new Interval;
-    interval_hist->InitSet(GetXvalLo(), GetXvalUp());
-    Interval* interval_and = new Interval;
-    interval_and->And(interval, interval_hist);
-
-    GetOvalArrNonConst()->SetConst(0.0);
-    for(long iterm = 0; iterm < interval_and->GetNterm(); iterm++){
-        double xlo = interval_and->GetTstartElm(iterm);
-        double xup = interval_and->GetTstopElm(iterm);
-        long ibin_x_lo = (long) MxcsMath::GetMax((double) GetIbin(xlo), 0.0);
-        long ibin_x_up = (long) MxcsMath::GetMin((double) GetIbin(xup),
-                                                 (double) (GetNbinX() - 1) );
-        
-        for(long ibin = ibin_x_lo; ibin <= ibin_x_up; ibin ++){
-            SetOvalElm(ibin, 1);
-        }
-    }
-    delete interval_hist;
-    delete interval_and;
-}
-
-void HistData1d::SetFracAtInterval(const Interval* const interval)
-{
-    SetOneAtInterval(interval);
-
-    Interval* interval_hist = new Interval;
-    interval_hist->InitSet(GetXvalLo(), GetXvalUp());
-    Interval* interval_and = new Interval;
-    interval_and->And(interval, interval_hist);
-
-    for(long iterm = 0; iterm < interval_and->GetNterm(); iterm++){
-        double xlo = interval_and->GetTstartElm(iterm);
-        double xup = interval_and->GetTstopElm(iterm);
-        long ibin_x_lo = (long) MxcsMath::GetMax((double) GetIbin(xlo), 0.0);
-        long ibin_x_up = (long) MxcsMath::GetMin((double) GetIbin(xup),
-                                                 (double) (GetNbinX() - 1) );
-
-        if (ibin_x_lo < ibin_x_up){
-            double frac_lo = (GetHi1d()->GetBinUp(ibin_x_lo) - xlo)
-                / GetXvalBinWidth();
-            double frac_up = (xup - GetHi1d()->GetBinLo(ibin_x_up))
-                / GetXvalBinWidth();
-            SetOvalElm(ibin_x_lo, frac_lo);
-            SetOvalElm(ibin_x_up, frac_up);
-        } else {
-            double frac = (xup - xlo) / GetXvalBinWidth();
-            SetOvalElm(ibin_x_lo, frac);
-        }
-    }
-    delete interval_hist;
-    delete interval_and;
-}
-
-
 void HistData1d::SetByFunc(const MxcsFunc* const func, const double* const par)
 {
     for(int ibin = 0; ibin < GetNbinX(); ibin ++){
@@ -427,49 +364,6 @@ void HistData1d::GenRandomEvtFromProbDist(
     *xval_arr_ptr = xval_arr;
 }
 
-
-
-Interval* const HistData1d::GenIntervalAboveThreshold(double threshold) const
-{
-    vector<double> tstart_vec;
-    vector<double> tstop_vec;
-    for(long ibin = 0; ibin < GetNbinX(); ibin ++){
-        if(GetOvalElm(ibin) > threshold){
-            tstart_vec.push_back(GetBinLo(ibin));
-            tstop_vec.push_back(GetBinUp(ibin));
-        }
-    }
-
-    Interval* interval = new Interval;
-    interval->Init(tstart_vec.size());
-    interval->Set(tstart_vec, tstop_vec);
-
-    // tdiff must be less than bin-width
-    double tdiff = GetXvalBinWidth() / 10.; 
-    interval->Clean(tdiff);
-    return interval;
-}
-
-Interval* const HistData1d::GenIntervalBelowThreshold(double threshold) const
-{
-    vector<double> tstart_vec;
-    vector<double> tstop_vec;
-    for(long ibin = 0; ibin < GetNbinX(); ibin ++){
-        if(GetOvalElm(ibin) < threshold){
-            tstart_vec.push_back(GetBinLo(ibin));
-            tstop_vec.push_back(GetBinUp(ibin));
-        }
-    }
-
-    Interval* interval = new Interval;
-    interval->Init(tstart_vec.size());
-    interval->Set(tstart_vec, tstop_vec);
-
-    // tdiff must be less than bin-width
-    double tdiff = GetXvalBinWidth() / 10.; 
-    interval->Clean(tdiff);
-    return interval;
-}
 
 double HistData1d::GetOffsetXFromTag(string offset_tag) const
 {

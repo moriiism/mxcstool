@@ -1,4 +1,3 @@
-#include "mxcs_vect.h"
 #include "mxcs_hist2d_ope.h"
 
 DataArray1d** const HistData2dOpe::GenDa1dArrNerr(

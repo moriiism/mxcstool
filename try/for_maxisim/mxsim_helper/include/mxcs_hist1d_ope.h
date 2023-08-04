@@ -2,12 +2,8 @@
 #define MXCSTOOL_MXCSANALIB_HIST1D_OPE_H_
 
 #include "mxcs_data1d_ope.h"
-#include "mxcs_graph2d_nerr.h"
-#include "mxcs_graph2d_serr.h"
-#include "mxcs_graph2d_terr.h"
 #include "mxcs_hist1d_nerr.h"
 #include "mxcs_hist1d_serr.h"
-#include "mxcs_hist1d_terr.h"
 
 namespace HistData1dOpe
 {
@@ -16,8 +12,6 @@ namespace HistData1dOpe
     DataArray1d** const GenDa1dArrNerr(const HistData1d* const* const hd1d_arr,
                                        int narr);
     DataArray1d** const GenDa1dArrSerr(const HistData1d* const* const hd1d_arr,
-                                       int narr);
-    DataArray1d** const GenDa1dArrTerr(const HistData1d* const* const hd1d_arr,
                                        int narr);
     void DelHd1dArr(HistData1d** const hd1d_arr, int narr);
 
@@ -31,8 +25,6 @@ namespace HistData1dOpe
                 HistDataNerr1d* const out);
     void GetNot(const HistData1d* const in,
                 HistDataSerr1d* const out);
-    void GetNot(const HistData1d* const in,
-                HistDataTerr1d* const out);
     
     void GetScale(const HistData1d* const in,
                   double scale, double offset,
@@ -40,9 +32,6 @@ namespace HistData1dOpe
     void GetScale(const HistData1d* const in,
                   double scale, double offset,
                   HistDataSerr1d* const out);
-    void GetScale(const HistData1d* const in,
-                  double scale, double offset,
-                  HistDataTerr1d* const out);
 
     // For two HistData1d
     void GetMin(const HistData1d* const in1,
@@ -51,9 +40,6 @@ namespace HistData1dOpe
     void GetMin(const HistData1d* const in1,
                 const HistData1d* const in2,
                 HistDataSerr1d* const out);
-    void GetMin(const HistData1d* const in1,
-                const HistData1d* const in2,
-                HistDataTerr1d* const out);
     
     void GetMax(const HistData1d* const in1,
                 const HistData1d* const in2,
@@ -61,9 +47,6 @@ namespace HistData1dOpe
     void GetMax(const HistData1d* const in1,
                 const HistData1d* const in2,
                 HistDataSerr1d* const out);
-    void GetMax(const HistData1d* const in1,
-                const HistData1d* const in2,
-                HistDataTerr1d* const out);
     
     void GetAdd(const HistData1d* const in1,
                 const HistData1d* const in2,
@@ -124,9 +107,6 @@ namespace HistData1dOpe
     void GetMin(const HistData1d* const* const in_arr,
                 int narr,
                 HistDataSerr1d* const out);
-    void GetMin(const HistData1d* const* const in_arr,
-                int narr,
-                HistDataTerr1d* const out);
     
     void GetMax(const HistData1d* const* const in_arr,
                 int narr,
@@ -134,9 +114,6 @@ namespace HistData1dOpe
     void GetMax(const HistData1d* const* const in_arr,
                 int narr,
                 HistDataSerr1d* const out);
-    void GetMax(const HistData1d* const* const in_arr,
-                int narr,
-                HistDataTerr1d* const out);
     
     void GetSum(const HistData1d* const* const in_arr,
                 int narr,
@@ -209,10 +186,6 @@ namespace HistData1dOpe
                        const MxcsFunc* const func,
                        const double* const par,
                        HistDataSerr1d* const out);
-    void GetResValHd1d(const HistData1d* const data,
-                       const MxcsFunc* const func,
-                       const double* const par,
-                       HistDataTerr1d* const out);
     
     void GetResValHd1d(const HistData1d* const data,
                        const HistDataNerr1d* const func,
@@ -220,9 +193,6 @@ namespace HistData1dOpe
     void GetResValHd1d(const HistData1d* const data,
                        const HistDataNerr1d* const func,
                        HistDataSerr1d* const out);
-    void GetResValHd1d(const HistData1d* const data,
-                       const HistDataNerr1d* const func,
-                       HistDataTerr1d* const out);
 
     void GetResRatioHd1d(const HistData1d* const data,
                          const MxcsFunc* const func,
@@ -232,10 +202,6 @@ namespace HistData1dOpe
                          const MxcsFunc* const func,
                          const double* const par,
                          HistDataSerr1d* const out);
-    void GetResRatioHd1d(const HistData1d* const data,
-                         const MxcsFunc* const func,
-                         const double* const par,
-                         HistDataTerr1d* const out);
     
     void GetResRatioHd1d(const HistData1d* const data,
                          const HistDataNerr1d* const func,
@@ -243,9 +209,6 @@ namespace HistData1dOpe
     void GetResRatioHd1d(const HistData1d* const data,
                          const HistDataNerr1d* const func,
                          HistDataSerr1d* const out);
-    void GetResRatioHd1d(const HistData1d* const data,
-                         const HistDataNerr1d* const func,
-                         HistDataTerr1d* const out);
 
     void GetResChiHd1d(const HistData1d* const data,
                        const MxcsFunc* const func,
@@ -273,40 +236,6 @@ namespace HistData1dOpe
     void GetCrossCorr(const HistData1d* const in1,
                       const HistData1d* const in2,
                       HistDataNerr1d* const out);
-
-
-    // graph
-    void GetGd2d(const HistData1d* const in,
-                 GraphDataNerr2d* const out);
-    void GetGd2d(const HistData1d* const in,
-                 GraphDataSerr2d* const out);
-    void GetGd2d(const HistData1d* const in,
-                 GraphDataTerr2d* const out);
-
-
-    // Init & Set by graph2d, only if xval_arr of graph2d is equally-spaced.
-    void FillByGd2d(const GraphData2d* const in,
-                    HistDataNerr1d* const out);
-    // Init & Set by graph2d, by amean of graph2d.
-    void FillByGd2d(const HistInfo1d* const hi1d,
-                    const GraphData2d* const in,
-                    HistDataNerr1d* const out);
-
-    
-//    //    // Init & Set by graph2d_serr,
-//    //    // only if xval_arr of graph2d_serr is equally-spaced and
-//    //    // appropriate errors.
-//    void InitSetByGraphData2dSerr(const GraphDataSerr2d* const g2d);
-    
-    
-    // Init & Set by graph2d, only if xval_arr of graph2d is
-    // the same as hist_info
-    HistData1d* const GenHd1dByHistInfoAndGraphData2d(
-        const HistInfo1d* const hist_info,
-        const GraphData2d* const g2d);
-
-    void IsValidForSetByGd2d(const HistData1d* const hd1d,
-                             const GraphData2d* const gd2d);
     
 } // namespace HistData1dOpe
 

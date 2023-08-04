@@ -114,6 +114,24 @@ int main(int argc, char* argv[])
         printf("=== \n");
     }
 
+    // upper edge, lower edge
+    {
+        printf("--- test Init \n");
+        HistDataNerr2d* hd2d = new HistDataNerr2d("hd2d");
+        hd2d->Init(4, 0.0, 4.0, 2, 0.0, 2.0);
+
+        int ibinx = 2;
+        double xval_lo = hd2d->GetHi2d()->GetHistInfoX()
+            ->GetBinLo(ibinx);
+        double xval_up = hd2d->GetHi2d()->GetHistInfoX()
+            ->GetBinUp(ibinx);
+        printf("xval_lo = %e\n", xval_lo);
+        printf("xval_up = %e\n", xval_up);
+
+        delete hd2d;
+        printf("=== \n");
+    }
+
     
     
     

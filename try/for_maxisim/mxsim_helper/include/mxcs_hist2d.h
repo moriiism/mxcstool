@@ -3,7 +3,6 @@
 
 #include "mxcs_data1d.h"
 #include "mxcs_hist_info.h"
-#include "mxcs_interval.h"
 #include "mxcs_func.h"
 #include "mxcs_hist1d.h"
 
@@ -75,10 +74,6 @@ public:
         {MxcsPrintErrVFunc; abort();};
 
     void SetConst(double constant);
-    void SetOneAtIntervalXY(const Interval* const interval_x,
-                            const Interval* const interval_y);
-    void SetFracAtIntervalXY(const Interval* const interval_x,
-                             const Interval* const interval_y);
     
     virtual void SetOvalErrArrByPoissonErr()
         {MxcsPrintErrVFunc; abort();};

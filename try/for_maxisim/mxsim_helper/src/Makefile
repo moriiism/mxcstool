@@ -4,8 +4,8 @@ INCLUDE := $(MXSIM_HELPER_INC) $(GSL_INC)
 
 TARGET := libmxsim_helper.a
 
-OBJ := base.o  iolib.o  rand.o  str.o  time.o \
-	math.o  interval.o  func.o  func_par.o \
+OBJ := base.o  iolib.o  rand.o  str.o  \
+	math.o  func.o  func_par.o \
 	plot_conf.o  \
 	data1d.o  data1d_nerr.o  data1d_serr.o  data1d_ope.o \
 	hist_info.o  \

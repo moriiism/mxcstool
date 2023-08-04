@@ -2,7 +2,6 @@
 #define MXCSTOOL_MXCSANALIB_HIST1D_H_
 
 #include "mxcs_rand.h"
-#include "mxcs_interval.h"
 #include "mxcs_data1d_nerr.h"
 #include "mxcs_data1d_serr.h"
 #include "mxcs_hist_info.h"
@@ -77,8 +76,6 @@ public:
         {MxcsPrintErrVFunc; abort();};
     
     void SetConst(double constant);
-    void SetOneAtInterval(const Interval* const interval);
-    void SetFracAtInterval(const Interval* const interval);
 
     virtual void SetOvalErrArrByPoissonErr()
         {MxcsPrintErrVFunc; abort();};
@@ -192,9 +189,6 @@ public:
                                   int rand_seed,
                                   double** xval_arr_ptr) const;
     
-    Interval* const GenIntervalAboveThreshold(double threshold) const;
-    Interval* const GenIntervalBelowThreshold(double threshold) const;
-
     virtual HistData1d* GenSubHist(long ibinx_st, long ibinx_ed) const = 0;
 
     // offset_tag = "st", "md", "ed", "no"

@@ -2,26 +2,21 @@
 #define MXCSTOOL_MXCSANALIB_HIST2D_OPE_H_
 
 #include "mxcs_data1d_ope.h"
-
 #include "mxcs_hist1d_nerr.h"
 #include "mxcs_hist1d_serr.h"
-#include "mxcs_hist1d_terr.h"
-
 #include "mxcs_hist2d_nerr.h"
 #include "mxcs_hist2d_serr.h"
-#include "mxcs_hist2d_terr.h"
-#include "mxcs_cont.h"
 
 namespace HistData2dOpe
 {
     HistData2d* const GenHd2dByLoad(string file);
 
-    DataArray1d** const GenDa1dArrNerr(const HistData2d* const* const hd2d_arr,
-                                       int narr);
-    DataArray1d** const GenDa1dArrSerr(const HistData2d* const* const hd2d_arr,
-                                       int narr);
-    DataArray1d** const GenDa1dArrTerr(const HistData2d* const* const hd2d_arr,
-                                       int narr);
+    DataArray1d** const GenDa1dArrNerr(
+        const HistData2d* const* const hd2d_arr,
+        int narr);
+    DataArray1d** const GenDa1dArrSerr(
+        const HistData2d* const* const hd2d_arr,
+        int narr);
     void DelHd2dArr(HistData2d** const hd2d_arr, int narr);
 
     int IsFormatSame(const HistData2d* const data1,
@@ -34,8 +29,6 @@ namespace HistData2dOpe
                 HistDataNerr2d* const out);
     void GetNot(const HistData2d* const in,
                 HistDataSerr2d* const out);
-    void GetNot(const HistData2d* const in,
-                HistDataTerr2d* const out);
     
     void GetScale(const HistData2d* const in,
                   double scale, double offset,
@@ -43,9 +36,6 @@ namespace HistData2dOpe
     void GetScale(const HistData2d* const in,
                   double scale, double offset,
                   HistDataSerr2d* const out);
-    void GetScale(const HistData2d* const in,
-                  double scale, double offset,
-                  HistDataTerr2d* const out);
 
     // For two HistData2d
     void GetMin(const HistData2d* const in1,
@@ -54,9 +44,6 @@ namespace HistData2dOpe
     void GetMin(const HistData2d* const in1,
                 const HistData2d* const in2,
                 HistDataSerr2d* const out);
-    void GetMin(const HistData2d* const in1,
-                const HistData2d* const in2,
-                HistDataTerr2d* const out);
     
     void GetMax(const HistData2d* const in1,
                 const HistData2d* const in2,
@@ -64,9 +51,6 @@ namespace HistData2dOpe
     void GetMax(const HistData2d* const in1,
                 const HistData2d* const in2,
                 HistDataSerr2d* const out);
-    void GetMax(const HistData2d* const in1,
-                const HistData2d* const in2,
-                HistDataTerr2d* const out);
     
     void GetAdd(const HistData2d* const in1,
                 const HistData2d* const in2,
@@ -127,9 +111,6 @@ namespace HistData2dOpe
     void GetMin(const HistData2d* const* const in_arr,
                 int narr,
                 HistDataSerr2d* const out);
-    void GetMin(const HistData2d* const* const in_arr,
-                int narr,
-                HistDataTerr2d* const out);
     
     void GetMax(const HistData2d* const* const in_arr,
                 int narr,
@@ -137,9 +118,6 @@ namespace HistData2dOpe
     void GetMax(const HistData2d* const* const in_arr,
                 int narr,
                 HistDataSerr2d* const out);
-    void GetMax(const HistData2d* const* const in_arr,
-                int narr,
-                HistDataTerr2d* const out);
     
     void GetSum(const HistData2d* const* const in_arr,
                 int narr,
@@ -212,10 +190,6 @@ namespace HistData2dOpe
                        const MxcsFunc* const func,
                        const double* const par,
                        HistDataSerr2d* const out);
-    void GetResValHd2d(const HistData2d* const data,
-                       const MxcsFunc* const func,
-                       const double* const par,
-                       HistDataTerr2d* const out);
     
     void GetResValHd2d(const HistData2d* const data,
                        const HistDataNerr2d* const func,
@@ -223,9 +197,6 @@ namespace HistData2dOpe
     void GetResValHd2d(const HistData2d* const data,
                        const HistDataNerr2d* const func,
                        HistDataSerr2d* const out);
-    void GetResValHd2d(const HistData2d* const data,
-                       const HistDataNerr2d* const func,
-                       HistDataTerr2d* const out);
 
     void GetResRatioHd2d(const HistData2d* const data,
                          const MxcsFunc* const func,
@@ -235,10 +206,6 @@ namespace HistData2dOpe
                          const MxcsFunc* const func,
                          const double* const par,
                          HistDataSerr2d* const out);
-    void GetResRatioHd2d(const HistData2d* const data,
-                         const MxcsFunc* const func,
-                         const double* const par,
-                         HistDataTerr2d* const out);
     
     void GetResRatioHd2d(const HistData2d* const data,
                          const HistDataNerr2d* const func,
@@ -246,29 +213,15 @@ namespace HistData2dOpe
     void GetResRatioHd2d(const HistData2d* const data,
                          const HistDataNerr2d* const func,
                          HistDataSerr2d* const out);
-    void GetResRatioHd2d(const HistData2d* const data,
-                         const HistDataNerr2d* const func,
-                         HistDataTerr2d* const out);
 
     void GetResChiHd2d(const HistData2d* const data,
                        const MxcsFunc* const func,
                        const double* const par,
                        HistDataSerr2d* const out);
-    void GetResChiHd2d(const HistData2d* const data,
-                       const MxcsFunc* const func,
-                       const double* const par,
-                       HistDataTerr2d* const out);
 
     void GetResChiHd2d(const HistData2d* const data,
                        const HistDataNerr2d* const func,
                        HistDataSerr2d* const out);
-    void GetResChiHd2d(const HistData2d* const data,
-                       const HistDataNerr2d* const func,
-                       HistDataTerr2d* const out);    
-
-
-    void FillGd2d(const GraphDataNerr2d* const gd2d,
-                  HistDataNerr2d* const hist_res_out);
 
     double FindMdXbyEdge(const HistDataNerr2d* const hd2d);
     double FindMdYbyEdge(const HistDataNerr2d* const hd2d);

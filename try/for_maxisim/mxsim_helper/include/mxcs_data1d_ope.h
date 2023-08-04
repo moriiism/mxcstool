@@ -1,10 +1,8 @@
 #ifndef MXCSTOOL_MXCSANALIB_DATA1D_OPE_H_
 #define MXCSTOOL_MXCSANALIB_DATA1D_OPE_H_
 
-#include "mxcs_interval.h"
 #include "mxcs_data1d_nerr.h"
 #include "mxcs_data1d_serr.h"
-#include "mxcs_data1d_terr.h"
 
 namespace DataArray1dOpe
 {
@@ -21,9 +19,6 @@ namespace DataArray1dOpe
     void GetScale(const DataArray1d* const data_array,
                   double scale, double offset,
                   DataArraySerr1d* const data_array_out);
-    void GetScale(const DataArray1d* const data_array,
-                  double scale, double offset,
-                  DataArrayTerr1d* const data_array_out);
     
     // For two DataArray1d
     void GetMin(const DataArray1d* const data_array1,
@@ -32,9 +27,6 @@ namespace DataArray1dOpe
     void GetMin(const DataArray1d* const data_array1,
                 const DataArray1d* const data_array2,
                 DataArraySerr1d* const data_array_out);
-    void GetMin(const DataArray1d* const data_array1,
-                const DataArray1d* const data_array2,
-                DataArrayTerr1d* const data_array_out);
     
     void GetMax(const DataArray1d* const data_array1,
                 const DataArray1d* const data_array2,
@@ -42,9 +34,6 @@ namespace DataArray1dOpe
     void GetMax(const DataArray1d* const data_array1,
                 const DataArray1d* const data_array2,
                 DataArraySerr1d* const data_array_out);
-    void GetMax(const DataArray1d* const data_array1,
-                const DataArray1d* const data_array2,
-                DataArrayTerr1d* const data_array_out);
     
     void GetAdd(const DataArray1d* const data_array1,
                 const DataArray1d* const data_array2,
@@ -105,9 +94,6 @@ namespace DataArray1dOpe
     void GetMin(const DataArray1d* const* const data_array_arr,
                 int ndata_array,
                 DataArraySerr1d* const data_array_out);
-    void GetMin(const DataArray1d* const* const data_array_arr,
-                int ndata_array,
-                DataArrayTerr1d* const data_array_out);
     
     void GetMax(const DataArray1d* const* const data_array_arr,
                 int ndata_array,
@@ -115,9 +101,6 @@ namespace DataArray1dOpe
     void GetMax(const DataArray1d* const* const data_array_arr,
                 int ndata_array,
                 DataArraySerr1d* const data_array_out);
-    void GetMax(const DataArray1d* const* const data_array_arr,
-                int ndata_array,
-                DataArrayTerr1d* const data_array_out);
     
     void GetSum(const DataArray1d* const* const data_array_arr,
                 int ndata_array,
@@ -186,27 +169,6 @@ namespace DataArray1dOpe
     int IsFormatSame(const DataArray1d* const* const data_array_arr,
                      int ndata_array);
     
-    // Select
-    void GetSelectDa1dByInterval(const DataArray1d* const data_array,
-                                 const Interval* const interval,
-                                 DataArrayNerr1d* const data_array_out);
-    void GetSelectDa1dByInterval(const DataArray1d* const data_array,
-                                 const Interval* const interval,
-                                 DataArraySerr1d* const data_array_out);
-    void GetSelectDa1dByInterval(const DataArray1d* const data_array,
-                                 const Interval* const interval,
-                                 DataArrayTerr1d* const data_array_out);
-
-    void GenSelectDa1dArrByIntervalNerr(const DataArray1d* const data_array,
-                                        const Interval* const interval,
-                                        DataArray1d*** const data_array_arr_ptr);
-    void GenSelectDa1dArrByIntervalSerr(const DataArray1d* const data_array,
-                                        const Interval* const interval,
-                                        DataArray1d*** const data_array_arr_ptr);
-    void GenSelectDa1dArrByIntervalTerr(const DataArray1d* const data_array,
-                                        const Interval* const interval,
-                                        DataArray1d*** const data_array_arr_ptr);
-
 } // namespace DataArray1dOpe
 
 #endif // MXCSTOOL_MXCSANALIB_DATA1D_OPE_H_
