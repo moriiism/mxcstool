@@ -7,12 +7,6 @@ MXSIM_HELPER_DIR := /home/morii/work/github/moriiism/mxcstool/try/for_maxisim/mx
 MXSIM_HELPER_INC := -I${MXSIM_HELPER_DIR}/include
 MXSIM_HELPER_LIB := -L${MXSIM_HELPER_DIR}/lib -lmxsim_helper
 
-### GSL lib
-GSL_DIR := ${HEADAS}
-GSL_INC := -I${GSL_DIR}/include
-GSL_LIB := -L${GSL_DIR}/lib -lgsl -lgslcblas
-
-
 ### library
 LIB := -lm -lrt
 

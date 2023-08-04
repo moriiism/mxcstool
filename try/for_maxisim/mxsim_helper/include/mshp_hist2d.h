@@ -1,18 +1,18 @@
-#ifndef MXCSTOOL_MXCSANALIB_HIST2D_H_
-#define MXCSTOOL_MXCSANALIB_HIST2D_H_
+#ifndef MXSIM_HELPER_HIST2D_H_
+#define MXSIM_HELPER_HIST2D_H_
 
-#include "mxcs_data1d.h"
-#include "mxcs_hist_info.h"
-#include "mxcs_func.h"
-#include "mxcs_hist1d.h"
+#include "mshp_data1d.h"
+#include "mshp_hist_info.h"
+#include "mshp_func.h"
+#include "mshp_hist1d.h"
 
 class HistDataNerr2d;
 class HistDataSerr2d;
 
-class HistData2d : public MxcsObject{
+class HistData2d : public MshpObject{
 public:
     HistData2d(string class_name, string title) :
-        MxcsObject(class_name, title),
+        MshpObject(class_name, title),
         hi2d_(NULL),
         oval_arr_(NULL) {}
     virtual ~HistData2d() {}
@@ -24,30 +24,13 @@ public:
     void SetOvalArr(long ndata, const double* const val);
     void SetOvalArr(vector<double> val);    
     virtual void SetOvalSerrArr(long ndata, const double* const val_serr)
-        {MxcsPrintErrVFunc; abort();};
+        {MshpPrintErrVFunc; abort();};
     virtual void SetOvalSerrArr(vector<double> val_serr)
-        {MxcsPrintErrVFunc; abort();};
-    virtual void SetOvalTerrArr(long ndata, const double* const val_serr)
-        {MxcsPrintErrVFunc; abort();};
-    virtual void SetOvalTerrArr(vector<double> val_serr)
-        {MxcsPrintErrVFunc; abort();};    
-    virtual void SetOvalTerrArr(long ndata,
-                                const double* const val_terr_plus,
-                                const double* const val_terr_minus)
-        {MxcsPrintErrVFunc; abort();};
-    virtual void SetOvalTerrArr(vector<double> val_terr_plus,
-                                vector<double> val_terr_minus)
-        {MxcsPrintErrVFunc; abort();};    
+        {MshpPrintErrVFunc; abort();};
 
     void SetOvalElm(long ibin_xval, long ibin_yval, double oval);
     virtual void SetOvalSerrElm(long ibin_xval, long ibin_yval, double oval_serr)
-        {MxcsPrintErrVFunc; abort();};
-    virtual void SetOvalTerrElm(long ibin_xval, long ibin_yval, double oval_serr)
-        {MxcsPrintErrVFunc; abort();};
-    virtual void SetOvalTerrPlusElm(long ibin_xval, long ibin_yval, double oval_terr_plus)
-        {MxcsPrintErrVFunc; abort();};
-    virtual void SetOvalTerrMinusElm(long ibin_xval, long ibin_yval, double oval_terr_minus)
-        {MxcsPrintErrVFunc; abort();};
+        {MshpPrintErrVFunc; abort();};
 
     void Fill(double xval, double yval);
     void Fill(double xval, double yval, double weight);
@@ -55,31 +38,21 @@ public:
     virtual void FillByLarger(double xval, double yval,
                               double oval,
                               double oval_serr)
-        {MxcsPrintErrVFunc; abort();};
-    virtual void FillByLarger(double xval, double yval,
-                              double oval,
-                              double oval_terr_plus,
-                              double oval_terr_minus)
-        {MxcsPrintErrVFunc; abort();};
+        {MshpPrintErrVFunc; abort();};
     
     void FillBySmaller(double xval, double yval, double oval);
     virtual void FillBySmaller(double xval, double yval,
                                double oval,
                                double oval_serr)
-        {MxcsPrintErrVFunc; abort();};
-    virtual void FillBySmaller(double xval, double yval,
-                               double oval,
-                               double oval_terr_plus,
-                               double oval_terr_minus)
-        {MxcsPrintErrVFunc; abort();};
+        {MshpPrintErrVFunc; abort();};
 
     void SetConst(double constant);
     
     virtual void SetOvalErrArrByPoissonErr()
-        {MxcsPrintErrVFunc; abort();};
+        {MshpPrintErrVFunc; abort();};
 
     // Set by Func
-    void SetByFunc(const MxcsFunc* const func, const double* const par);
+    void SetByFunc(const MshpFunc* const func, const double* const par);
 
     void Copy(const HistData2d* const org);
     // virtual void Load(string file) = 0;
@@ -106,19 +79,11 @@ public:
     // get element
     double GetOvalElm(long ibin_xval, long ibin_yval) const;
     virtual double GetOvalSerrElm(long ibin_xval, long ibin_yval) const
-        {MxcsPrintErrVFunc; abort();};    
-    virtual double GetOvalTerrPlusElm(long ibin_xval, long ibin_yval) const
-        {MxcsPrintErrVFunc; abort();};    
-    virtual double GetOvalTerrMinusElm(long ibin_xval, long ibin_yval) const
-        {MxcsPrintErrVFunc; abort();};    
+        {MshpPrintErrVFunc; abort();};    
     
     double GetOvalElmAtXY(double xval, double yval) const;
     virtual double GetOvalSerrElmAtXY(double xval, double yval) const
-        {MxcsPrintErrVFunc; abort();};
-    virtual double GetOvalTerrPlusElmAtXY(double xval, double yval) const
-        {MxcsPrintErrVFunc; abort();};
-    virtual double GetOvalTerrMinusElmAtXY(double xval, double yval) const
-        {MxcsPrintErrVFunc; abort();};
+        {MshpPrintErrVFunc; abort();};
 
     double GetXvalAtOvalMin() const;
     double GetXvalAtOvalMax() const;
@@ -142,11 +107,7 @@ public:
                     long* const nbin_ptr) const;
     virtual void GenOvalSerrArr(double** const oval_serr_arr_ptr,
                                 long* const nbin_ptr) const
-        {MxcsPrintErrVFunc; abort();};
-    virtual void GenOvalTerrArr(double** const oval_terr_plus_arr_ptr,
-                                double** const oval_terr_minus_arr_ptr,
-                                long* const nbin_ptr) const
-        {MxcsPrintErrVFunc; abort();};
+        {MshpPrintErrVFunc; abort();};
 
     double GetOvalIntPolLin(double xval, double yval) const;
     
@@ -177,23 +138,23 @@ public:
                            double offset_oval) const = 0;
 
     // poisson error
-    virtual void FillRandom(const MxcsFunc* const func,
+    virtual void FillRandom(const MshpFunc* const func,
                             const double* const func_par,
                             int rand_seed)
-        {MxcsPrintErrVFunc; abort();};
+        {MshpPrintErrVFunc; abort();};
 
     // gaussian error
-    virtual void FillRandom(const MxcsFunc* const func,
+    virtual void FillRandom(const MshpFunc* const func,
                             const double* const func_par,
-                            const MxcsFunc* const func_sigma,
+                            const MshpFunc* const func_sigma,
                             const double* const func_par_sigma,
                             int rand_seed)
-        {MxcsPrintErrVFunc; abort();};    
+        {MshpPrintErrVFunc; abort();};    
 
     // poisson error
     virtual void FillRandom(const HistData2d* const hist_data,
                             int rand_seed)
-        {MxcsPrintErrVFunc; abort();};
+        {MshpPrintErrVFunc; abort();};
 
     // generate events from a probability distribution
     void GenRandomEvtFromProbDist(int nevt,
@@ -243,5 +204,5 @@ private:
     DataArray1d* oval_arr_;
 };
 
-#endif // MXCSTOOL_MXCSANALIB_HIST2D_H_
+#endif // MXSIM_HELPER_HIST2D_H_
 

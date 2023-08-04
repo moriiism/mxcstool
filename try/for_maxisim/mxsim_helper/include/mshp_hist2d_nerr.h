@@ -1,7 +1,7 @@
-#ifndef MXCSTOOL_MXCSANALIB_HIST2D_NERR_H_
-#define MXCSTOOL_MXCSANALIB_HIST2D_NERR_H_
+#ifndef MXSIM_HELPER_HIST2D_NERR_H_
+#define MXSIM_HELPER_HIST2D_NERR_H_
 
-#include "mxcs_hist2d.h"
+#include "mshp_hist2d.h"
 
 class HistDataNerr2d : public HistData2d{
 public:
@@ -22,7 +22,7 @@ public:
                    double offset_yval,
                    double offset_oval) const;
 
-    void FillRandom(const MxcsFunc* const func,
+    void FillRandom(const MshpFunc* const func,
                     const double* const func_par,
                     int rand_seed);
     void FillRandom(const HistData2d* const hist_data,
@@ -33,4 +33,4 @@ public:
     
 };
 
-#endif // MXCSTOOL_MXCSANALIB_HIST2D_NERR_H_
+#endif // MXSIM_HELPER_HIST2D_NERR_H_

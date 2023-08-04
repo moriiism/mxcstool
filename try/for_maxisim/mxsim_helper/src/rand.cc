@@ -1,6 +1,6 @@
-#include "mxcs_rand.h"
+#include "mshp_rand.h"
 
-void MxcsRand::Init(int seed)
+void MshpRand::Init(int seed)
 {
     if(0 == seed){
         std::random_device seed_gen;
@@ -12,7 +12,7 @@ void MxcsRand::Init(int seed)
     }
 }
 
-double MxcsRand::Uniform(void)
+double MshpRand::Uniform(void)
 {
     //double val = genrand64_real1();
     //double val = HDmtRand() / RAND_MAX;
@@ -26,14 +26,14 @@ double MxcsRand::Uniform(void)
 
 
 //
-////double MxcsRand::Normal(double mu, double sigma)
+////double MshpRand::Normal(double mu, double sigma)
 ////{
 ////    double z=sqrt( -2.0*log(Uniform()) ) * sin( 2.0*M_PI*Uniform() );
 ////    double val = mu + sigma*z;
 ////    return val;
 ////}
 
-double MxcsRand::Normal(double mu, double sigma)
+double MshpRand::Normal(double mu, double sigma)
 {
     std::normal_distribution<> norm(mu, sigma);
     double val = norm(mt_);
@@ -56,7 +56,7 @@ double MxcsRand::Normal(double mu, double sigma)
 ///// larger than 2*10**9.
 ////
 
-int MxcsRand::Poisson(double mean)
+int MshpRand::Poisson(double mean)
 {
     int n;
     if (mean <= 0) return 0;

@@ -1,5 +1,5 @@
-#include "mxcs_hist2d.h"
-#include "mxcs_hist1d_nerr.h"
+#include "mshp_hist2d.h"
+#include "mshp_hist1d_nerr.h"
 
 //
 // public
@@ -74,7 +74,7 @@ void HistData2d::SetConst(double constant)
 }
 
 // Set by Func
-void HistData2d::SetByFunc(const MxcsFunc* const func, const double* const par)
+void HistData2d::SetByFunc(const MshpFunc* const func, const double* const par)
 {
     for(int ibinx = 0; ibinx < GetNbinX(); ibinx ++){
         for(int ibiny = 0; ibiny < GetNbinY(); ibiny ++){
@@ -223,7 +223,7 @@ double HistData2d::GetOvalIntPolLin(double xval, double yval) const
 //        long index2 = index0 + nbin_xval_ + 1;
 //        long index3 = index0 + nbin_xval_;
 //        
-//        ans = MxcsMath::IntPolLin(xval, yval,
+//        ans = MshpMath::IntPolLin(xval, yval,
 //                                 GetBinCenterXFromIbinX(index_xval0),
 //                                 GetBinCenterXFromIbinX(index_xval1),
 //                                 GetBinCenterYFromIbinY(index_yval0),
@@ -234,7 +234,7 @@ double HistData2d::GetOvalIntPolLin(double xval, double yval) const
 //                                 GetOvalArr()->GetValElm(index3));
 //    } else {
 //        if(0 < g_flag_verbose){
-//            MxcsPrintWarnClass("bad xval and/or yval, then just return 0.0");
+//            MshpPrintWarnClass("bad xval and/or yval, then just return 0.0");
 //        }
 //        ans = 0.0;
 //    }
@@ -283,7 +283,7 @@ void HistData2d::GenRandomEvtFromProbDist(
     double** yval_arr_ptr) const
 {
     long nbin = GetOvalArr()->GetNdata();
-    double sum = MxcsMath::GetSum(nbin, GetOvalArr()->GetVal());
+    double sum = MshpMath::GetSum(nbin, GetOvalArr()->GetVal());
     // normalize
     double* data_norm = new double [nbin];
     for(long ibin = 0; ibin < nbin; ibin ++){
@@ -300,11 +300,11 @@ void HistData2d::GenRandomEvtFromProbDist(
 
     double* xval_arr = new double[nevt];
     double* yval_arr = new double[nevt];
-    MxcsRand* mrand = new MxcsRand;
+    MshpRand* mrand = new MshpRand;
     mrand->Init(rand_seed);
     for(int ievt = 0; ievt < nevt; ievt++){
         double rand = mrand->Uniform();
-        long ibin_find = MxcsSort::BinarySearch(nbin, cum_arr, rand);
+        long ibin_find = MshpSort::BinarySearch(nbin, cum_arr, rand);
         xval_arr[ievt] = GetHi2d()->GetBinCenterXFromIbin(ibin_find + 1);
         yval_arr[ievt] = GetHi2d()->GetBinCenterYFromIbin(ibin_find + 1);
     }
@@ -392,11 +392,11 @@ void HistData2d::ReadInfo(string file,
     
     string* line_arr = NULL;
     long ndata = 0;
-    MxcsIolib::GenReadFileComment(file, &line_arr, &ndata);
+    MshpIolib::GenReadFileComment(file, &line_arr, &ndata);
     for(long idata = 0; idata < ndata; idata ++){
         int ncolumn = 0;
         string* split_arr = NULL;
-        MxcsStr::GenSplit(line_arr[idata], &ncolumn, &split_arr);
+        MshpStr::GenSplit(line_arr[idata], &ncolumn, &split_arr);
         if(4 != ncolumn){
             continue;
         }
@@ -426,7 +426,7 @@ void HistData2d::ReadInfo(string file,
         
         delete [] split_arr;
     }
-    MxcsIolib::DelReadFile(line_arr);
+    MshpIolib::DelReadFile(line_arr);
 
     *nbin_xval_ptr = nbin_xval;
     *xval_lo_ptr = xval_lo;
@@ -437,7 +437,7 @@ void HistData2d::ReadInfo(string file,
     *format_ptr = format;
 
     if(0 < g_flag_verbose){
-        MxcsPrintInfo("done.");
+        MshpPrintInfo("done.");
     }
 }
 
@@ -471,7 +471,7 @@ void HistData2d::NewHi2d()
 void HistData2d::IsHi2dNotNull() const
 {
     if(NULL == GetHi2d()){
-        MxcsPrintErrClass("bad GetHi2d() (=NULL)");
+        MshpPrintErrClass("bad GetHi2d() (=NULL)");
         abort();
     }
 }
@@ -479,7 +479,7 @@ void HistData2d::IsHi2dNotNull() const
 void HistData2d::IsOvalArrNotNull() const
 {
     if(NULL == GetOvalArr()){
-        MxcsPrintErrClass("bad GetOvalArr() (=NULL)");
+        MshpPrintErrClass("bad GetOvalArr() (=NULL)");
         abort();
     }
 

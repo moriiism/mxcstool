@@ -1,5 +1,5 @@
-#ifndef MXCSTOOL_MXCSLIB_PAR_H_
-#define MXCSTOOL_MXCSLIB_PAR_H_
+#ifndef MXSIM_HELPER_PAR_H_
+#define MXSIM_HELPER_PAR_H_
 
 #include <limits>
 #include <cfloat>
@@ -15,4 +15,4 @@ extern int g_flag_debug;
 extern int g_flag_help;
 extern int g_flag_verbose;
 
-#endif // MXCSTOOL_MXCSLIB_PAR_H_
+#endif // MXSIM_HELPER_PAR_H_

@@ -1,4 +1,4 @@
-#include "mxcs_hist1d_serr.h"
+#include "mshp_hist1d_serr.h"
 
 //
 // public
@@ -91,25 +91,25 @@ void HistDataSerr1d::Load(string file)
     if("x,y,ye" != format){
         char msg[kLineSize];
         sprintf(msg, "format(=%s)", format.c_str());
-        MxcsPrintErrClass(msg);
+        MshpPrintErrClass(msg);
         abort();
     }
     string* line_arr = NULL;
     long nline = 0;
-    MxcsIolib::GenReadFileSkipComment(file, &line_arr, &nline);
+    MshpIolib::GenReadFileSkipComment(file, &line_arr, &nline);
     if(nline != nbin_xval){
         char msg[kLineSize];
         sprintf(msg, "nline != nbin_xval");
-        MxcsPrintErrClass(msg);
+        MshpPrintErrClass(msg);
         abort();
     }
     double xval = 0.0;
     double oval = 0.0;
     double oval_serr = 0.0; 
     for(long iline = 0; iline < nline; iline ++){
-        int ncolumn = MxcsStr::GetNcolumn(line_arr[iline]);
+        int ncolumn = MshpStr::GetNcolumn(line_arr[iline]);
         if(3 != ncolumn){
-            MxcsPrintErrClass("ncolumn != 3");
+            MshpPrintErrClass("ncolumn != 3");
             abort();
         }
         istringstream iss(line_arr[iline]);
@@ -118,7 +118,7 @@ void HistDataSerr1d::Load(string file)
         SetOvalElm(ibin, oval);
         SetOvalSerrElm(ibin, oval_serr);
     }
-    MxcsIolib::DelReadFile(line_arr);
+    MshpIolib::DelReadFile(line_arr);
 }
 
 
@@ -214,7 +214,7 @@ void HistDataSerr1d::PrintData(FILE* fp, string format,
     } else {
         char msg[kLineSize];
         sprintf(msg, "format(=%s)", format.c_str());
-        MxcsPrintErrClass(msg);
+        MshpPrintErrClass(msg);
         abort();
     }
   
@@ -224,15 +224,15 @@ void HistDataSerr1d::PrintData(FILE* fp, string format,
 HistDataSerr1d* const HistDataSerr1d::GenHd1MaxInBin(long nbin_new) const
 {
     if(nbin_new > GetNbinX()){
-        MxcsPrintErrClass("bad nbin_new");
+        MshpPrintErrClass("bad nbin_new");
         abort();
     }
     if(nbin_new < 1){
-        MxcsPrintErrClass("bad nbin_new");
+        MshpPrintErrClass("bad nbin_new");
         abort();
     }
     if(0 != GetNbinX() % nbin_new){
-        MxcsPrintErrClass("bad nbin_new");
+        MshpPrintErrClass("bad nbin_new");
         abort();
     }
 
@@ -248,11 +248,11 @@ HistDataSerr1d* const HistDataSerr1d::GenHd1MaxInBin(long nbin_new) const
     return h1d_new;
 }
 
-void HistDataSerr1d::FillRandom(const MxcsFunc* const func,
+void HistDataSerr1d::FillRandom(const MshpFunc* const func,
                                 const double* const func_par,
                                 int rand_seed)
 {
-    MxcsRand* mrand = new MxcsRand;
+    MshpRand* mrand = new MshpRand;
     mrand->Init(rand_seed);
     for(long ibin = 0; ibin < GetNbinX(); ibin ++){
         double xval = GetBinCenter(ibin);
@@ -267,13 +267,13 @@ void HistDataSerr1d::FillRandom(const MxcsFunc* const func,
     delete mrand;
 }
 
-void HistDataSerr1d::FillRandom(const MxcsFunc* const func,
+void HistDataSerr1d::FillRandom(const MshpFunc* const func,
                                 const double* const func_par,
-                                const MxcsFunc* const func_sigma,
+                                const MshpFunc* const func_sigma,
                                 const double* const func_par_sigma,
                                 int rand_seed)
 {
-    MxcsRand* mrand = new MxcsRand;
+    MshpRand* mrand = new MshpRand;
     mrand->Init(rand_seed);
     for(long ibin = 0; ibin < GetNbinX(); ibin ++){
         double xval = GetBinCenter(ibin);
@@ -294,7 +294,7 @@ void HistDataSerr1d::FillRandom(const HistData1d* const hist_data, int rand_seed
 {
     Init(hist_data->GetNbinX(), hist_data->GetXvalLo(), hist_data->GetXvalUp());
     
-    MxcsRand* mrand = new MxcsRand;
+    MshpRand* mrand = new MshpRand;
     mrand->Init(rand_seed);
     for(long ibin = 0; ibin < GetNbinX(); ibin ++){
         // poisson error

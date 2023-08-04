@@ -1,12 +1,12 @@
-#include "mxcs_base.h"
+#include "mshp_base.h"
 
 //
-// MxcsObject
+// MshpObject
 //
 
 // protected
 
-void MxcsObject::CopyTitle(const MxcsObject* const org)
+void MshpObject::CopyTitle(const MshpObject* const org)
 {
     if(this == org) {abort();}
     if(NULL == org) {abort();}
@@ -16,55 +16,55 @@ void MxcsObject::CopyTitle(const MxcsObject* const org)
 
 // private
 
-void MxcsObject::NullMxcsObject()
+void MshpObject::NullMshpObject()
 {
     class_name_ = "";
     title_      = "";
 }
 
 //
-// MxcsBase
+// MshpBase
 //
 
-void MxcsBase::IsValidArray(long narr, const int* const val_arr,
+void MshpBase::IsValidArray(long narr, const int* const val_arr,
                             string err_msg)
 {
     if(narr < 1){
         char msg[kLineSize];
         sprintf(msg, "narr (=%ld) < 1. %s.",
                 narr, err_msg.c_str());
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
     if(NULL == val_arr){
         char msg[kLineSize];
         sprintf(msg, "val_arr == NULL. %s.",
                 err_msg.c_str());
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
 }
 
-void MxcsBase::IsValidArray(long narr, const double* const val_arr,
+void MshpBase::IsValidArray(long narr, const double* const val_arr,
                             string err_msg)
 {
     if(narr < 1){
         char msg[kLineSize];
         sprintf(msg, "narr (=%ld) < 1. %s.",
                 narr, err_msg.c_str());
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
     if(NULL == val_arr){
         char msg[kLineSize];
         sprintf(msg, "val_arr == NULL. %s.",
                 err_msg.c_str());
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
 }
 
-void MxcsBase::GenArray(vector<double> vec,
+void MshpBase::GenArray(vector<double> vec,
                         long* narr_ptr,
                         double** val_arr_ptr)
 {
@@ -77,7 +77,7 @@ void MxcsBase::GenArray(vector<double> vec,
     *val_arr_ptr = val_arr;
 }
 
-double* MxcsBase::GenArray(vector<double> vec)
+double* MshpBase::GenArray(vector<double> vec)
 {
     long narr = vec.size();
     double* val_arr = new double [narr];
@@ -87,7 +87,7 @@ double* MxcsBase::GenArray(vector<double> vec)
     return val_arr;
 }
 
-void MxcsBase::DelArray(double* val_arr)
+void MshpBase::DelArray(double* val_arr)
 {
     delete [] val_arr; val_arr = NULL;
 }

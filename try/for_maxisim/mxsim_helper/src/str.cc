@@ -1,4 +1,4 @@
-#include "mxcs_str.h"
+#include "mshp_str.h"
 
 //
 // If the string buf is composed of only ' ' and '\t',
@@ -6,7 +6,7 @@
 // If the string buf is "", this returns also 1.
 // In the other cases, this returns 0.
 //
-int MxcsStr::IsSpace(string buf)
+int MshpStr::IsSpace(string buf)
 {
     int flag_only_space = 1;
     int nsize = buf.size();
@@ -24,7 +24,7 @@ int MxcsStr::IsSpace(string buf)
 // this remove the '\n'.
 //
 
-int MxcsStr::Chomp(char* const buf)
+int MshpStr::Chomp(char* const buf)
 {
     int ret = kRetNormal;
     int len = strlen(buf);
@@ -33,7 +33,7 @@ int MxcsStr::Chomp(char* const buf)
     return ret;
 }
 
-int MxcsStr::Chomp(string* const buf_ptr)
+int MshpStr::Chomp(string* const buf_ptr)
 {
     int ret = kRetNormal;
     int len = buf_ptr->size();
@@ -43,7 +43,7 @@ int MxcsStr::Chomp(string* const buf_ptr)
     return ret;
 }
 
-void MxcsStr::RmStSpace(string* const buf_ptr)
+void MshpStr::RmStSpace(string* const buf_ptr)
 {
     if(1 == IsSpace(*buf_ptr)){
         buf_ptr->erase(0);
@@ -64,7 +64,7 @@ void MxcsStr::RmStSpace(string* const buf_ptr)
 }
 
 
-void MxcsStr::RmEdSpace(string* const buf_ptr)
+void MshpStr::RmEdSpace(string* const buf_ptr)
 {
     if(1 == IsSpace(*buf_ptr)){
         buf_ptr->erase(0);
@@ -84,13 +84,13 @@ void MxcsStr::RmEdSpace(string* const buf_ptr)
     }
 }
 
-void MxcsStr::RmStEdSpace(string* const buf_ptr)
+void MshpStr::RmStEdSpace(string* const buf_ptr)
 {
     RmStSpace(buf_ptr);
     RmEdSpace(buf_ptr);
 }
 
-void MxcsStr::GenSplit(string str_in, int* nsplit_ptr, string** split_arr_ptr,
+void MshpStr::GenSplit(string str_in, int* nsplit_ptr, string** split_arr_ptr,
                        const char* const delim)
 {
     int nlength = str_in.length();
@@ -115,12 +115,12 @@ void MxcsStr::GenSplit(string str_in, int* nsplit_ptr, string** split_arr_ptr,
     *split_arr_ptr = split_arr;
 }
 
-void MxcsStr::DelSplit(string* split_arr)
+void MshpStr::DelSplit(string* split_arr)
 {
     delete [] split_arr;
 }
 
-int MxcsStr::GetNcolumn(string str_in, const char* const delim)
+int MshpStr::GetNcolumn(string str_in, const char* const delim)
 {
     int nlength = str_in.length();
     char* line = new char[nlength + 1];

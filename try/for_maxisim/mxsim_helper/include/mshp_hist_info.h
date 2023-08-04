@@ -1,7 +1,7 @@
-#ifndef MXCSTOOL_MXCSANALIB_HIST_INFO_H_
-#define MXCSTOOL_MXCSANALIB_HIST_INFO_H_
+#ifndef MXSIM_HELPER_HIST_INFO_H_
+#define MXSIM_HELPER_HIST_INFO_H_
 
-#include "mxcs_iolib.h"
+#include "mshp_iolib.h"
 
 //
 // format of hist_info file:
@@ -10,10 +10,10 @@
 //   none   -10   20   1.0  floor
 //
 
-class HistInfo1d : public MxcsObject{
+class HistInfo1d : public MshpObject{
 public:
     explicit HistInfo1d(string title = "") :
-        MxcsObject("HistInfo1d", title),
+        MshpObject("HistInfo1d", title),
         nbin_(0),
         lo_(0.0),
         up_(0.0) {}
@@ -83,10 +83,10 @@ private:
 };
 
 
-class HistInfo2d : public MxcsObject{
+class HistInfo2d : public MshpObject{
 public:
     explicit HistInfo2d(string title = "") :
-        MxcsObject("HistInfo2d", title),
+        MshpObject("HistInfo2d", title),
         hist_info_x_(NULL),
         hist_info_y_(NULL) {}
     ~HistInfo2d(){
@@ -161,4 +161,4 @@ private:
     void Null();
 };
 
-#endif // MXCSTOOL_MXCSANALIB_HIST_INFO_H_
+#endif // MXSIM_HELPER_HIST_INFO_H_

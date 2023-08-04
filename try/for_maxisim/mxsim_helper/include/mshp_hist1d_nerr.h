@@ -1,7 +1,7 @@
-#ifndef MXCSTOOL_MXCSANALIB_HIST1D_NERR_H_
-#define MXCSTOOL_MXCSANALIB_HIST1D_NERR_H_
+#ifndef MXSIM_HELPER_HIST1D_NERR_H_
+#define MXSIM_HELPER_HIST1D_NERR_H_
 
-#include "mxcs_hist1d.h"
+#include "mshp_hist1d.h"
 
 class HistDataNerr1d : public HistData1d{
 public:
@@ -22,7 +22,7 @@ public:
                    double offset_xval,
                    double offset_oval) const;
     HistDataNerr1d* const GenHd1MaxInBin(long nbin_new) const;
-    void FillRandom(const MxcsFunc* const func,
+    void FillRandom(const MshpFunc* const func,
                      const double* const func_par,
                      int rand_seed);
     void FillRandom(const HistData1d* const hist_data,
@@ -30,4 +30,4 @@ public:
     HistDataNerr1d* GenSubHist(long ibinx_st, long ibinx_ed) const;
 };
 
-#endif // MXCSTOOL_MXCSANALIB_HIST1D_NERR_H_
+#endif // MXSIM_HELPER_HIST1D_NERR_H_

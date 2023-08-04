@@ -1,4 +1,4 @@
-#include "mxcs_hist1d.h"
+#include "mshp_hist1d.h"
 
 //
 // public
@@ -64,7 +64,7 @@ void HistData1d::SetConst(double constant)
     GetOvalArrNonConst()->SetConst(constant);
 }
 
-void HistData1d::SetByFunc(const MxcsFunc* const func, const double* const par)
+void HistData1d::SetByFunc(const MshpFunc* const func, const double* const par)
 {
     for(int ibin = 0; ibin < GetNbinX(); ibin ++){
         double xval = GetBinCenter(ibin);
@@ -181,26 +181,6 @@ long HistData1d::GetIbin_WithHalfBinShifted(double val) const
     return ibin;
 }
 
-double HistData1d::GetOvalIntPolLin(double xval) const
-{
-    IsValidRange(xval);
-    double ans = 0.0;
-    long index_xval = GetIbin_WithHalfBinShifted(xval);
-    if (-1 < index_xval && index_xval < GetNbinX() - 1){
-        ans = MxcsMath::IntPolLin(xval,
-                                  GetBinCenter(index_xval),
-                                  GetBinCenter(index_xval + 1),
-                                  GetOvalElm(index_xval),
-                                  GetOvalElm(index_xval + 1) );
-    } else {
-        if(0 < g_flag_verbose){
-            MxcsPrintWarnClass("bad xval, then just return 0.0");
-        }
-        ans = 0.0;
-    }
-    return ans;
-}
-
 void HistData1d::Save(string outfile, string format,
                       double offset_xval,
                       double offset_oval) const
@@ -297,7 +277,7 @@ void HistData1d::PrintData(FILE* fp, string format,
     } else {
         char msg[kLineSize];
         sprintf(msg, "format(=%s)", format.c_str());
-        MxcsPrintErrClass(msg);
+        MshpPrintErrClass(msg);
         abort();
     }
 }
@@ -305,7 +285,7 @@ void HistData1d::PrintData(FILE* fp, string format,
 // generate events from histogram with poisson statistic
 DataArrayNerr1d* const HistData1d::GenRandomEvt(int rand_seed) const
 {
-    MxcsRand* mrand = new MxcsRand;
+    MshpRand* mrand = new MshpRand;
     mrand->Init(rand_seed);
     vector<double> time_vec;
 
@@ -336,7 +316,7 @@ void HistData1d::GenRandomEvtFromProbDist(
     double** xval_arr_ptr) const
 {
     long nbin = GetOvalArr()->GetNdata();
-    double sum = MxcsMath::GetSum(nbin, GetOvalArr()->GetVal());
+    double sum = MshpMath::GetSum(nbin, GetOvalArr()->GetVal());
     // normalize
     double* data_norm = new double [nbin];
     for(long ibin = 0; ibin < nbin; ibin ++){
@@ -351,11 +331,11 @@ void HistData1d::GenRandomEvtFromProbDist(
         printf("cum_arr = %e\n", cum_arr[ibin]);
     }
     double* xval_arr = new double[nevt];
-    MxcsRand* mrand = new MxcsRand;
+    MshpRand* mrand = new MshpRand;
     mrand->Init(rand_seed);
     for(int ievt = 0; ievt < nevt; ievt++){
         double rand = mrand->Uniform();
-        long ibin_find = MxcsSort::BinarySearch(nbin, cum_arr, rand);
+        long ibin_find = MshpSort::BinarySearch(nbin, cum_arr, rand);
         xval_arr[ievt] = GetBinCenter(ibin_find + 1);
     }
     delete mrand;
@@ -418,11 +398,11 @@ void HistData1d::ReadInfo(string file,
     
     string* line_arr = NULL;
     long ndata = 0;
-    MxcsIolib::GenReadFileComment(file, &line_arr, &ndata);
+    MshpIolib::GenReadFileComment(file, &line_arr, &ndata);
     for(long idata = 0; idata < ndata; idata ++){
         int ncolumn = 0;
         string* split_arr = NULL;
-        MxcsStr::GenSplit(line_arr[idata], &ncolumn, &split_arr);
+        MshpStr::GenSplit(line_arr[idata], &ncolumn, &split_arr);
         if(4 != ncolumn){
             continue;
         }
@@ -441,7 +421,7 @@ void HistData1d::ReadInfo(string file,
         
         delete [] split_arr;
     }
-    MxcsIolib::DelReadFile(line_arr);
+    MshpIolib::DelReadFile(line_arr);
 
     *nbin_xval_ptr = nbin_xval;
     *xval_lo_ptr = xval_lo;

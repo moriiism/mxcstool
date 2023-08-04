@@ -1,4 +1,4 @@
-#include "mxcs_hist2d_serr.h"
+#include "mshp_hist2d_serr.h"
 
 //
 // public
@@ -268,18 +268,18 @@ void HistDataSerr2d::PrintData(FILE* fp, string format,
     } else {
         char msg[kLineSize];
         sprintf(msg, "format(=%s)", format.c_str());
-        MxcsPrintErrClass(msg);
+        MshpPrintErrClass(msg);
         abort();
     }
 }
 
 
 // poisson error
-void HistDataSerr2d::FillRandom(const MxcsFunc* const func,
+void HistDataSerr2d::FillRandom(const MshpFunc* const func,
                                 const double* const func_par,
                                 int rand_seed)
 {
-    MxcsRand* mrand = new MxcsRand;
+    MshpRand* mrand = new MshpRand;
     mrand->Init(rand_seed);
     for(long ibin = 0; ibin < GetNbin(); ibin ++){
         long ibin_x = GetHi2d()->GetIbinX(ibin);
@@ -302,13 +302,13 @@ void HistDataSerr2d::FillRandom(const MxcsFunc* const func,
 }
 
 // gaussian error
-void HistDataSerr2d::FillRandom(const MxcsFunc* const func,
+void HistDataSerr2d::FillRandom(const MshpFunc* const func,
                                 const double* const func_par,
-                                const MxcsFunc* const func_sigma,
+                                const MshpFunc* const func_sigma,
                                 const double* const func_par_sigma,
                                 int rand_seed)
 {
-    MxcsRand* mrand = new MxcsRand;
+    MshpRand* mrand = new MshpRand;
     mrand->Init(rand_seed);
     for(long ibin = 0; ibin < GetNbin(); ibin ++){
         long ibin_x = GetHi2d()->GetIbinX(ibin);
@@ -338,7 +338,7 @@ void HistDataSerr2d::FillRandom(const HistData2d* const hist_data,
     Init(hist_data->GetNbinX(), hist_data->GetXvalLo(), hist_data->GetXvalUp(),
          hist_data->GetNbinY(), hist_data->GetYvalLo(), hist_data->GetYvalUp());
     
-    MxcsRand* mrand = new MxcsRand;
+    MshpRand* mrand = new MshpRand;
     mrand->Init(rand_seed);
     for(long ibin = 0; ibin < GetNbin(); ibin ++){
         long ibin_x = GetHi2d()->GetIbinX(ibin);

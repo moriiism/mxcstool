@@ -1,7 +1,7 @@
-#ifndef MXCSTOOL_MXCSANALIB_HIST1D_SERR_H_
-#define MXCSTOOL_MXCSANALIB_HIST1D_SERR_H_
+#ifndef MXSIM_HELPER_HIST1D_SERR_H_
+#define MXSIM_HELPER_HIST1D_SERR_H_
 
-#include "mxcs_hist1d.h"
+#include "mshp_hist1d.h"
 
 class HistDataSerr1d : public HistData1d{
 public:
@@ -39,12 +39,12 @@ public:
     HistDataSerr1d* const GenHd1MaxInBin(long nbin_new) const;
 
     // poisson error
-    void FillRandom(const MxcsFunc* const func,
+    void FillRandom(const MshpFunc* const func,
                     const double* const func_par,
                     int rand_seed);
-    void FillRandom(const MxcsFunc* const func,
+    void FillRandom(const MshpFunc* const func,
                     const double* const func_par,
-                    const MxcsFunc* const func_sigma,
+                    const MshpFunc* const func_sigma,
                     const double* const func_par_sigma,
                     int rand_seed);
     void FillRandom(const HistData1d* const hist_data,
@@ -52,5 +52,5 @@ public:
     HistDataSerr1d* GenSubHist(long ibinx_st, long ibinx_ed) const;
 };
 
-#endif // MXCSTOOL_MXCSANALIB_HIST1D_SERR_H_
+#endif // MXSIM_HELPER_HIST1D_SERR_H_
 

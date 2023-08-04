@@ -1,8 +1,8 @@
-#include "mxcs_func_par.h"
+#include "mshp_func_par.h"
 
 // public
 
-void MxcsFuncPar::Init(int npar)
+void MshpFuncPar::Init(int npar)
 {
     Null();
     
@@ -11,7 +11,7 @@ void MxcsFuncPar::Init(int npar)
     par_      = new double [npar];
 }
 
-void MxcsFuncPar::Set(int npar,
+void MshpFuncPar::Set(int npar,
                       const string* const par_name,
                       const double* const par)
 {
@@ -24,7 +24,7 @@ void MxcsFuncPar::Set(int npar,
     }
 }
 
-void MxcsFuncPar::SetElm(int ipar,
+void MshpFuncPar::SetElm(int ipar,
                          string par_name,
                          double par)
 {
@@ -32,7 +32,7 @@ void MxcsFuncPar::SetElm(int ipar,
     par_[ipar] = par;
 }
 
-void MxcsFuncPar::InitSet(int npar,
+void MshpFuncPar::InitSet(int npar,
                           const string* const par_name,
                           const double* const par)
 {
@@ -41,18 +41,18 @@ void MxcsFuncPar::InitSet(int npar,
 }
 
 
-void MxcsFuncPar::Load(string file)
+void MshpFuncPar::Load(string file)
 {
     Null();
     
     string* line_arr = NULL;
     long nline = 0;
-    MxcsIolib::GenReadFileSkipComment(file, &line_arr, &nline);
+    MshpIolib::GenReadFileSkipComment(file, &line_arr, &nline);
     Init(nline);
     for(long iline = 0; iline < nline; iline ++){
-        int ncolumn = MxcsStr::GetNcolumn(line_arr[iline]);
+        int ncolumn = MshpStr::GetNcolumn(line_arr[iline]);
         if(2 != ncolumn){
-            MxcsPrintWarnClass("ncolumn != 2");
+            MshpPrintWarnClass("ncolumn != 2");
         }
         istringstream iss(line_arr[iline]);
         string par_name_tmp;
@@ -60,14 +60,14 @@ void MxcsFuncPar::Load(string file)
         iss >> par_name_tmp >> par_tmp;
         SetElm(iline, par_name_tmp, par_tmp);
     }
-    MxcsIolib::DelReadFile(line_arr);
+    MshpIolib::DelReadFile(line_arr);
     if(0 < g_flag_verbose){
-        MxcsPrintInfoClass("done.");
+        MshpPrintInfoClass("done.");
     }
 }
 
 
-void MxcsFuncPar::Copy(const MxcsFuncPar* const org)
+void MshpFuncPar::Copy(const MshpFuncPar* const org)
 {
     if(this == org) {abort();}
     if(NULL == org) {abort();}
@@ -78,15 +78,15 @@ void MxcsFuncPar::Copy(const MxcsFuncPar* const org)
             org->GetPar());
 }
 
-MxcsFuncPar* const MxcsFuncPar::Clone() const
+MshpFuncPar* const MshpFuncPar::Clone() const
 {
-    MxcsFuncPar* obj_new = new MxcsFuncPar;
+    MshpFuncPar* obj_new = new MshpFuncPar;
     obj_new->Copy(this);
     return obj_new;
 }
 
 
-void MxcsFuncPar::Print(FILE* fp) const
+void MshpFuncPar::Print(FILE* fp) const
 {
     fprintf(fp, "%s: npar = %d\n",
             GetClassName().c_str(), npar_);
@@ -104,7 +104,7 @@ void MxcsFuncPar::Print(FILE* fp) const
 // private
 //
 
-void MxcsFuncPar::Null()
+void MshpFuncPar::Null()
 {
     npar_ = 0;
     if(NULL != par_name_) {delete [] par_name_; par_name_ = NULL;}

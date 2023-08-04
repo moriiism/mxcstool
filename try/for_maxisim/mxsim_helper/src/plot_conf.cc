@@ -1,8 +1,8 @@
-#include "mxcs_plot_conf.h"
+#include "mshp_plot_conf.h"
 
 // public
 
-void MxcsPlotConf::Init(int ndim)
+void MshpPlotConf::Init(int ndim)
 {
     Null();
     
@@ -21,21 +21,21 @@ void MxcsPlotConf::Init(int ndim)
     }
 }
 
-void MxcsPlotConf::Load(string file)
+void MshpPlotConf::Load(string file)
 {
     Null();
 
     string* line_arr = NULL;
     long ndim = 0;
-    MxcsIolib::GenReadFileSkipComment(file, &line_arr, &ndim);
+    MshpIolib::GenReadFileSkipComment(file, &line_arr, &ndim);
     Init(ndim);
     for(long idim = 0; idim < ndim; idim ++){
-        int ncolumn = MxcsStr::GetNcolumn(line_arr[idim]);
+        int ncolumn = MshpStr::GetNcolumn(line_arr[idim]);
         if(6 > ncolumn){
             char msg[kLineSize];
             sprintf(msg, "ncolumn < 6: "
                     "format: lo_str  up_str  offset_tag  scale  !  label");
-            MxcsPrintErr(msg);
+            MshpPrintErr(msg);
         }
         char lo_char[kLineSize];
         char up_char[kLineSize];
@@ -47,22 +47,22 @@ void MxcsPlotConf::Load(string file)
         string line_str = line_arr[idim];
         int ipos_delim = line_str.find("!");
         string label_str = line_str.substr(ipos_delim + 1);
-        MxcsStr::RmStEdSpace(&label_str);
+        MshpStr::RmStEdSpace(&label_str);
         SetIdimElm(idim, lo_char, up_char,
                    offset_tag_char, scale_char, label_str);
     }
-    MxcsIolib::DelReadFile(line_arr);
+    MshpIolib::DelReadFile(line_arr);
 }
 
 
-void MxcsPlotConf::SetIdimElm(int idim, string lo_str, string up_str,
+void MshpPlotConf::SetIdimElm(int idim, string lo_str, string up_str,
                              string offset_tag, string scale, string label)
 {
     if(idim >= GetNdim()){
         char msg[kLineSize];
         sprintf(msg, "bad idim (=%d) for ndim (=%d)",
                 idim, GetNdim());
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
     lo_str_[idim] = lo_str;
@@ -72,7 +72,7 @@ void MxcsPlotConf::SetIdimElm(int idim, string lo_str, string up_str,
     label_[idim] = label;
 }
 
-void MxcsPlotConf::Copy(const MxcsPlotConf* const org)
+void MshpPlotConf::Copy(const MshpPlotConf* const org)
 {
     if(this == org) {abort();}
     if(NULL == org) {abort();}
@@ -88,14 +88,14 @@ void MxcsPlotConf::Copy(const MxcsPlotConf* const org)
     }
 }
 
-MxcsPlotConf* const MxcsPlotConf::Clone() const
+MshpPlotConf* const MshpPlotConf::Clone() const
 {
-    MxcsPlotConf* obj_new = new MxcsPlotConf;
+    MshpPlotConf* obj_new = new MshpPlotConf;
     obj_new->Copy(this);
     return obj_new;
 }
 
-void MxcsPlotConf::Print(FILE* fp) const
+void MshpPlotConf::Print(FILE* fp) const
 {
     fprintf(fp, "%s: ndim = %d\n", GetClassName().c_str(), GetNdim());
     for(int idim = 0; idim < GetNdim(); idim ++){
@@ -116,16 +116,16 @@ void MxcsPlotConf::Print(FILE* fp) const
 // static
 //
 
-void MxcsPlotConf::GenPlotConf2(const MxcsPlotConf* const plot_conf,
-                               MxcsPlotConf** const plot_conf_val_ptr,
-                               MxcsPlotConf** const plot_conf_ratio_ptr)
+void MshpPlotConf::GenPlotConf2(const MshpPlotConf* const plot_conf,
+                               MshpPlotConf** const plot_conf_val_ptr,
+                               MshpPlotConf** const plot_conf_ratio_ptr)
 {
     if(4 != plot_conf->GetNdim()){
-        MxcsPrintErr("bad plot_conf (ndim of plot_conf is not 4)");
+        MshpPrintErr("bad plot_conf (ndim of plot_conf is not 4)");
         abort();
     }
-    MxcsPlotConf* plot_conf_val = new MxcsPlotConf;
-    MxcsPlotConf* plot_conf_ratio = new MxcsPlotConf;
+    MshpPlotConf* plot_conf_val = new MshpPlotConf;
+    MshpPlotConf* plot_conf_ratio = new MshpPlotConf;
     plot_conf_val->Init(3);
     plot_conf_ratio->Init(3);
 
@@ -175,18 +175,18 @@ void MxcsPlotConf::GenPlotConf2(const MxcsPlotConf* const plot_conf,
     *plot_conf_ratio_ptr = plot_conf_ratio;    
 }
 
-void MxcsPlotConf::GenPlotConf3(const MxcsPlotConf* const plot_conf,
-                               MxcsPlotConf** const plot_conf_val_ptr,
-                               MxcsPlotConf** const plot_conf_chi_ptr,
-                               MxcsPlotConf** const plot_conf_ratio_ptr)
+void MshpPlotConf::GenPlotConf3(const MshpPlotConf* const plot_conf,
+                               MshpPlotConf** const plot_conf_val_ptr,
+                               MshpPlotConf** const plot_conf_chi_ptr,
+                               MshpPlotConf** const plot_conf_ratio_ptr)
 {
     if(5 != plot_conf->GetNdim()){
-        MxcsPrintErr("bad plot_conf (ndim of plot_conf is not 5)");
+        MshpPrintErr("bad plot_conf (ndim of plot_conf is not 5)");
         abort();
     }
-    MxcsPlotConf* plot_conf_val = new MxcsPlotConf;
-    MxcsPlotConf* plot_conf_chi = new MxcsPlotConf;
-    MxcsPlotConf* plot_conf_ratio = new MxcsPlotConf;
+    MshpPlotConf* plot_conf_val = new MshpPlotConf;
+    MshpPlotConf* plot_conf_chi = new MshpPlotConf;
+    MshpPlotConf* plot_conf_ratio = new MshpPlotConf;
     plot_conf_val->Init(3);
     plot_conf_chi->Init(3);
     plot_conf_ratio->Init(3);
@@ -259,7 +259,7 @@ void MxcsPlotConf::GenPlotConf3(const MxcsPlotConf* const plot_conf,
 
 // private
 
-void MxcsPlotConf::Null()
+void MshpPlotConf::Null()
 {
     ndim_ = 0;
     if(NULL != lo_str_) {delete [] lo_str_; lo_str_ = NULL;}

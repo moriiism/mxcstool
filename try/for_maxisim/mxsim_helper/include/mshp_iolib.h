@@ -1,5 +1,5 @@
-#ifndef MXCSTOOL_MXCSLIB_IOLIB_H_
-#define MXCSTOOL_MXCSLIB_IOLIB_H_
+#ifndef MXSIM_HELPER_IOLIB_H_
+#define MXSIM_HELPER_IOLIB_H_
 
 #include <unistd.h>
 #include <stdio.h>
@@ -14,9 +14,9 @@ using std::istringstream;
 using std::ifstream;
 using std::stringstream;
 
-#include "mxcs_str.h"
+#include "mshp_str.h"
 
-namespace MxcsIolib
+namespace MshpIolib
 {
     int GenReadFile(string file,
                     double** const valx_arr_ptr,
@@ -63,6 +63,6 @@ namespace MxcsIolib
 
     int Printf2(FILE* fp_log, const char* const format, ...);
 
-}  // namespace MxcsIolib
+}  // namespace MshpIolib
 
-#endif // MXCSTOOL_MXCSLIB_IOLIB_H_
+#endif // MXSIM_HELPER_IOLIB_H_

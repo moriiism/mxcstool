@@ -1,10 +1,10 @@
-#include "mxcs_func.h"
+#include "mshp_func.h"
 
 //
 // public
 //
 
-double MxcsFunc::Eval1d(double xval,
+double MshpFunc::Eval1d(double xval,
                         const double* const par) const
 {
     double xval_arr[1];
@@ -13,7 +13,7 @@ double MxcsFunc::Eval1d(double xval,
     return ans;
 }
 
-double MxcsFunc::Eval2d(double xval, double yval,
+double MshpFunc::Eval2d(double xval, double yval,
                         const double* const par) const
 {
     double xval_arr[2];
@@ -27,14 +27,14 @@ double MxcsFunc::Eval2d(double xval, double yval,
 // protected
 //
 
-void MxcsFunc::NullMxcsFunc()
+void MshpFunc::NullMshpFunc()
 {
     npar_ = 0;
     ndim_ = 0;
 }
 
 
-void MxcsFunc::CopyMxcsFunc(const MxcsFunc* const org)
+void MshpFunc::CopyMshpFunc(const MshpFunc* const org)
 {
     if(this == org) {abort();}
     if(NULL == org) {abort();}

@@ -1,8 +1,8 @@
-#include "mxcs_str.h"
-#include "mxcs_iolib.h"
-#include "mxcs_hist2d_nerr.h"
-#include "mxcs_qdp_tool.h"
-//#include "mxcs_func.h"
+#include "mshp_str.h"
+#include "mshp_iolib.h"
+#include "mshp_hist2d_nerr.h"
+#include "mshp_qdp_tool.h"
+//#include "mshp_func.h"
 
 // global variable 
 int g_flag_debug = 0;
@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
         for(int ievt = 0; ievt < nevt; ievt++){
             hd1d->Fill(yval_arr[ievt]);
         }
-        MxcsQdpTool::MkQdp(hd1d, "temp.qdp", "x,y");
+        MshpQdpTool::MkQdp(hd1d, "temp.qdp", "x,y");
         delete hd1d;
         delete hd2d;
         printf("=== \n");
@@ -108,7 +108,7 @@ int main(int argc, char* argv[])
 
         printf("jjjjj");
         
-        MxcsQdpTool::MkQdp(hd1d, "temp_proj.qdp", "x,y");
+        MshpQdpTool::MkQdp(hd1d, "temp_proj.qdp", "x,y");
         delete hd1d;
         delete hd2d;
         printf("=== \n");

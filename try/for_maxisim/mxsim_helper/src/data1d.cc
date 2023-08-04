@@ -1,4 +1,4 @@
-#include "mxcs_data1d.h"
+#include "mshp_data1d.h"
 
 //
 // public
@@ -7,7 +7,7 @@
 void DataArray1d::SetVal(long ndata, const double* const val)
 {
     if(GetNdata() != ndata){
-        MxcsPrintErrClass("GetNdata() != ndata");
+        MshpPrintErrClass("GetNdata() != ndata");
         abort();
     }
     IsValNotNull();
@@ -20,7 +20,7 @@ void DataArray1d::SetVal(long ndata, const double* const val)
 void DataArray1d::SetVal(vector<double> val)
 {
     if(GetNdata() != (long) val.size()){
-        MxcsPrintErrClass("GetNdata() != val.size()");
+        MshpPrintErrClass("GetNdata() != val.size()");
         abort();
     }
     IsValNotNull();    
@@ -53,24 +53,6 @@ void DataArray1d::Copy(const DataArray1d* const org)
         } else if("DataArraySerr1d" == org->GetClassName()){
             SetVal(org->GetNdata(), org->GetVal());
             SetValSerr(org->GetNdata(), org->GetValSerr());
-        } else if("DataArrayTerr1d" == org->GetClassName()){
-            SetVal(org->GetNdata(), org->GetVal());
-            double* val_serr = org->GenValSerr();
-            SetValSerr(org->GetNdata(), val_serr);
-            delete [] val_serr;
-        }
-    } else if("DataArrayTerr1d" == GetClassName()){
-        if("DataArrayNerr1d" == org->GetClassName()){
-            SetVal(org->GetNdata(), org->GetVal());
-            SetValErrByPoissonErr();
-        } else if("DataArraySerr1d" == org->GetClassName()){
-            SetVal(org->GetNdata(), org->GetVal());
-            SetValTerr(org->GetNdata(), org->GetValSerr());
-        } else if("DataArrayTerr1d" == org->GetClassName()){
-            SetVal(org->GetNdata(), org->GetVal());
-            SetValTerr(org->GetNdata(),
-                       org->GetValTerrPlus(),
-                       org->GetValTerrMinus());
         }
     }
 }
@@ -86,25 +68,25 @@ double DataArray1d::GetValElm(long idata) const
 
 double DataArray1d::GetValMin() const
 {
-    double ans = MxcsMath::GetMin(GetNdata(), GetVal());
+    double ans = MshpMath::GetMin(GetNdata(), GetVal());
     return ans;
 }
 
 double DataArray1d::GetValMax() const
 {
-    double ans = MxcsMath::GetMax(GetNdata(), GetVal());
+    double ans = MshpMath::GetMax(GetNdata(), GetVal());
     return ans;
 }
 
 long DataArray1d::GetLocValMin() const
 {
-    long ans = MxcsMath::GetLocMin(GetNdata(), GetVal());
+    long ans = MshpMath::GetLocMin(GetNdata(), GetVal());
     return ans;
 }
 
 long DataArray1d::GetLocValMax() const
 {
-    long ans = MxcsMath::GetLocMax(GetNdata(), GetVal());
+    long ans = MshpMath::GetLocMax(GetNdata(), GetVal());
     return ans;
 }
 
@@ -170,11 +152,11 @@ void DataArray1d::ReadInfo(string file, int* flag_val_sorted_ptr)
     
     string* line_arr = NULL;
     long ndata = 0;
-    MxcsIolib::GenReadFileComment(file, &line_arr, &ndata);
+    MshpIolib::GenReadFileComment(file, &line_arr, &ndata);
     for(long idata = 0; idata < ndata; idata ++){
         int ncolumn = 0;
         string* split_arr = NULL;
-        MxcsStr::GenSplit(line_arr[idata], &ncolumn, &split_arr);
+        MshpStr::GenSplit(line_arr[idata], &ncolumn, &split_arr);
         if(4 != ncolumn){
             continue;
         }
@@ -183,7 +165,7 @@ void DataArray1d::ReadInfo(string file, int* flag_val_sorted_ptr)
         }
         delete [] split_arr;
     }
-    MxcsIolib::DelReadFile(line_arr);
+    MshpIolib::DelReadFile(line_arr);
 
     *flag_val_sorted_ptr = flag_val_sorted;
 }
@@ -215,7 +197,7 @@ void DataArray1d::IsValNotNull() const
     if(NULL == GetVal()){
         char msg[kLineSize];
         sprintf(msg, "GetVal() = NULL");
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
 }
@@ -225,7 +207,7 @@ void DataArray1d::IsValidRange(long idata) const
     if(idata < 0 || GetNdata() <= idata){
         char msg[kLineSize];
         sprintf(msg, "idata (=%ld)", idata);
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
 }
@@ -236,7 +218,7 @@ void DataArray1d::IsValSerrPlus(double val_serr) const
     if(val_serr < 0.0){
         char msg[kLineSize];
         sprintf(msg, "val_serr(=%e) < 0.0", val_serr);
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
 }

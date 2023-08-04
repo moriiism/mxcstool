@@ -1,9 +1,9 @@
-#ifndef MXCSTOOL_MXCSLIB_STR_H_
-#define MXCSTOOL_MXCSLIB_STR_H_
+#ifndef MXSIM_HELPER_STR_H_
+#define MXSIM_HELPER_STR_H_
 
-#include "mxcs_base.h"
+#include "mshp_base.h"
 
-namespace MxcsStr
+namespace MshpStr
 {
     int IsSpace(string buf);
     // If the string buf is composed of only ' ' and '\t',
@@ -31,6 +31,6 @@ namespace MxcsStr
     
     int GetNcolumn(string str_in, const char* const delim = " \t");
     
-}  //  namespace MxcsStr
+}  //  namespace MshpStr
 
-#endif // MXCSTOOL_MXCSLIB_STR_H_
+#endif // MXSIM_HELPER_STR_H_

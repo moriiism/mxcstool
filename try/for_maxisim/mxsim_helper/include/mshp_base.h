@@ -1,24 +1,24 @@
-#ifndef MXCSTOOL_MXCSLIB_BASE_H_
-#define MXCSTOOL_MXCSLIB_BASE_H_
+#ifndef MXSIM_HELPER_BASE_H_
+#define MXSIM_HELPER_BASE_H_
 
-#include "mxcs_par.h"
+#include "mshp_par.h"
 
-#define MxcsPrintErr(msg)       (printf("ERROR: %s: %u: %s(): %s\n", \
+#define MshpPrintErr(msg)       (printf("ERROR: %s: %u: %s(): %s\n", \
                              __FILE__, __LINE__, __func__, msg))
-#define MxcsPrintWarn(msg)      (printf("WARNING: %s: %u: %s(): %s\n", \
+#define MshpPrintWarn(msg)      (printf("WARNING: %s: %u: %s(): %s\n", \
                              __FILE__, __LINE__, __func__, msg))
-#define MxcsPrintInfo(msg)      (printf("INFO: %s: %u: %s(): %s\n", \
+#define MshpPrintInfo(msg)      (printf("INFO: %s: %u: %s(): %s\n", \
                              __FILE__, __LINE__, __func__, msg))
-#define MxcsPrintErrClass(msg)  (printf("ERROR: %s: %u: %s::%s():%s: %s\n", \
+#define MshpPrintErrClass(msg)  (printf("ERROR: %s: %u: %s::%s():%s: %s\n", \
                              __FILE__, __LINE__, GetClassName().c_str(), \
                              __func__, GetTitle().c_str(), msg))
-#define MxcsPrintWarnClass(msg) (printf("WARNING: %s: %u: %s::%s():%s: %s\n", \
+#define MshpPrintWarnClass(msg) (printf("WARNING: %s: %u: %s::%s():%s: %s\n", \
                              __FILE__, __LINE__, GetClassName().c_str(), \
                              __func__, GetTitle().c_str(), msg))
-#define MxcsPrintInfoClass(msg) (printf("INFO: %s: %u: %s::%s():%s: %s\n", \
+#define MshpPrintInfoClass(msg) (printf("INFO: %s: %u: %s::%s():%s: %s\n", \
                              __FILE__, __LINE__, GetClassName().c_str(), \
                              __func__, GetTitle().c_str(), msg))
-#define MxcsPrintErrVFunc       (MxcsPrintErr("Wrong virtual function call."))
+#define MshpPrintErrVFunc       (MshpPrintErr("Wrong virtual function call."))
 
 #include <string.h>
 #include <typeinfo>
@@ -51,16 +51,16 @@ private:
     Uncopyable& operator=(const Uncopyable &);
 };
 
-class MxcsObject: private Uncopyable{
+class MshpObject: private Uncopyable{
 public:
-    MxcsObject(string class_name, string title) :
+    MshpObject(string class_name, string title) :
         class_name_(class_name),
         title_(title) {}
-    virtual ~MxcsObject() {
-        NullMxcsObject();
+    virtual ~MshpObject() {
+        NullMshpObject();
     }
 
-    virtual MxcsObject* const Clone() const = 0;
+    virtual MshpObject* const Clone() const = 0;
     
     string GetClassName() const {return class_name_;};
     string GetTitle() const {return title_;};
@@ -70,19 +70,19 @@ public:
     // class_name_ should be set at the initialization.
 
 protected:
-    void CopyTitle(const MxcsObject* const org);
+    void CopyTitle(const MshpObject* const org);
     
 private:
     string class_name_;  
     string title_;
 
-    void NullMxcsObject();
+    void NullMshpObject();
 };
 
-class MxcsArgBase: private Uncopyable{
+class MshpArgBase: private Uncopyable{
 public:
-    MxcsArgBase() {}
-    virtual ~MxcsArgBase() {}
+    MshpArgBase() {}
+    virtual ~MshpArgBase() {}
     
     virtual void Init(int argc, char* argv[]) = 0;
     virtual void Print(FILE* fp) const = 0;
@@ -94,7 +94,7 @@ private:
     virtual void Usage(FILE* fp) const = 0;
 };
 
-namespace MxcsBase
+namespace MshpBase
 {
     void IsValidArray(long narr, const int* const val_arr,
                       string err_msg = "");
@@ -109,4 +109,4 @@ namespace MxcsBase
     void DelArray(double* val_arr);
 }
 
-#endif // MXCSTOOL_MXCSLIB_BASE_H_
+#endif // MXSIM_HELPER_BASE_H_

@@ -1,8 +1,8 @@
-#ifndef MXCSTOOL_MXCSANALIB_HIST2D_SERR_H_
-#define MXCSTOOL_MXCSANALIB_HIST2D_SERR_H_
+#ifndef MXSIM_HELPER_HIST2D_SERR_H_
+#define MXSIM_HELPER_HIST2D_SERR_H_
 
-#include "mxcs_hist1d_serr.h"
-#include "mxcs_hist2d.h"
+#include "mshp_hist1d_serr.h"
+#include "mshp_hist2d.h"
 
 class HistDataSerr2d : public HistData2d{
 public:
@@ -43,14 +43,14 @@ public:
                    double offset_yval,
                    double offset_oval) const;
     // poisson error
-    void FillRandom(const MxcsFunc* const func,
+    void FillRandom(const MshpFunc* const func,
                     const double* const func_par,
                     int rand_seed);
 
     // gaussian error
-    void FillRandom(const MxcsFunc* const func,
+    void FillRandom(const MshpFunc* const func,
                     const double* const func_par,
-                    const MxcsFunc* const func_sigma,
+                    const MshpFunc* const func_sigma,
                     const double* const func_par_sigma,
                     int rand_seed);
 
@@ -62,4 +62,4 @@ public:
                                long ibiny_st, long ibiny_ed) const;
 };
 
-#endif // MXCSTOOL_MXCSANALIB_HIST2D_SERR_H_
+#endif // MXSIM_HELPER_HIST2D_SERR_H_

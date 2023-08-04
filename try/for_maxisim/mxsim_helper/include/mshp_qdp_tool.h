@@ -1,15 +1,15 @@
-#ifndef MXCSTOOL_MXCSANALIB_QDP_TOOL_H_
-#define MXCSTOOL_MXCSANALIB_QDP_TOOL_H_
+#ifndef MXSIM_HELPER_QDP_TOOL_H_
+#define MXSIM_HELPER_QDP_TOOL_H_
 
-#include "mxcs_plot_conf.h"
-#include "mxcs_hist1d_nerr.h"
-#include "mxcs_hist1d_serr.h"
-#include "mxcs_hist1d_ope.h"
-#include "mxcs_hist2d_nerr.h"
-#include "mxcs_hist2d_serr.h"
-#include "mxcs_hist2d_ope.h"
+#include "mshp_plot_conf.h"
+#include "mshp_hist1d_nerr.h"
+#include "mshp_hist1d_serr.h"
+#include "mshp_hist1d_ope.h"
+#include "mshp_hist2d_nerr.h"
+#include "mshp_hist2d_serr.h"
+#include "mshp_hist2d_ope.h"
 
-namespace MxcsQdpTool
+namespace MshpQdpTool
 {
     void GetRangeQdp(double min, double max,
                      double* const low_ptr, double* const up_ptr);
@@ -42,7 +42,7 @@ namespace MxcsQdpTool
                              double offset_xval,
                              double offset_oval,
                              double offset_oval_res,
-                             const MxcsPlotConf* const plot_conf);
+                             const MshpPlotConf* const plot_conf);
 
     // format: index  data
     void MkQdpMode1(const DataArray1d* const data_array,
@@ -53,7 +53,7 @@ namespace MxcsQdpTool
                     string scale_oval = "lin");
     void MkQdpMode1(const DataArray1d* const data_array,
                     string qdpout,
-                    const MxcsPlotConf* const plot_conf);
+                    const MshpPlotConf* const plot_conf);
 
     // format: data  1.0
     void MkQdpMode2(const DataArray1d* const data_array,
@@ -63,7 +63,7 @@ namespace MxcsQdpTool
                     string scale_xval = "lin");
     void MkQdpMode2(const DataArray1d* const data_array,
                     string qdpout,
-                    const MxcsPlotConf* const plot_conf);
+                    const MshpPlotConf* const plot_conf);
 
     void MkQdp(const HistData1d* const hist_data,
                string outqdp,
@@ -77,9 +77,9 @@ namespace MxcsQdpTool
     void MkQdp(const HistData1d* const hist_data,
                string outqdp,
                string format,
-               const MxcsPlotConf* const plot_conf);
+               const MshpPlotConf* const plot_conf);
 
-    void MkQdp(const MxcsFunc* const func, const double* const par,
+    void MkQdp(const MshpFunc* const func, const double* const par,
                int npoint, double xval_lo, double xval_up,
                string outqdp,
                string title_xval = "",
@@ -88,10 +88,10 @@ namespace MxcsQdpTool
                double offset_oval = 0.0,
                string scale_xval = "lin",
                string scale_oval = "lin");
-    void MkQdp(const MxcsFunc* const func, const double* const par,
+    void MkQdp(const MshpFunc* const func, const double* const par,
                int npoint, double xval_lo, double xval_up,
                string outqdp,
-               const MxcsPlotConf* const plot_conf);
+               const MshpPlotConf* const plot_conf);
 
     void MkQdpDiff(const HistData1d* const hist_data,
                    const HistData1d* const hist_model,
@@ -112,11 +112,11 @@ namespace MxcsQdpTool
                    const HistData1d* const hist_res,
                    string qdpout,
                    string format,
-                   const MxcsPlotConf* const plot_conf);
+                   const MshpPlotConf* const plot_conf);
 
     // hist_data, func
     void MkQdpDiff3Serr(const HistData1d* const hist_data,
-                        const MxcsFunc* const func, const double* const par,
+                        const MshpFunc* const func, const double* const par,
                         int npoint_func,
                         string outdir, string qdpout_head,
                         string title_xval = "",
@@ -126,13 +126,13 @@ namespace MxcsQdpTool
                         string scale_xval = "lin",
                         string scale_oval = "lin");
     void MkQdpDiff3Serr(const HistData1d* const hist_data,
-                        const MxcsFunc* const func, const double* const par,
+                        const MshpFunc* const func, const double* const par,
                         int npoint_func,
                         string outdir, string qdpout_head,
-                        const MxcsPlotConf* const plot_conf);
+                        const MshpPlotConf* const plot_conf);
 
     void MkQdpDiff2Terr(const HistData1d* const hist_data,
-                        const MxcsFunc* const func, const double* const par,
+                        const MshpFunc* const func, const double* const par,
                         int npoint_func,
                         string outdir, string qdpout_head,
                         string title_xval = "",
@@ -142,17 +142,17 @@ namespace MxcsQdpTool
                         string scale_xval = "lin",
                         string scale_oval = "lin");
     void MkQdpDiff2Terr(const HistData1d* const hist_data,
-                        const MxcsFunc* const func, const double* const par,
+                        const MshpFunc* const func, const double* const par,
                         int npoint_func,
                         string outdir, string qdpout_head,
-                        const MxcsPlotConf* const plot_conf);
+                        const MshpPlotConf* const plot_conf);
 
     // plot N HistData in one qdp file
     void MkQdpNhist(const HistData1d* const* const hist_arr, int nhist,
                     string qdpout,
                     double offset_xval = 0.0);
 
-    void MkQdpProj(const MxcsFunc* const func, const double* const par,
+    void MkQdpProj(const MshpFunc* const func, const double* const par,
                    double xval_lo, double xval_up, double yval_lo, double yval_up,
                    string outdir, string qdpout_head, string calc_mode,
                    int npoint_func,
@@ -165,15 +165,15 @@ namespace MxcsQdpTool
                    string scale_xval = "lin",
                    string scale_yval = "lin",
                    string scale_oval = "lin");
-    void MkQdpProj(const MxcsFunc* const func, const double* const par,
+    void MkQdpProj(const MshpFunc* const func, const double* const par,
                    double xval_lo, double xval_up, double yval_lo, double yval_up,
                    string outdir, string qdpout_head, string calc_mode,
                    int npoint_func,
-                   const MxcsPlotConf* const plot_conf_projx,
-                   const MxcsPlotConf* const plot_conf_projy);
+                   const MshpPlotConf* const plot_conf_projx,
+                   const MshpPlotConf* const plot_conf_projy);
     
     void MkQdpDiffProjSerr(const HistData2d* const hist_data,
-                           const MxcsFunc* const func, const double* const par,
+                           const MshpFunc* const func, const double* const par,
                            string outdir, string qdpout_head,
                            string add_mode, string error_mode,
                            string title_xval = "",
@@ -186,13 +186,13 @@ namespace MxcsQdpTool
                            string scale_yval = "lin",
                            string scale_oval = "lin");
     void MkQdpDiffProjSerr(const HistData2d* const hist_data,
-                           const MxcsFunc* const func, const double* const par,
+                           const MshpFunc* const func, const double* const par,
                            string outdir, string qdpout_head,
                            string add_mode, string error_mode,
-                           const MxcsPlotConf* const plot_conf_projx,
-                           const MxcsPlotConf* const plot_conf_projy);
+                           const MshpPlotConf* const plot_conf_projx,
+                           const MshpPlotConf* const plot_conf_projy);
     void MkQdpDiffProjTerr(const HistData2d* const hist_data,
-                           const MxcsFunc* const func, const double* const par,
+                           const MshpFunc* const func, const double* const par,
                            string outdir, string qdpout_head,
                            string add_mode, string error_mode,
                            string title_xval = "",
@@ -205,11 +205,11 @@ namespace MxcsQdpTool
                            string scale_yval = "lin",
                            string scale_oval = "lin");
     void MkQdpDiffProjTerr(const HistData2d* const hist_data,
-                           const MxcsFunc* const func, const double* const par,
+                           const MshpFunc* const func, const double* const par,
                            string outdir, string qdpout_head,
                            string add_mode, string error_mode,
-                           const MxcsPlotConf* const plot_conf_projx,
-                           const MxcsPlotConf* const plot_conf_projy);
+                           const MshpPlotConf* const plot_conf_projx,
+                           const MshpPlotConf* const plot_conf_projy);
 }
 
-#endif // MXCSTOOL_MXCSANALIB_QDP_TOOL_H_
+#endif // MXSIM_HELPER_QDP_TOOL_H_

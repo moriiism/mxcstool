@@ -1,20 +1,19 @@
-#ifndef MXCSTOOL_MXCSANALIB_DATA1D_H_
-#define MXCSTOOL_MXCSANALIB_DATA1D_H_
+#ifndef MXSIM_HELPER_DATA1D_H_
+#define MXSIM_HELPER_DATA1D_H_
 
-#include "mxcs_base.h"
-#include "mxcs_iolib.h"
-#include "mxcs_str.h"
-#include "mxcs_sort.h"
-#include "mxcs_math.h"
+#include "mshp_base.h"
+#include "mshp_iolib.h"
+#include "mshp_str.h"
+#include "mshp_sort.h"
+#include "mshp_math.h"
 
 class DataArrayNerr1d;
 class DataArraySerr1d;
-class DataArrayTerr1d;
 
-class DataArray1d : public MxcsObject{
+class DataArray1d : public MshpObject{
 public:
     DataArray1d(string class_name, string title) :
-        MxcsObject(class_name, title),
+        MshpObject(class_name, title),
         ndata_(0),
         val_(NULL),
         flag_val_sorted_(0) {}
@@ -32,34 +31,14 @@ public:
     // DataArraySerr1d
     virtual void SetValSerr(long ndata,
                             const double* const val_serr)
-        {MxcsPrintErrVFunc; abort();};
+        {MshpPrintErrVFunc; abort();};
     virtual void SetValSerr(vector<double> val_serr)
-        {MxcsPrintErrVFunc; abort();};
-
-    // DataArrayTerr1d
-    virtual void SetValTerr(long ndata,
-                            const double* const val_serr)
-        {MxcsPrintErrVFunc; abort();};
-    virtual void SetValTerr(vector<double> val_serr)
-        {MxcsPrintErrVFunc; abort();};
-    virtual void SetValTerr(long ndata,
-                            const double* const val_terr_plus,
-                            const double* const val_terr_minus)
-        {MxcsPrintErrVFunc; abort();};
-    virtual void SetValTerr(vector<double> val_terr_plus,
-                            vector<double> val_terr_minus)
-        {MxcsPrintErrVFunc; abort();};
+        {MshpPrintErrVFunc; abort();};
 
     // Set element
     void SetValElm(long idata, double val);
     virtual void SetValSerrElm(long idata, double val_serr)
-        {MxcsPrintErrVFunc; abort();};
-    virtual void SetValTerrElm(long idata, double val_serr)
-        {MxcsPrintErrVFunc; abort();};
-    virtual void SetValTerrPlusElm(long idata, double val_terr_plus)
-        {MxcsPrintErrVFunc; abort();};
-    virtual void SetValTerrMinusElm(long idata, double val_terr_minus)
-        {MxcsPrintErrVFunc; abort();};
+        {MshpPrintErrVFunc; abort();};
     
     virtual void Fill(long idata) = 0;
     // add an event on the idata-bin of the data
@@ -71,28 +50,28 @@ public:
     virtual void FillByLarger(long idata,
                               double val,
                               double val_serr)
-        {MxcsPrintErrVFunc; abort();};
+        {MshpPrintErrVFunc; abort();};
     virtual void FillByLarger(long idata,
                               double val,
                               double val_terr_plus,
                               double val_terr_minus)
-        {MxcsPrintErrVFunc; abort();};
+        {MshpPrintErrVFunc; abort();};
 
     virtual void FillBySmaller(long idata, double val) = 0;
     virtual void FillBySmaller(long idata,
                                double val,
                                double val_serr)
-        {MxcsPrintErrVFunc; abort();};
+        {MshpPrintErrVFunc; abort();};
     virtual void FillBySmaller(long idata,
                                double val,
                                double val_terr_plus,
                                double val_terr_minus)
-        {MxcsPrintErrVFunc; abort();};
+        {MshpPrintErrVFunc; abort();};
     
     virtual void SetConst(double constant) = 0;
 
     virtual void SetValErrByPoissonErr()
-        {MxcsPrintErrVFunc; abort();};
+        {MshpPrintErrVFunc; abort();};
     
     void Copy(const DataArray1d* const org);
     virtual void Load(string file) = 0;
@@ -111,18 +90,12 @@ public:
     int GetFlagValSorted() const {return flag_val_sorted_;};
     
     virtual const double* const GetValSerr() const
-        {MxcsPrintErrVFunc; abort(); return NULL;};
-    virtual const double* const GetValTerrPlus() const
-        {MxcsPrintErrVFunc; abort(); return NULL;};
-    virtual const double* const GetValTerrMinus() const
-        {MxcsPrintErrVFunc; abort(); return NULL;};
+        {MshpPrintErrVFunc; abort(); return NULL;};
     virtual double GetValSerrElm(long idata) const = 0;
-    virtual double GetValTerrPlusElm(long idata) const = 0;
-    virtual double GetValTerrMinusElm(long idata) const = 0;
 
     // terr --> serr by average
     virtual double* const GenValSerr() const
-        {MxcsPrintErrVFunc; abort(); return NULL;};
+        {MshpPrintErrVFunc; abort(); return NULL;};
 
     double GetValMin() const;
     double GetValMax() const;
@@ -169,5 +142,4 @@ private:
     int flag_val_sorted_; // -1: not sorted, 0: not checked, 1: sorted
 };
 
-#endif // MXCSTOOL_MXCSANALIB_DATA1D_H_
-
+#endif // MXSIM_HELPER_DATA1D_H_

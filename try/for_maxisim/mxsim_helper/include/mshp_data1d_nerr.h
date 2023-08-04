@@ -1,7 +1,7 @@
-#ifndef MXCSTOOL_MXCSANALIB_DATA1D_NERR_H_
-#define MXCSTOOL_MXCSANALIB_DATA1D_NERR_H_
+#ifndef MXSIM_HELPER_DATA1D_NERR_H_
+#define MXSIM_HELPER_DATA1D_NERR_H_
 
-#include "mxcs_data1d.h"
+#include "mshp_data1d.h"
 
 class DataArrayNerr1d : public DataArray1d{
 public:
@@ -25,8 +25,6 @@ public:
     // const functions
     //
     double GetValSerrElm(long idata) const {return 0.0;};
-    double GetValTerrPlusElm(long idata) const {return 0.0;};
-    double GetValTerrMinusElm(long idata) const {return 0.0;};
     
     double GetValAndErrMin() const;
     double GetValAndErrMax() const;
@@ -38,5 +36,5 @@ public:
 };
 
 
-#endif // MXCSTOOL_MXCSANALIB_DATA1D_NERR_H_
+#endif // MXSIM_HELPER_DATA1D_NERR_H_
 

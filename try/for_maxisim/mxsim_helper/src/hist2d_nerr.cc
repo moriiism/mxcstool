@@ -1,4 +1,4 @@
-#include "mxcs_hist2d_nerr.h"
+#include "mshp_hist2d_nerr.h"
 
 //
 // public
@@ -57,7 +57,7 @@ HistDataNerr2d* const HistDataNerr2d::Clone() const
 //    if("x,y,z" != format){
 //        char msg[kLineSize];
 //        sprintf(msg, "format(=%s)", format.c_str());
-//        MxcsPrintErrClass(msg);
+//        MshpPrintErrClass(msg);
 //        abort();
 //    }
 //    GraphDataNerr3d* gdata3d = new GraphDataNerr3d;
@@ -179,16 +179,16 @@ void HistDataNerr2d::PrintData(FILE* fp, string format,
     } else {
         char msg[kLineSize];
         sprintf(msg, "format(=%s)", format.c_str());
-        MxcsPrintErrClass(msg);
+        MshpPrintErrClass(msg);
         abort();
     }
 }
 
-void HistDataNerr2d::FillRandom(const MxcsFunc* const func,
+void HistDataNerr2d::FillRandom(const MshpFunc* const func,
                                 const double* const func_par,
                                 int rand_seed)
 {
-    MxcsRand* mrand = new MxcsRand;
+    MshpRand* mrand = new MshpRand;
     mrand->Init(rand_seed);
     for(long ibin = 0; ibin < GetNbin(); ibin ++){
         long ibin_x = GetHi2d()->GetIbinX(ibin);
@@ -213,7 +213,7 @@ void HistDataNerr2d::FillRandom(const HistData2d* const hist_data,
     Init(hist_data->GetNbinX(), hist_data->GetXvalLo(), hist_data->GetXvalUp(),
          hist_data->GetNbinY(), hist_data->GetYvalLo(), hist_data->GetYvalUp());
     
-    MxcsRand* mrand = new MxcsRand;
+    MshpRand* mrand = new MshpRand;
     mrand->Init(rand_seed);
     for(long ibin = 0; ibin < GetNbin(); ibin ++){
         long ibin_x = GetHi2d()->GetIbinX(ibin);

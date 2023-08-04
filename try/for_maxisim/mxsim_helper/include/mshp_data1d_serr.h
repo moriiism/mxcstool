@@ -1,7 +1,7 @@
-#ifndef MXCSTOOL_MXCSANALIB_DATA1D_SERR_H_
-#define MXCSTOOL_MXCSANALIB_DATA1D_SERR_H_
+#ifndef MXSIM_HELPER_DATA1D_SERR_H_
+#define MXSIM_HELPER_DATA1D_SERR_H_
 
-#include "mxcs_data1d.h"
+#include "mshp_data1d.h"
 
 class DataArraySerr1d : public DataArray1d{
 public:
@@ -43,9 +43,6 @@ public:
     //
     const double* const GetValSerr() const {return val_serr_;};
     double GetValSerrElm(long idata) const;
-    double GetValTerrPlusElm(long idata) const;
-    double GetValTerrMinusElm(long idata) const;
-    
     double GetValAndErrMin() const;
     double GetValAndErrMax() const;
     void PrintData(FILE* fp, int mode,
@@ -61,5 +58,5 @@ private:
 };
 
 
-#endif // MXCSTOOL_MXCSANALIB_DATA1D_SERR_H_
+#endif // MXSIM_HELPER_DATA1D_SERR_H_
 

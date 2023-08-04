@@ -1,13 +1,13 @@
-#ifndef MXCSTOOL_MXCSLIB_SORT_H_
-#define MXCSTOOL_MXCSLIB_SORT_H_
+#ifndef MXSIM_HELPER_SORT_H_
+#define MXSIM_HELPER_SORT_H_
 
-#include "mxcs_base.h"
+#include "mshp_base.h"
 
 //
 // made from TMath.h of ROOT tool developed at CERN.
 //
 
-namespace MxcsSort
+namespace MshpSort
 {
     template<typename T>
     struct CompareDesc {
@@ -85,4 +85,4 @@ namespace MxcsSort
     
 }
 
-#endif // MXCSTOOL_MXCSLIB_SORT_H_
+#endif // MXSIM_HELPER_SORT_H_

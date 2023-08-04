@@ -1,4 +1,4 @@
-#include "mxcs_hist1d_nerr.h"
+#include "mshp_hist1d_nerr.h"
 
 //
 // public
@@ -48,24 +48,24 @@ void HistDataNerr1d::Load(string file)
     if("x,y" != format){
         char msg[kLineSize];
         sprintf(msg, "format(=%s)", format.c_str());
-        MxcsPrintErrClass(msg);
+        MshpPrintErrClass(msg);
         abort();
     }
     string* line_arr = NULL;
     long nline = 0;
-    MxcsIolib::GenReadFileSkipComment(file, &line_arr, &nline);
+    MshpIolib::GenReadFileSkipComment(file, &line_arr, &nline);
     if(nline != nbin_xval){
         char msg[kLineSize];
         sprintf(msg, "nline != nbin_xval");
-        MxcsPrintErrClass(msg);
+        MshpPrintErrClass(msg);
         abort();
     }
     double xval = 0.0;
     double oval = 0.0;
     for(long iline = 0; iline < nline; iline ++){
-        int ncolumn = MxcsStr::GetNcolumn(line_arr[iline]);
+        int ncolumn = MshpStr::GetNcolumn(line_arr[iline]);
         if(2 != ncolumn){
-            MxcsPrintErrClass("ncolumn != 2");
+            MshpPrintErrClass("ncolumn != 2");
             abort();
         }
         istringstream iss(line_arr[iline]);
@@ -73,7 +73,7 @@ void HistDataNerr1d::Load(string file)
         long ibin = GetIbin(xval);
         SetOvalElm(ibin, oval);
     }
-    MxcsIolib::DelReadFile(line_arr);
+    MshpIolib::DelReadFile(line_arr);
 }
 
 const DataArrayNerr1d* const HistDataNerr1d::GetOvalArr() const
@@ -148,7 +148,7 @@ void HistDataNerr1d::PrintData(FILE* fp, string format,
     } else {
         char msg[kLineSize];
         sprintf(msg, "format(=%s)", format.c_str());
-        MxcsPrintErrClass(msg);
+        MshpPrintErrClass(msg);
         abort();
     }
 }
@@ -157,15 +157,15 @@ void HistDataNerr1d::PrintData(FILE* fp, string format,
 HistDataNerr1d* const HistDataNerr1d::GenHd1MaxInBin(long nbin_new) const
 {
     if(nbin_new > GetNbinX()){
-        MxcsPrintErrClass("bad nbin_new");
+        MshpPrintErrClass("bad nbin_new");
         abort();
     }
     if(nbin_new < 1){
-        MxcsPrintErrClass("bad nbin_new");
+        MshpPrintErrClass("bad nbin_new");
         abort();
     }
     if(0 != GetNbinX() % nbin_new){
-        MxcsPrintErrClass("bad nbin_new");
+        MshpPrintErrClass("bad nbin_new");
         abort();
     }
     
@@ -179,11 +179,11 @@ HistDataNerr1d* const HistDataNerr1d::GenHd1MaxInBin(long nbin_new) const
     return h1d_new;
 }
 
-void HistDataNerr1d::FillRandom(const MxcsFunc* const func,
+void HistDataNerr1d::FillRandom(const MshpFunc* const func,
                                 const double* const func_par,
                                 int rand_seed)
 {
-    MxcsRand* mrand = new MxcsRand;
+    MshpRand* mrand = new MshpRand;
     mrand->Init(rand_seed);
     for(long ibin = 0; ibin < GetNbinX(); ibin ++){
         double xval = GetBinCenter(ibin);
@@ -198,7 +198,7 @@ void HistDataNerr1d::FillRandom(const HistData1d* const hist_data, int rand_seed
 {
     Init(hist_data->GetNbinX(), hist_data->GetXvalLo(), hist_data->GetXvalUp());
     
-    MxcsRand* mrand = new MxcsRand;
+    MshpRand* mrand = new MshpRand;
     mrand->Init(rand_seed);
     for(long ibin = 0; ibin < GetNbinX(); ibin ++){
         double oval_rand = mrand->Poisson(hist_data->GetOvalElm(ibin));

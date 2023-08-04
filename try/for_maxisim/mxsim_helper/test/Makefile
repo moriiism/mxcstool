@@ -1,7 +1,7 @@
 include ../Makefile.in
 
-INCLUDE := $(MXSIM_HELPER_INC) $(GSL_INC)
-LDLIBS  := $(MXSIM_HELPER_LIB) $(GSL_LIB) $(LIB)
+INCLUDE := $(MXSIM_HELPER_INC) 
+LDLIBS  := $(MXSIM_HELPER_LIB) $(LIB)
 
 TARGET := test_hist1d  test_hist2d  test_binary_search
 

@@ -1,16 +1,16 @@
-#ifndef MXCSTOOL_MXCSANALIB_FUNC_PAR_H_
-#define MXCSTOOL_MXCSANALIB_FUNC_PAR_H_
+#ifndef MXSIM_HELPER_FUNC_PAR_H_
+#define MXSIM_HELPER_FUNC_PAR_H_
 
-#include "mxcs_iolib.h"
+#include "mshp_iolib.h"
 
-class MxcsFuncPar : public MxcsObject{
+class MshpFuncPar : public MshpObject{
 public:
-    explicit MxcsFuncPar(string title = "") :
-        MxcsObject("MxcsFuncPar", title),
+    explicit MshpFuncPar(string title = "") :
+        MshpObject("MshpFuncPar", title),
         npar_(0),
         par_name_(NULL),
         par_(NULL) {}
-    ~MxcsFuncPar() {
+    ~MshpFuncPar() {
         Null();
     }
     void Init(int npar);
@@ -26,8 +26,8 @@ public:
     
     void Load(string file);
 
-    void Copy(const MxcsFuncPar* const org);
-    MxcsFuncPar* const Clone() const;
+    void Copy(const MshpFuncPar* const org);
+    MshpFuncPar* const Clone() const;
 
     void Print(FILE* fp) const;
 
@@ -45,4 +45,4 @@ private:
     void Null();
 };
 
-#endif // MXCSTOOL_MXCSANALIB_FUNC_PAR_H_
+#endif // MXSIM_HELPER_FUNC_PAR_H_

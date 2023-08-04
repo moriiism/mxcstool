@@ -1,6 +1,6 @@
-#include "mxcs_qdp_tool.h"
+#include "mshp_qdp_tool.h"
 
-void MxcsQdpTool::GetRangeQdp(double min, double max,
+void MshpQdpTool::GetRangeQdp(double min, double max,
                               double* const low_ptr, double* const up_ptr)
 {
     double width = (max - min) * 1.2;
@@ -11,11 +11,11 @@ void MxcsQdpTool::GetRangeQdp(double min, double max,
     *up_ptr  = up;
 }
 
-void MxcsQdpTool::PrintQdpRead(FILE* fp, string format)
+void MshpQdpTool::PrintQdpRead(FILE* fp, string format)
 {
     fprintf(fp, "\n");    
     if("x" == format){
-        MxcsPrintErr("bad format");
+        MshpPrintErr("bad format");
         abort();
 
     } else if ("x,y" == format){
@@ -39,13 +39,13 @@ void MxcsQdpTool::PrintQdpRead(FILE* fp, string format)
     } else if ("x,xe+,xe-,y,ye+,ye-" == format){
         fprintf(fp, "read terr 1 2\n");
     } else {
-        MxcsPrintErr("bad format");
+        MshpPrintErr("bad format");
         abort();        
     }
     fprintf(fp, "\n");
 }
 
-void MxcsQdpTool::PrintQdpCmdStd(FILE* fp)
+void MshpQdpTool::PrintQdpCmdStd(FILE* fp)
 {
     fprintf(fp, "\n");
     fprintf(fp, "la file\n");
@@ -58,7 +58,7 @@ void MxcsQdpTool::PrintQdpCmdStd(FILE* fp)
     fprintf(fp, "\n");    
 }
 
-void MxcsQdpTool::PrintQdpAxisRescale(FILE* fp, string xy,
+void MshpQdpTool::PrintQdpAxisRescale(FILE* fp, string xy,
                                       double val_lo, double val_up)
 {
     char cmd[kLineSize];
@@ -68,7 +68,7 @@ void MxcsQdpTool::PrintQdpAxisRescale(FILE* fp, string xy,
     }
 }
 
-void MxcsQdpTool::PrintQdpAxisTitle(FILE* fp, string xy,
+void MshpQdpTool::PrintQdpAxisTitle(FILE* fp, string xy,
                                     string title, double offset)
 {
     char cmd[kLineSize];
@@ -82,7 +82,7 @@ void MxcsQdpTool::PrintQdpAxisTitle(FILE* fp, string xy,
     fprintf(fp, "%s\n", cmd);
 }
 
-void MxcsQdpTool::PrintQdpScale(FILE* fp, string xy, string scale)
+void MshpQdpTool::PrintQdpScale(FILE* fp, string xy, string scale)
 {
     if("log" == scale){
         fprintf(fp, "log   %s  on\n",
@@ -95,7 +95,7 @@ void MxcsQdpTool::PrintQdpScale(FILE* fp, string xy, string scale)
     }
 }
 
-void MxcsQdpTool::PrintQdpCmdDiffPlot(
+void MshpQdpTool::PrintQdpCmdDiffPlot(
     FILE* fp,
     double xval_lo_data, double xval_up_data,
     double oval_lo_w1_data, double oval_up_w1_data,
@@ -161,7 +161,7 @@ void MxcsQdpTool::PrintQdpCmdDiffPlot(
 }
 
 
-void MxcsQdpTool::PrintQdpCmdDiffPlot(
+void MshpQdpTool::PrintQdpCmdDiffPlot(
     FILE* fp,
     double xval_lo_data, double xval_up_data,
     double oval_lo_w1_data, double oval_up_w1_data,
@@ -169,7 +169,7 @@ void MxcsQdpTool::PrintQdpCmdDiffPlot(
     double offset_xval,
     double offset_oval,
     double offset_oval_res,
-    const MxcsPlotConf* const plot_conf)
+    const MshpPlotConf* const plot_conf)
 {
     double xval_lo = 0.0;
     double xval_up = 0.0;
@@ -260,7 +260,7 @@ void MxcsQdpTool::PrintQdpCmdDiffPlot(
 }
 
 
-void MxcsQdpTool::MkQdpMode1(const DataArray1d* const data_array,
+void MshpQdpTool::MkQdpMode1(const DataArray1d* const data_array,
                              string qdpout,
                              string title_oval,
                              double offset_oval,
@@ -282,7 +282,7 @@ void MxcsQdpTool::MkQdpMode1(const DataArray1d* const data_array,
     } else {
         char msg[kLineSize];
         sprintf(msg, "bad class name");
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
     string title_xval = "index";
@@ -318,9 +318,9 @@ void MxcsQdpTool::MkQdpMode1(const DataArray1d* const data_array,
 }
 
 
-void MxcsQdpTool::MkQdpMode1(const DataArray1d* const data_array,
+void MshpQdpTool::MkQdpMode1(const DataArray1d* const data_array,
                              string qdpout,
-                             const MxcsPlotConf* const plot_conf)
+                             const MshpPlotConf* const plot_conf)
 {
     //
     // index  data
@@ -329,7 +329,7 @@ void MxcsQdpTool::MkQdpMode1(const DataArray1d* const data_array,
     if(2 != plot_conf->GetNdim()){
         char msg[kLineSize];
         sprintf(msg, "plot_conf->GetNdim() != 2");
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
 
@@ -344,7 +344,7 @@ void MxcsQdpTool::MkQdpMode1(const DataArray1d* const data_array,
     } else {
         char msg[kLineSize];
         sprintf(msg, "bad class name");
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
 
@@ -354,7 +354,7 @@ void MxcsQdpTool::MkQdpMode1(const DataArray1d* const data_array,
     if("no" !=  plot_conf->GetOffsetTagElm(0) ){
         char msg[kLineSize];
         sprintf(msg, "offset_xval must be zero. Then, set offset_xval = no.");
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
     double offset_xval = 0.0;
@@ -413,7 +413,7 @@ void MxcsQdpTool::MkQdpMode1(const DataArray1d* const data_array,
 }
 
 
-void MxcsQdpTool::MkQdpMode2(const DataArray1d* const data_array,
+void MshpQdpTool::MkQdpMode2(const DataArray1d* const data_array,
                              string qdpout,
                              string title_xval,
                              double offset_xval,
@@ -434,7 +434,7 @@ void MxcsQdpTool::MkQdpMode2(const DataArray1d* const data_array,
     } else {
         char msg[kLineSize];
         sprintf(msg, "bad class name");
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
 
@@ -466,9 +466,9 @@ void MxcsQdpTool::MkQdpMode2(const DataArray1d* const data_array,
 }
 
 
-void MxcsQdpTool::MkQdpMode2(const DataArray1d* const data_array,
+void MshpQdpTool::MkQdpMode2(const DataArray1d* const data_array,
                              string qdpout,
-                             const MxcsPlotConf* const plot_conf)
+                             const MshpPlotConf* const plot_conf)
 {
     //
     // data  1.0
@@ -477,7 +477,7 @@ void MxcsQdpTool::MkQdpMode2(const DataArray1d* const data_array,
     if(2 != plot_conf->GetNdim()){
         char msg[kLineSize];
         sprintf(msg, "plot_conf->GetNdim() != 2");
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
     
@@ -492,7 +492,7 @@ void MxcsQdpTool::MkQdpMode2(const DataArray1d* const data_array,
     } else {
         char msg[kLineSize];
         sprintf(msg, "bad class name");
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
 
@@ -504,7 +504,7 @@ void MxcsQdpTool::MkQdpMode2(const DataArray1d* const data_array,
     if("no" !=  plot_conf->GetOffsetTagElm(1) ){
         char msg[kLineSize];
         sprintf(msg, "offset_oval must be zero. Then, set offset_oval = no.");
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
     double offset_oval = 0.0;
@@ -554,7 +554,7 @@ void MxcsQdpTool::MkQdpMode2(const DataArray1d* const data_array,
     fclose(fp);
 }
 
-void MxcsQdpTool::MkQdp(const HistData1d* const hist_data,
+void MshpQdpTool::MkQdp(const HistData1d* const hist_data,
                         string outqdp,
                         string format,
                         string title_xval,
@@ -573,7 +573,7 @@ void MxcsQdpTool::MkQdp(const HistData1d* const hist_data,
         } else if ("HistDataTerr1d" == hist_data->GetClassName()){
             format_this = "x,y,ye+,ye-";
         } else {
-            MxcsPrintErr("bad classname");
+            MshpPrintErr("bad classname");
             abort();
         }
     } else {
@@ -614,10 +614,10 @@ void MxcsQdpTool::MkQdp(const HistData1d* const hist_data,
 }
 
 
-void MxcsQdpTool::MkQdp(const HistData1d* const hist_data,
+void MshpQdpTool::MkQdp(const HistData1d* const hist_data,
                         string outqdp,
                         string format,
-                        const MxcsPlotConf* const plot_conf)
+                        const MshpPlotConf* const plot_conf)
 {
     string format_this = "";
     if("def" == format){
@@ -628,7 +628,7 @@ void MxcsQdpTool::MkQdp(const HistData1d* const hist_data,
         } else if ("HistDataTerr1d" == hist_data->GetClassName()){
             format_this = "x,y,ye+,ye-";
         } else {
-            MxcsPrintErr("bad classname");
+            MshpPrintErr("bad classname");
             abort();
         }
     } else {
@@ -637,7 +637,7 @@ void MxcsQdpTool::MkQdp(const HistData1d* const hist_data,
     if(2 != plot_conf->GetNdim()){
         char msg[kLineSize];
         sprintf(msg, "plot_conf->GetNdim() != 2");
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
 
@@ -701,7 +701,7 @@ void MxcsQdpTool::MkQdp(const HistData1d* const hist_data,
     fclose(fp);
 }
 
-void MxcsQdpTool::MkQdpDiff(const HistData1d* const hist_data,
+void MshpQdpTool::MkQdpDiff(const HistData1d* const hist_data,
                             const HistData1d* const hist_model,
                             const HistData1d* const hist_res,
                             string qdpout,
@@ -751,17 +751,17 @@ void MxcsQdpTool::MkQdpDiff(const HistData1d* const hist_data,
 }
 
 
-void MxcsQdpTool::MkQdpDiff(const HistData1d* const hist_data,
+void MshpQdpTool::MkQdpDiff(const HistData1d* const hist_data,
                             const HistData1d* const hist_model,
                             const HistData1d* const hist_res,
                             string qdpout,
                             string format,
-                            const MxcsPlotConf* const plot_conf)
+                            const MshpPlotConf* const plot_conf)
 {
     if(3 != plot_conf->GetNdim()){
         char msg[kLineSize];
         sprintf(msg, "plot_conf->GetNdim() != 3");
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
     FILE* fp = fopen(qdpout.c_str(), "w");
@@ -803,138 +803,10 @@ void MxcsQdpTool::MkQdpDiff(const HistData1d* const hist_data,
                         plot_conf);
     fclose(fp);
 }
-
-// hist_data, func
-void MxcsQdpTool::MkQdpDiff3Serr(const HistData1d* const hist_data,
-                                 const MxcsFunc* const func,
-                                 const double* const par,
-                                 int npoint_func,
-                                 string outdir, string qdpout_head,
-                                 string title_xval,
-                                 string title_oval,
-                                 double offset_xval,
-                                 double offset_oval,
-                                 string scale_xval,
-                                 string scale_oval)
-{
-    double xval_lo = 0.0;
-    double xval_up = 0.0;
-    GetRangeQdp(hist_data->GetHi1d()->GetLo(),
-                hist_data->GetHi1d()->GetUp(),
-                &xval_lo, &xval_up);
-
-    HistDataNerr1d* hist_func = new HistDataNerr1d;
-    hist_func->Init(npoint_func, xval_lo, xval_up);
-    hist_func->SetByFunc(func, par);
-
-    HistDataSerr1d* hist_res_val   = new HistDataSerr1d;
-    HistDataSerr1d* hist_res_chi   = new HistDataSerr1d;
-    HistDataSerr1d* hist_res_ratio = new HistDataSerr1d;
-    HistData1dOpe::GetResValHd1d(hist_data, func, par,
-                                 hist_res_val);
-    HistData1dOpe::GetResChiHd1d(hist_data, func, par,
-                                 hist_res_chi);
-    HistData1dOpe::GetResRatioHd1d(hist_data, func, par,
-                                   hist_res_ratio);
-    string format = "x,xe,y,ye";
-    MkQdpDiff(hist_data, hist_func, hist_res_val, 
-              outdir + "/" + qdpout_head + "_diff_val.qdp",
-              format,
-              title_xval, title_oval, "res_val",
-              offset_xval, offset_oval, 0.0,
-              scale_xval, scale_oval, "lin");
-
-    MkQdpDiff(hist_data, hist_func, hist_res_chi, 
-              outdir + "/" + qdpout_head + "_diff_chi.qdp",
-              format, 
-              title_xval, title_oval, "chi",
-              offset_xval, offset_oval, 0.0,
-              scale_xval, scale_oval, "lin");
-
-    MkQdpDiff(hist_data, hist_func, hist_res_ratio, 
-              outdir + "/" + qdpout_head + "_diff_ratio.qdp",
-              format,
-              title_xval, title_oval, "ratio",
-              offset_xval, offset_oval, 0.0,
-              scale_xval, scale_oval, "lin");
-
-    delete hist_res_val;
-    delete hist_res_chi;
-    delete hist_res_ratio;
-    delete hist_func;
-}
-   
-    
-void MxcsQdpTool::MkQdpDiff3Serr(const HistData1d* const hist_data,
-                                 const MxcsFunc* const func,
-                                 const double* const par,
-                                 int npoint_func,
-                                 string outdir, string qdpout_head,
-                                 const MxcsPlotConf* const plot_conf)
-{
-    if(5 != plot_conf->GetNdim()){
-        char msg[kLineSize];
-        sprintf(msg, "plot_conf->GetNdim() != 5");
-        MxcsPrintErr(msg);
-        abort();
-    }
-    
-    double xval_lo = 0.0;
-    double xval_up = 0.0;
-    GetRangeQdp(hist_data->GetHi1d()->GetLo(),
-                hist_data->GetHi1d()->GetUp(),
-                &xval_lo, &xval_up);    
-
-    HistDataNerr1d* hist_func = new HistDataNerr1d;
-    hist_func->Init(npoint_func, xval_lo, xval_up);
-    hist_func->SetByFunc(func, par);
-
-    HistDataSerr1d* hist_res_val   = new HistDataSerr1d;
-    HistDataSerr1d* hist_res_chi   = new HistDataSerr1d;
-    HistDataSerr1d* hist_res_ratio = new HistDataSerr1d;
-    HistData1dOpe::GetResValHd1d(hist_data, func, par,
-                                 hist_res_val);
-    HistData1dOpe::GetResChiHd1d(hist_data, func, par,
-                                 hist_res_chi);
-    HistData1dOpe::GetResRatioHd1d(hist_data, func, par,
-                                   hist_res_ratio);
-
-    MxcsPlotConf* plot_conf_val   = NULL;
-    MxcsPlotConf* plot_conf_chi   = NULL;
-    MxcsPlotConf* plot_conf_ratio = NULL;
-    MxcsPlotConf::GenPlotConf3(plot_conf,
-                               &plot_conf_val,
-                               &plot_conf_chi,
-                               &plot_conf_ratio);
-    
-    string format = "x,xe,y,ye";
-    MkQdpDiff(hist_data, hist_func, hist_res_val, 
-              outdir + "/" + qdpout_head + "_diff_val.qdp",
-              format,
-              plot_conf_val);
-
-    MkQdpDiff(hist_data, hist_func, hist_res_chi, 
-              outdir + "/" + qdpout_head + "_diff_chi.qdp",
-              format,
-              plot_conf_chi);
-
-    MkQdpDiff(hist_data, hist_func, hist_res_ratio, 
-              outdir + "/" + qdpout_head + "_diff_ratio.qdp",
-              format,
-              plot_conf_ratio);
-
-    delete hist_res_val;
-    delete hist_res_chi;
-    delete hist_res_ratio;
-    delete hist_func;
-    delete plot_conf_val;
-    delete plot_conf_chi;
-    delete plot_conf_ratio;    
-}
         
 
 // plot N HistData in one qdp file
-void MxcsQdpTool::MkQdpNhist(const HistData1d* const* const hist_arr,
+void MshpQdpTool::MkQdpNhist(const HistData1d* const* const hist_arr,
                              int nhist,
                              string qdpout, double offset_xval)
 {
@@ -963,8 +835,8 @@ void MxcsQdpTool::MkQdpNhist(const HistData1d* const* const hist_arr,
                     hist_arr[ihist]->GetXvalUp(),
                     &x_lo[ihist], &x_up[ihist]);
     }
-    double x_lo_common = MxcsMath::GetMin(nhist, x_lo);
-    double x_up_common = MxcsMath::GetMax(nhist, x_up);
+    double x_lo_common = MshpMath::GetMin(nhist, x_lo);
+    double x_up_common = MshpMath::GetMax(nhist, x_up);
 
     double* y_lo = new double [nhist];
     double* y_up  = new double [nhist];    
@@ -1006,7 +878,7 @@ void MxcsQdpTool::MkQdpNhist(const HistData1d* const* const hist_arr,
 }
 
 
-void MxcsQdpTool::MkQdpProj(const MxcsFunc* const func,
+void MshpQdpTool::MkQdpProj(const MshpFunc* const func,
                             const double* const par,
                             double xval_lo, double xval_up,
                             double yval_lo, double yval_up,
@@ -1055,25 +927,25 @@ void MxcsQdpTool::MkQdpProj(const MxcsFunc* const func,
 }
 
 
-void MxcsQdpTool::MkQdpProj(const MxcsFunc* const func, const double* const par,
+void MshpQdpTool::MkQdpProj(const MshpFunc* const func, const double* const par,
                             double xval_lo, double xval_up,
                             double yval_lo, double yval_up,
                             string outdir, string qdpout_head,
                             string calc_mode,
                             int npoint_func,
-                            const MxcsPlotConf* const plot_conf_projx,
-                            const MxcsPlotConf* const plot_conf_projy)
+                            const MshpPlotConf* const plot_conf_projx,
+                            const MshpPlotConf* const plot_conf_projy)
 {
     if(2 != plot_conf_projx->GetNdim()){
         char msg[kLineSize];
         sprintf(msg, "plot_conf_projx->GetNdim() != 2");
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
     if(2 != plot_conf_projy->GetNdim()){
         char msg[kLineSize];
         sprintf(msg, "plot_conf_projy->GetNdim() != 2");
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
     
@@ -1105,271 +977,5 @@ void MxcsQdpTool::MkQdpProj(const MxcsFunc* const func, const double* const par,
     delete h2d_func;    
     delete h1d_func_projx;
     delete h1d_func_projy;
-}
-
-
-void MxcsQdpTool::MkQdpDiffProjSerr(const HistData2d* const hist_data,
-                                    const MxcsFunc* const func,
-                                    const double* const par,
-                                    string outdir, string qdpout_head,
-                                    string add_mode, string error_mode,
-                                    string title_xval,
-                                    string title_yval,
-                                    string title_oval,
-                                    double offset_xval,
-                                    double offset_yval,
-                                    double offset_oval,
-                                    string scale_xval,
-                                    string scale_yval,
-                                    string scale_oval)
-{
-    HistDataSerr1d* h1d_projx = new HistDataSerr1d;
-    HistData2dOpe::GetProjectX(hist_data,
-                               0, hist_data->GetNbinY() - 1,
-                               add_mode, error_mode,
-                               h1d_projx);
-    HistDataSerr1d* h1d_projy = new HistDataSerr1d;
-    HistData2dOpe::GetProjectY(hist_data,
-                               0, hist_data->GetNbinX() - 1,
-                               add_mode, error_mode,
-                               h1d_projy);
-    long nbin_func_x = hist_data->GetNbinX();
-    long nbin_func_y = hist_data->GetNbinY();    
-    double xval_lo = hist_data->GetXvalLo();
-    double xval_up = hist_data->GetXvalUp();
-    double yval_lo = hist_data->GetYvalLo();
-    double yval_up = hist_data->GetYvalUp();
-
-    HistData2d* h2d_func = new HistDataNerr2d;
-    h2d_func->Init(nbin_func_x, xval_lo, xval_up,
-                   nbin_func_y, yval_lo, yval_up);
-
-    h2d_func->SetByFunc(func, par);
-    HistDataNerr1d* h1d_func_projx = new HistDataNerr1d;
-    HistData2dOpe::GetProjectX(h2d_func,
-                               0, h2d_func->GetNbinY() - 1,
-                               add_mode,
-                               h1d_func_projx);
-    HistDataNerr1d* h1d_func_projy = new HistDataNerr1d;
-    HistData2dOpe::GetProjectY(h2d_func,
-                               0, h2d_func->GetNbinX() - 1,
-                               add_mode,
-                               h1d_func_projy);
-    HistDataSerr1d* h1d_projx_res_val   = new HistDataSerr1d;
-    HistDataSerr1d* h1d_projx_res_chi   = new HistDataSerr1d;
-    HistDataSerr1d* h1d_projx_res_ratio = new HistDataSerr1d;
-    HistData1dOpe::GetResValHd1d(h1d_projx, h1d_func_projx,
-                                 h1d_projx_res_val);
-    HistData1dOpe::GetResChiHd1d(h1d_projx, h1d_func_projx,
-                                 h1d_projx_res_chi);
-    HistData1dOpe::GetResRatioHd1d(h1d_projx, h1d_func_projx,
-                                   h1d_projx_res_ratio);
-
-    HistDataSerr1d* h1d_projy_res_val   = new HistDataSerr1d;
-    HistDataSerr1d* h1d_projy_res_chi   = new HistDataSerr1d;
-    HistDataSerr1d* h1d_projy_res_ratio = new HistDataSerr1d;
-    HistData1dOpe::GetResValHd1d(h1d_projy, h1d_func_projy,
-                                 h1d_projy_res_val);
-    HistData1dOpe::GetResChiHd1d(h1d_projy, h1d_func_projy,
-                                 h1d_projy_res_chi);
-    HistData1dOpe::GetResRatioHd1d(h1d_projy, h1d_func_projy,
-                                   h1d_projy_res_ratio);
-    string format = "x,xe,y,ye";
-    MkQdpDiff(h1d_projx, h1d_func_projx, h1d_projx_res_val, 
-              outdir + "/" + qdpout_head + "_projx_diff_val.qdp",
-              format,
-              title_xval, title_oval, "res_val",
-              offset_xval, offset_oval, 0.0,
-              scale_xval, scale_oval, "lin");
-    MkQdpDiff(h1d_projy, h1d_func_projy, h1d_projy_res_val, 
-              outdir + "/" + qdpout_head + "_projy_diff_val.qdp",
-              format,
-              title_yval, title_oval, "res_val",
-              offset_yval, offset_oval, 0.0,
-              scale_yval, scale_oval, "lin");
-
-    if(0 < g_flag_verbose){
-        MkQdpDiff(h1d_projx, h1d_func_projx, h1d_projx_res_chi, 
-                  outdir + "/" + qdpout_head + "_projx_diff_chi.qdp",
-                  format,
-                  title_xval, title_oval, "chi",
-                  offset_xval, offset_oval, 0.0,
-                  scale_xval, scale_oval, "lin");
-
-        MkQdpDiff(h1d_projx, h1d_func_projx, h1d_projx_res_ratio, 
-                  outdir + "/" + qdpout_head + "_projx_diff_ratio.qdp",
-                  format,
-                  title_xval, title_oval, "ratio",
-                  offset_xval, offset_oval, 0.0,
-                  scale_xval, scale_oval, "lin");
-
-        MkQdpDiff(h1d_projy, h1d_func_projy, h1d_projy_res_chi, 
-                  outdir + "/" + qdpout_head + "_projy_diff_chi.qdp",
-                  format,
-                  title_yval, title_oval, "chi",
-                  offset_yval, offset_oval, 0.0,
-                  scale_yval, scale_oval, "lin");
-
-        MkQdpDiff(h1d_projy, h1d_func_projy, h1d_projy_res_ratio, 
-                  outdir + "/" + qdpout_head + "_projy_diff_ratio.qdp",
-                  format,
-                  title_yval, title_oval, "ratio",
-                  offset_yval, offset_oval, 0.0,
-                  scale_yval, scale_oval, "lin");
-    }
-    
-    delete h1d_projx;
-    delete h1d_projy;
-    delete h2d_func;
-    delete h1d_func_projx;
-    delete h1d_func_projy;
-    delete h1d_projx_res_val;
-    delete h1d_projx_res_chi;
-    delete h1d_projx_res_ratio;
-    delete h1d_projy_res_val;
-    delete h1d_projy_res_chi;
-    delete h1d_projy_res_ratio;
-}
-
-
-
-void MxcsQdpTool::MkQdpDiffProjSerr(const HistData2d* const hist_data,
-                                    const MxcsFunc* const func,
-                                    const double* const par,
-                                    string outdir, string qdpout_head,
-                                    string add_mode, string error_mode,
-                                    const MxcsPlotConf* const plot_conf_projx,
-                                    const MxcsPlotConf* const plot_conf_projy)
-{
-    if(5 != plot_conf_projx->GetNdim()){
-        char msg[kLineSize];
-        sprintf(msg, "plot_conf_projx->GetNdim() != 5");
-        MxcsPrintErr(msg);
-        abort();
-    }
-    if(5 != plot_conf_projy->GetNdim()){
-        char msg[kLineSize];
-        sprintf(msg, "plot_conf_projy->GetNdim() != 5");
-        MxcsPrintErr(msg);
-        abort();
-    }
-   
-    HistDataSerr1d* h1d_projx = new HistDataSerr1d;
-    HistData2dOpe::GetProjectX(hist_data,
-                               0, hist_data->GetNbinY() - 1,
-                               add_mode, error_mode,
-                               h1d_projx);
-    HistDataSerr1d* h1d_projy = new HistDataSerr1d;
-    HistData2dOpe::GetProjectY(hist_data,
-                               0, hist_data->GetNbinX() - 1,
-                               add_mode, error_mode,
-                               h1d_projy);
-
-    long nbin_func_x = hist_data->GetNbinX();
-    long nbin_func_y = hist_data->GetNbinY();    
-    double xval_lo = hist_data->GetXvalLo();
-    double xval_up = hist_data->GetXvalUp();
-    double yval_lo = hist_data->GetYvalLo();
-    double yval_up = hist_data->GetYvalUp();
-
-    HistData2d* h2d_func = new HistDataNerr2d;
-    h2d_func->Init(nbin_func_x, xval_lo, xval_up,
-                   nbin_func_y, yval_lo, yval_up);
-
-    h2d_func->SetByFunc(func, par);
-    HistDataNerr1d* h1d_func_projx = new HistDataNerr1d;
-    HistData2dOpe::GetProjectX(h2d_func,
-                               0, h2d_func->GetNbinY() - 1,
-                               add_mode,
-                               h1d_func_projx);
-    HistDataNerr1d* h1d_func_projy = new HistDataNerr1d;
-    HistData2dOpe::GetProjectY(h2d_func,
-                               0, h2d_func->GetNbinX() - 1,
-                               add_mode,
-                               h1d_func_projy);
-    HistDataSerr1d* h1d_projx_res_val   = new HistDataSerr1d;
-    HistDataSerr1d* h1d_projx_res_chi   = new HistDataSerr1d;
-    HistDataSerr1d* h1d_projx_res_ratio = new HistDataSerr1d;
-    HistData1dOpe::GetResValHd1d(h1d_projx, h1d_func_projx,
-                                 h1d_projx_res_val);
-    HistData1dOpe::GetResChiHd1d(h1d_projx, h1d_func_projx,
-                                 h1d_projx_res_chi);
-    HistData1dOpe::GetResRatioHd1d(h1d_projx, h1d_func_projx,
-                                   h1d_projx_res_ratio);
-
-    HistDataSerr1d* h1d_projy_res_val   = new HistDataSerr1d;
-    HistDataSerr1d* h1d_projy_res_chi   = new HistDataSerr1d;
-    HistDataSerr1d* h1d_projy_res_ratio = new HistDataSerr1d;
-    HistData1dOpe::GetResValHd1d(h1d_projy, h1d_func_projy,
-                                 h1d_projy_res_val);
-    HistData1dOpe::GetResChiHd1d(h1d_projy, h1d_func_projy,
-                                 h1d_projy_res_chi);
-    HistData1dOpe::GetResRatioHd1d(h1d_projy, h1d_func_projy,
-                                   h1d_projy_res_ratio);
-
-    MxcsPlotConf* plot_conf_val_projx   = NULL;
-    MxcsPlotConf* plot_conf_chi_projx   = NULL;
-    MxcsPlotConf* plot_conf_ratio_projx = NULL;
-    MxcsPlotConf* plot_conf_val_projy   = NULL;
-    MxcsPlotConf* plot_conf_chi_projy   = NULL;
-    MxcsPlotConf* plot_conf_ratio_projy = NULL;
-    MxcsPlotConf::GenPlotConf3(plot_conf_projx,
-                               &plot_conf_val_projx,
-                               &plot_conf_chi_projx,
-                               &plot_conf_ratio_projx);
-    MxcsPlotConf::GenPlotConf3(plot_conf_projy,
-                               &plot_conf_val_projy,
-                               &plot_conf_chi_projy,
-                               &plot_conf_ratio_projy);    
-    
-    string format = "x,xe,y,ye";
-    MkQdpDiff(h1d_projx, h1d_func_projx, h1d_projx_res_val, 
-              outdir + "/" + qdpout_head + "_projx_diff_val.qdp",
-              format,
-              plot_conf_val_projx);
-    MkQdpDiff(h1d_projy, h1d_func_projy, h1d_projy_res_val, 
-              outdir + "/" + qdpout_head + "_projy_diff_val.qdp",
-              format,
-              plot_conf_val_projy);
-
-    if(0 < g_flag_verbose){
-        MkQdpDiff(h1d_projx, h1d_func_projx, h1d_projx_res_chi, 
-                  outdir + "/" + qdpout_head + "_projx_diff_chi.qdp",
-                  format,
-                  plot_conf_chi_projx);
-
-        MkQdpDiff(h1d_projx, h1d_func_projx, h1d_projx_res_ratio, 
-                  outdir + "/" + qdpout_head + "_projx_diff_ratio.qdp",
-                  format,
-                  plot_conf_ratio_projx);
-
-        MkQdpDiff(h1d_projy, h1d_func_projy, h1d_projy_res_chi, 
-                  outdir + "/" + qdpout_head + "_projy_diff_chi.qdp",
-                  format,
-                  plot_conf_chi_projy);
-
-        MkQdpDiff(h1d_projy, h1d_func_projy, h1d_projy_res_ratio, 
-                  outdir + "/" + qdpout_head + "_projy_diff_ratio.qdp",
-                  format,
-                  plot_conf_ratio_projy);
-    }
-    
-    delete h1d_projx;
-    delete h1d_projy;
-    delete h2d_func;
-    delete h1d_func_projx;
-    delete h1d_func_projy;
-    delete h1d_projx_res_val;
-    delete h1d_projx_res_chi;
-    delete h1d_projx_res_ratio;
-    delete h1d_projy_res_val;
-    delete h1d_projy_res_chi;
-    delete h1d_projy_res_ratio;
-    delete plot_conf_val_projx;
-    delete plot_conf_chi_projx;
-    delete plot_conf_ratio_projx;
-    delete plot_conf_val_projy;
-    delete plot_conf_chi_projy;
-    delete plot_conf_ratio_projy;
 }
 

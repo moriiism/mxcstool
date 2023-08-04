@@ -1,4 +1,4 @@
-#include "mxcs_hist_info.h"
+#include "mshp_hist_info.h"
 
 //
 // HistInfo1d
@@ -27,7 +27,7 @@ void HistInfo1d::InitSetByWidth(double lo, double up,
     } else if ("ceil" == mode){
         nbin_tmp = (long) ceil( (up - lo) / bin_width);
     } else {
-        MxcsPrintErrClass("bad mode");
+        MshpPrintErrClass("bad mode");
         abort();
     }
 
@@ -47,7 +47,7 @@ void HistInfo1d::InitSetByMidPoint(double md, double bin_width,
     } else if ("ceil" == mode){
         nbin_tmp = (long) ceil ( half_width / bin_width );
     } else {
-        MxcsPrintErrClass("bad mode");
+        MshpPrintErrClass("bad mode");
         abort();
     }
     lo_ = md - (nbin_tmp + 0.5) * bin_width;
@@ -61,15 +61,15 @@ void HistInfo1d::Load(string file)
     
     string* line_arr = NULL;
     long nline;
-    MxcsIolib::GenReadFileSkipComment(file, &line_arr, &nline);
+    MshpIolib::GenReadFileSkipComment(file, &line_arr, &nline);
     if(1 != nline){
-        MxcsPrintErrClass("bad nline");
+        MshpPrintErrClass("bad nline");
         abort();
     }
 
-    int ncolumn = MxcsStr::GetNcolumn(line_arr[0]);
+    int ncolumn = MshpStr::GetNcolumn(line_arr[0]);
     if(5 != ncolumn){
-        MxcsPrintErrClass("ncolum != 5");
+        MshpPrintErrClass("ncolum != 5");
         abort();
     }
 
@@ -83,18 +83,18 @@ void HistInfo1d::Load(string file)
     string mode = "";
     
     iss >> nbin_str >> lo >> up >> bin_width_str >> mode;
-    MxcsIolib::DelReadFile(line_arr);
+    MshpIolib::DelReadFile(line_arr);
 
     if("none" == nbin_str){
         bin_width = atof(bin_width_str.c_str());
         InitSetByWidth(lo, up, bin_width, mode);
     } else {
         if("none" != bin_width_str){
-            MxcsPrintErrClass("bin_width_str != none");
+            MshpPrintErrClass("bin_width_str != none");
             abort();
         }
         if("none" != mode){
-            MxcsPrintErrClass("mode != none");
+            MshpPrintErrClass("mode != none");
             abort();
         }
         nbin = atoi(nbin_str.c_str());
@@ -176,7 +176,7 @@ long HistInfo1d::GetIbin(double val, string scale) const
         char msg[kLineSize];
         sprintf(msg, "bad scale (=%s)",
                 scale.c_str());
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
     return ibin;
@@ -201,7 +201,7 @@ double HistInfo1d::GetBinCenter(long ibin, string scale) const
         char msg[kLineSize];
         sprintf(msg, "bad scale (=%s)",
                 scale.c_str());
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
     return bin_center;
@@ -226,7 +226,7 @@ double HistInfo1d::GetBinLo(long ibin, string scale) const
         char msg[kLineSize];
         sprintf(msg, "bad scale (=%s)",
                 scale.c_str());
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
     return bin_lo;
@@ -251,7 +251,7 @@ double HistInfo1d::GetBinUp(long ibin, string scale) const
         char msg[kLineSize];
         sprintf(msg, "bad scale (=%s)",
                 scale.c_str());
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
     return bin_up;
@@ -342,9 +342,9 @@ void HistInfo1d::Print(FILE* fp) const
 
 void HistInfo1d::SetHistInfo(string line, HistInfo1d* const hist_info_out)
 {
-    int ncolumn = MxcsStr::GetNcolumn(line);
+    int ncolumn = MshpStr::GetNcolumn(line);
     if(5 != ncolumn){
-        MxcsPrintErr("ncolum != 5");
+        MshpPrintErr("ncolum != 5");
         abort();
     }
 
@@ -363,11 +363,11 @@ void HistInfo1d::SetHistInfo(string line, HistInfo1d* const hist_info_out)
         hist_info_out->InitSetByWidth(lo, up, bin_width, mode);
     } else {
         if("none" != bin_width_str){
-            MxcsPrintErr("bin_width_str != none");
+            MshpPrintErr("bin_width_str != none");
             abort();
         }
         if("none" != mode){
-            MxcsPrintErr("mode != none");
+            MshpPrintErr("mode != none");
             abort();
         }
         nbin = atoi(nbin_str.c_str());
@@ -382,7 +382,7 @@ void HistInfo1d::IsValidForLogScale() const
         char msg[kLineSize];
         sprintf(msg, "bad lo (=%e) or up (=%e)",
                 GetLo(), GetUp());
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
 }
@@ -392,7 +392,7 @@ void HistInfo1d::IsValidIbin(long ibin) const
     if(ibin < 0 || GetNbin() <= ibin){
         char msg[kLineSize];
         sprintf(msg, "bad ibin (=%ld)", ibin);
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
 }
@@ -402,7 +402,7 @@ void HistInfo1d::IsValidRange(double val) const
     if(val < GetLo() || GetUp() < val){
         char msg[kLineSize];
         sprintf(msg, "bad val (=%e)", val);
-        MxcsPrintErr(msg);
+        MshpPrintErr(msg);
         abort();
     }
 }
@@ -466,9 +466,9 @@ void HistInfo2d::Load(string file)
     
     string* line_arr = NULL;
     long nline;
-    MxcsIolib::GenReadFileSkipComment(file, &line_arr, &nline);
+    MshpIolib::GenReadFileSkipComment(file, &line_arr, &nline);
     if(2 != nline){
-        MxcsPrintErrClass("bad nline");
+        MshpPrintErrClass("bad nline");
         abort();
     }
 
@@ -476,7 +476,7 @@ void HistInfo2d::Load(string file)
     hist_info_y_ = new HistInfo1d;
     HistInfo1d::SetHistInfo(line_arr[0], hist_info_x_);
     HistInfo1d::SetHistInfo(line_arr[1], hist_info_y_);
-    MxcsIolib::DelReadFile(line_arr);
+    MshpIolib::DelReadFile(line_arr);
 }
 
 void HistInfo2d::Copy(const HistInfo2d* const org)

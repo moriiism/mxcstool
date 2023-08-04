@@ -1,4 +1,4 @@
-#include "mxcs_data1d_serr.h"
+#include "mshp_data1d_serr.h"
 
 //
 // public
@@ -14,7 +14,7 @@ void DataArraySerr1d::SetValSerr(long ndata,
                                  const double* const val_serr)
 {
     if(GetNdata() != ndata){
-        MxcsPrintErrClass("GetNdata() != ndata");
+        MshpPrintErrClass("GetNdata() != ndata");
         abort();
     }
     IsValSerrNotNull();
@@ -28,7 +28,7 @@ void DataArraySerr1d::SetValSerr(long ndata,
 void DataArraySerr1d::SetValSerr(vector<double> val_serr)
 {
     if(GetNdata() != (long) val_serr.size()){
-        MxcsPrintErrClass("GetNdata() != val_serr.size()");
+        MshpPrintErrClass("GetNdata() != val_serr.size()");
         abort();
     }
     IsValSerrNotNull();
@@ -135,12 +135,12 @@ void DataArraySerr1d::Load(string file)
     
     string* line_arr = NULL;
     long ndata = 0;
-    MxcsIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
+    MshpIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
     Init(ndata);
     for(long idata = 0; idata < ndata; idata ++){
-        int ncolumn = MxcsStr::GetNcolumn(line_arr[idata]);
+        int ncolumn = MshpStr::GetNcolumn(line_arr[idata]);
         if(2 != ncolumn){
-            MxcsPrintErrClass("ncolumn != 2");
+            MshpPrintErrClass("ncolumn != 2");
             abort();
         }
         istringstream iss(line_arr[idata]);
@@ -150,7 +150,7 @@ void DataArraySerr1d::Load(string file)
         SetValElm(idata, val_tmp);
         SetValSerrElm(idata, val_serr_tmp);
     }
-    MxcsIolib::DelReadFile(line_arr);
+    MshpIolib::DelReadFile(line_arr);
 
     int flag_val_sorted = 0;
     ReadInfo(file, &flag_val_sorted);
@@ -160,11 +160,11 @@ void DataArraySerr1d::Load(string file)
 void DataArraySerr1d::Sort()
 {
     if(1 == GetFlagValSorted()){
-        MxcsPrintInfoClass("It has been already sorted.");
+        MshpPrintInfoClass("It has been already sorted.");
         return;
     }
     if(NULL == GetVal() || NULL == GetValSerr()){
-        MxcsPrintErrClass("GetVal() == NULL or GetValSerr() == NULL");
+        MshpPrintErrClass("GetVal() == NULL or GetValSerr() == NULL");
         abort();
     }
     long ndata = GetNdata();
@@ -177,7 +177,7 @@ void DataArraySerr1d::Sort()
 
     long* index = new long [ndata];  // to store sort result
     bool down = false;
-    MxcsSort::Sort<double, long>(ndata, val_org, index, down);
+    MshpSort::Sort<double, long>(ndata, val_org, index, down);
     for(long idata = 0; idata < ndata; idata++){
         SetValElm(idata, val_org[index[idata]]);
         SetValSerrElm(idata, val_serr_org[index[idata]]);
@@ -197,20 +197,6 @@ double DataArraySerr1d::GetValSerrElm(long idata) const
     return val_serr_[idata];
 }
 
-double DataArraySerr1d::GetValTerrPlusElm(long idata) const
-{
-    IsValidRange(idata);
-    double val_terr_plus = GetValSerrElm(idata);
-    return val_terr_plus;
-}
-
-double DataArraySerr1d::GetValTerrMinusElm(long idata) const
-{
-    IsValidRange(idata);
-    double val_terr_minus = -1 * GetValSerrElm(idata);
-    return val_terr_minus;
-}
-
 double DataArraySerr1d::GetValAndErrMin() const
 {
     long ndata = GetNdata();
@@ -218,7 +204,7 @@ double DataArraySerr1d::GetValAndErrMin() const
     for(long idata = 0; idata < ndata; idata ++){
         val_tmp[idata] = GetValElm(idata) - GetValSerrElm(idata);
     }
-    double min = MxcsMath::GetMin(ndata, val_tmp);
+    double min = MshpMath::GetMin(ndata, val_tmp);
     delete [] val_tmp;
     return min;
 }
@@ -230,7 +216,7 @@ double DataArraySerr1d::GetValAndErrMax() const
     for(long idata = 0; idata < ndata; idata ++){
         val_tmp[idata] = GetValElm(idata) + GetValSerrElm(idata);
     }
-    double max = MxcsMath::GetMax(ndata, val_tmp);
+    double max = MshpMath::GetMax(ndata, val_tmp);
     delete [] val_tmp;
     return max;
 }
@@ -264,7 +250,7 @@ void DataArraySerr1d::PrintData(FILE* fp, int mode,
     } else {
         char msg[kLineSize];
         sprintf(msg, "bad mode (=%d).", mode);
-        MxcsPrintErrClass(msg);
+        MshpPrintErrClass(msg);
         abort();
     }
 }
@@ -300,7 +286,7 @@ void DataArraySerr1d::InitDataArraySerr1d(long ndata)
 {
     NullDataArraySerr1d();
     if(GetNdata() != ndata){
-        MxcsPrintErrClass("GetNdata() != ndata");
+        MshpPrintErrClass("GetNdata() != ndata");
         abort();
     }
     val_serr_ = new double [ndata];
@@ -312,7 +298,7 @@ void DataArraySerr1d::InitDataArraySerr1d(long ndata)
 void DataArraySerr1d::IsValSerrNotNull() const
 {
     if(NULL == GetValSerr()){
-        MxcsPrintErrClass("bad GetValSerr() (=NULL)");
+        MshpPrintErrClass("bad GetValSerr() (=NULL)");
         abort();
     }
 }

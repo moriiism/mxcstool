@@ -1,8 +1,8 @@
-#include "mxcs_str.h"
-#include "mxcs_iolib.h"
-#include "mxcs_hist1d_nerr.h"
-//#include "mxcs_qdp_tool.h"
-//#include "mxcs_func.h"
+#include "mshp_str.h"
+#include "mshp_iolib.h"
+#include "mshp_hist1d_nerr.h"
+//#include "mshp_qdp_tool.h"
+//#include "mshp_func.h"
 
 // global variable 
 int g_flag_debug = 0;
@@ -10,16 +10,16 @@ int g_flag_help = 0;
 int g_flag_verbose = 0;
 
 
-//class FuncTest : public MxcsFunc{
+//class FuncTest : public MshpFunc{
 //public:
 //    explicit FuncTest(string title = "") :
-//        MxcsFunc("FuncTest", title)
+//        MshpFunc("FuncTest", title)
 //        {
 //            SetNpar(3);
 //            SetNdim(1);           
 //        }
 //    ~FuncTest() {
-//        NullMxcsFunc();
+//        NullMshpFunc();
 //    }
 //
 //    void Copy(const FuncTest* const org);
@@ -34,7 +34,7 @@ int g_flag_verbose = 0;
 //    if(NULL == org) {abort();}
 //    
 //    CopyTitle(org);
-//    NullMxcsFunc();
+//    NullMshpFunc();
 //    SetNpar(org->GetNpar());
 //    SetNdim(org->GetNdim());
 //}
@@ -295,7 +295,7 @@ int main(int argc, char* argv[])
 //        printf("=== \n");
 //    }
 //    
-////    void SetByFunc(const MxcsFunc* const func, const double* const par);
+////    void SetByFunc(const MshpFunc* const func, const double* const par);
 //    {
 //        printf("--- test  SetByFunc\n");
 //        FuncTest* func = new FuncTest;
@@ -305,7 +305,7 @@ int main(int argc, char* argv[])
 //        hd1d->Init(4, 0.0, 4.0);
 //        hd1d->SetByFunc(func, par);
 //        hd1d->PrintData(stdout, "x,y", 0.0, 0.0);        
-//        MxcsQdpTool::MkQdp(hd1d, "temp.qdp", "x,y");
+//        MshpQdpTool::MkQdp(hd1d, "temp.qdp", "x,y");
 //        delete func;
 //        delete hd1d;
 //        printf("=== \n");

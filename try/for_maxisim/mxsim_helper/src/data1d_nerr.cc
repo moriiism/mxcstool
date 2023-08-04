@@ -1,4 +1,4 @@
-#include "mxcs_data1d_nerr.h"
+#include "mshp_data1d_nerr.h"
 
 //
 // public
@@ -58,12 +58,12 @@ void DataArrayNerr1d::Load(string file)
 
     string* line_arr = NULL;
     long ndata = 0;
-    MxcsIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
+    MshpIolib::GenReadFileSkipComment(file, &line_arr, &ndata);
     Init(ndata);
     for(long idata = 0; idata < ndata; idata ++){
-        int ncolumn = MxcsStr::GetNcolumn(line_arr[idata]);
+        int ncolumn = MshpStr::GetNcolumn(line_arr[idata]);
         if(1 != ncolumn){
-            MxcsPrintErrClass("ncolumn != 1");
+            MshpPrintErrClass("ncolumn != 1");
             abort();
         }
         istringstream iss(line_arr[idata]);
@@ -71,7 +71,7 @@ void DataArrayNerr1d::Load(string file)
         iss >> val_tmp;
         SetValElm(idata, val_tmp);
     }
-    MxcsIolib::DelReadFile(line_arr);
+    MshpIolib::DelReadFile(line_arr);
 
     int flag_val_sorted = 0;
     ReadInfo(file, &flag_val_sorted);
@@ -82,11 +82,11 @@ void DataArrayNerr1d::Load(string file)
 void DataArrayNerr1d::Sort()
 {
     if(1 == GetFlagValSorted()){
-        MxcsPrintInfoClass("It has been already sorted.");
+        MshpPrintInfoClass("It has been already sorted.");
         return;
     }
     if(NULL == GetVal()){
-        MxcsPrintErrClass("GetVal() == NULL");
+        MshpPrintErrClass("GetVal() == NULL");
         abort();
     }
     long ndata = GetNdata();
@@ -97,7 +97,7 @@ void DataArrayNerr1d::Sort()
 
     long* index = new long [ndata];  // to store sort result
     bool down = false;
-    MxcsSort::Sort<double, long>(ndata, val_org, index, down);
+    MshpSort::Sort<double, long>(ndata, val_org, index, down);
 
     for(long idata = 0; idata < ndata; idata++){
         SetValElm(idata, val_org[index[idata]]);
@@ -111,13 +111,13 @@ void DataArrayNerr1d::Sort()
 
 double DataArrayNerr1d::GetValAndErrMin() const
 {
-    double min = MxcsMath::GetMin(GetNdata(), GetVal());
+    double min = MshpMath::GetMin(GetNdata(), GetVal());
     return min;
 }
 
 double DataArrayNerr1d::GetValAndErrMax() const
 {
-    double max = MxcsMath::GetMax(GetNdata(), GetVal());
+    double max = MshpMath::GetMax(GetNdata(), GetVal());
     return max;
 }
 
@@ -143,7 +143,7 @@ void DataArrayNerr1d::PrintData(FILE* fp, int mode,
     } else {
         char msg[kLineSize];
         sprintf(msg, "bad mode (=%d).", mode);
-        MxcsPrintErrClass(msg);
+        MshpPrintErrClass(msg);
         abort();
     }
 }
@@ -152,12 +152,12 @@ double DataArrayNerr1d::GetOffsetValFromTag(string offset_tag) const
 {
     double offset = 0.0;
     if("st" == offset_tag){
-        offset = MxcsMath::GetMin(GetNdata(), GetVal());
+        offset = MshpMath::GetMin(GetNdata(), GetVal());
     } else if ("ed" == offset_tag){
-        offset = MxcsMath::GetMax(GetNdata(), GetVal());
+        offset = MshpMath::GetMax(GetNdata(), GetVal());
     } else if ("md" == offset_tag){
-        offset = ( MxcsMath::GetMin(GetNdata(), GetVal()) +
-                   MxcsMath::GetMax(GetNdata(), GetVal()) ) / 2.;
+        offset = ( MshpMath::GetMin(GetNdata(), GetVal()) +
+                   MshpMath::GetMax(GetNdata(), GetVal()) ) / 2.;
     } else if ("no" == offset_tag){
         offset = 0.0;
     } else {

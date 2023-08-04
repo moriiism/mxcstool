@@ -1,60 +1,11 @@
-#ifndef MXCSTOOL_MXCSANALIB_MATH_H_
-#define MXCSTOOL_MXCSANALIB_MATH_H_
+#ifndef MXSIM_HELPER_MATH_H_
+#define MXSIM_HELPER_MATH_H_
 
-#include "mxcs_base.h"
-#include "mxcs_sort.h"
-#include "gsl/gsl_sf_gamma.h"
+#include "mshp_base.h"
+#include "mshp_sort.h"
 
-// "Average" and "mean" are ambiguous,
-// then we do not use these names.
-// Instead, we use the followings:
-//   Arithmetic mean --> AMean
-//   Weighted mean   --> WMean
-
-namespace MxcsMath
+namespace MshpMath
 {
-    // For a value
-    int IsZero(double val);
-    // if val == 0, return 1
-    // if val != 0, return 0
-
-    int IsOne(double val);
-    // if val == 1, return 1
-    // if val != 1, return 0
-
-    int IsOneOrZero(double val);
-
-    int IsPlus(double val);
-    // if val > 0, return 1
-    // if val <=0, return 0
-
-    int IsMinus(double val);
-    // if val < 0, return 1
-    // if val >=0, return 0
-    
-    int Sign(double val);
-    // if val > 0, return 1
-    // if val < 0, return -1
-    // if val == 0, return 0.
-
-    double FilterPlus(double val);
-    // if val > 0, return val
-    // if val <= 0, return 0
-
-    double FilterMinus(double val);
-    // if val < 0, return val
-    // if val >= 0, return 0
-
-    int Not(double val);
-    int Not(int val);
-    // 0 ---> 1
-    // 1 ---> 0
-    // others ---> abort
-    
-    // For a value with a gaussian error
-    void GetScaled(double val, double val_err, double scale, double offset,
-                   double* const ans_ptr, double* const ans_err_ptr);
-    
     // For two values without errors
     int IsSame(double aval, double bval);
         
@@ -155,90 +106,7 @@ namespace MxcsMath
                          const int* const mask_arr,
                          double* const wmean_ptr, double* const wmean_err_ptr,
                          long* const nsel_ptr, int** const mask_sel_arr_ptr);
-    int GenChi2byConst(long narr,
-                       const double* const val_arr,
-                       const double* const val_err_arr,
-                       double* const wmean_ptr,
-                       double* const wmean_err_ptr,
-                       long* const nsel_ptr,
-                       int** const mask_sel_arr_ptr,
-                       double* const chi2_ptr,
-                       long* const dof_ptr,
-                       double* const chi2_red_ptr,
-                       double* const prob_ptr);
-    int GenChi2byConst(long narr,
-                       const double* const val_arr,
-                       const double* const val_err_arr,
-                       const int* const mask_arr,
-                       double* const wmean_ptr,
-                       double* const wmean_err_ptr,
-                       long* const nsel_ptr,
-                       int** const mask_sel_arr_ptr,
-                       double* const chi2_ptr,
-                       long* const dof_ptr,
-                       double* const chi2_red_ptr,
-                       double* const prob_ptr);
     
-    // interpolation, for 1dim
-    double IntPolLin(double xval,
-                     double xval_lo, double xval_up,
-                     double yval_lo, double yval_up);
+} //  namespace MshpMath
 
-    // interpolation, for 2dim
-    double IntPolLin(double xval, double yval,
-                     double xval0, double xval1,
-                     double yval0, double yval1,
-                     double oval_x0y0, double oval_x1y0,
-                     double oval_x1y1, double oval_x0y1);
-
-    //
-    // statistics
-    //
-    // PDF: probability density function
-    // CDF: cumulative distribution function
-    // Pval: p-value = 1 - CDF(x)
-    //
-
-    // gaussian dist
-    double GaussianPDF(double xval, double mu, double sigma);
-    double GaussianCDF(double xval, double mu, double sigma);
-    double PvalGaussian(double xval, double mu, double sigma,
-                        string side = "both");
-
-    double GaussianAsymPDF(double xval, double mu,
-                           double sigma_plus,
-                           double sigma_minus);
-    // gamma dist
-    double GammaPDF(double xval, double alpha, double beta);
-    double GammaCDF(double xval, double alpha, double beta);
-    double PvalGamma(double xval, double alpha, double beta);
-
-    // chi2 dist
-    double Chi2PDF(double xval, int dof);
-    double Chi2CDF(double xval, int dof);
-    double PvalChi2(double xval, int dof);
-
-    // sigma level <--> confidence level
-    double Sigma2CL(double s_sigma_level);
-    double CL2Sigma(double cl);
-
-
-    
-    int GetPermutation(int n, int r);
-    // Permutation(n, r) = _nP_r = n! / (n - r)!
-    int GetCombination(int n, int r);
-    // Combination(n, r) = _nC_r = _nP_r / r! =  n! / [r! (n - r)!]
-
-    // for binning
-    long GetNbin(double val_lo, double val_up, double delta_val, string mode);
-    long GetNbinEven(double val_lo, double val_up, double delta_val);
-
-    int IsSorted(long narr, const double* const val_arr);
-
-    // inner product
-    double GetInProd(double vec0_xval, double vec0_yval,
-                     double vec1_xval, double vec1_yval);
-    
-} //  namespace MxcsMath
-
-#endif // MXCSTOOL_MXCSANALIB_MATH_H_
+#endif // MXSIM_HELPER_MATH_H_

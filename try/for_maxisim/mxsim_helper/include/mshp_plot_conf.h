@@ -1,8 +1,8 @@
-#ifndef MXCSTOOL_MXCSANALIB_PLOT_CONF_H_
-#define MXCSTOOL_MXCSANALIB_PLOT_CONF_H_
+#ifndef MXSIM_HELPER_PLOT_CONF_H_
+#define MXSIM_HELPER_PLOT_CONF_H_
 
-#include "mxcs_base.h"
-#include "mxcs_iolib.h"
+#include "mshp_base.h"
+#include "mshp_iolib.h"
 
 //
 // plot configuration
@@ -20,17 +20,17 @@
 // label: any string, which can contain space.
 //
 
-class MxcsPlotConf : public MxcsObject{
+class MshpPlotConf : public MshpObject{
 public:
-    explicit MxcsPlotConf(string title = "") :
-        MxcsObject("MxcsPlotConf", title),
+    explicit MshpPlotConf(string title = "") :
+        MshpObject("MshpPlotConf", title),
         ndim_(0),
         lo_str_(NULL),
         up_str_(NULL),
         offset_tag_(NULL),
         scale_(NULL),
         label_(NULL) {}
-    ~MxcsPlotConf(){
+    ~MshpPlotConf(){
         Null();
     }
 
@@ -38,8 +38,8 @@ public:
     void Load(string file);
     void SetIdimElm(int idim, string lo_str, string up_str,
                     string offset_tag, string scale, string label);
-    void Copy(const MxcsPlotConf* const org);
-    MxcsPlotConf* const Clone() const;
+    void Copy(const MshpPlotConf* const org);
+    MshpPlotConf* const Clone() const;
 
     // const func
     void Print(FILE* fp) const;
@@ -67,13 +67,13 @@ public:
     // diff_chi
     // diff_ratio
 
-    static void GenPlotConf2(const MxcsPlotConf* const plot_conf,
-                             MxcsPlotConf** const plot_conf_val_ptr,
-                             MxcsPlotConf** const plot_conf_ratio_ptr);
-    static void GenPlotConf3(const MxcsPlotConf* const plot_conf,
-                             MxcsPlotConf** const plot_conf_val_ptr,
-                             MxcsPlotConf** const plot_conf_chi_ptr,
-                             MxcsPlotConf** const plot_conf_ratio_ptr);
+    static void GenPlotConf2(const MshpPlotConf* const plot_conf,
+                             MshpPlotConf** const plot_conf_val_ptr,
+                             MshpPlotConf** const plot_conf_ratio_ptr);
+    static void GenPlotConf3(const MshpPlotConf* const plot_conf,
+                             MshpPlotConf** const plot_conf_val_ptr,
+                             MshpPlotConf** const plot_conf_chi_ptr,
+                             MshpPlotConf** const plot_conf_ratio_ptr);
     
 private:
     int ndim_;
@@ -87,4 +87,4 @@ private:
 };
 
 
-#endif // MXCSTOOL_MXCSANALIB_PLOT_CONF_H_
+#endif // MXSIM_HELPER_PLOT_CONF_H_
